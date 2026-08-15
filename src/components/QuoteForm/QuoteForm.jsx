@@ -164,14 +164,7 @@ export default function QuoteForm() {
                 <div className="w-10 h-10 rounded-xl bg-white border border-[#E5EAF1] shadow-xs group-hover:border-blue-300 flex items-center justify-center flex-shrink-0 transition-colors">
                   <span className="text-sm">✉️</span>
                 </div>
-                <span className="font-semibold text-[#0B1020]">{CONTACT.email}</span>
               </a>
-              <div className="flex items-center gap-3 text-[#4B5563] text-sm">
-                <div className="w-10 h-10 rounded-xl bg-white border border-[#E5EAF1] shadow-xs flex items-center justify-center flex-shrink-0">
-                  <span className="text-sm">🌐</span>
-                </div>
-                <span className="font-semibold text-[#0B1020]">{CONTACT.domain}</span>
-              </div>
             </div>
           </ScrollReveal>
 

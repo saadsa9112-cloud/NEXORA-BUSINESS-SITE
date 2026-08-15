@@ -126,12 +126,6 @@ export default function Footer() {
               </li>
               <li>
                 <div className="flex items-start gap-2.5 text-[#A7ADBB] text-sm">
-                  <Globe size={15} className="mt-0.5 text-[#1F90FF] flex-shrink-0" aria-hidden="true" />
-                  <span>{CONTACT.domain}</span>
-                </div>
-              </li>
-              <li>
-                <div className="flex items-start gap-2.5 text-[#A7ADBB] text-sm">
                   <MapPin size={15} className="mt-0.5 text-[#1F90FF] flex-shrink-0" aria-hidden="true" />
                   <span>Karachi, Pakistan</span>
                 </div>

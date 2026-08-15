@@ -13,7 +13,7 @@ function BrowserMockup({ children, className = '' }) {
         <span className="w-2.5 h-2.5 rounded-full bg-amber-400/80" />
         <span className="w-2.5 h-2.5 rounded-full bg-emerald-400/80" />
         <div className="ml-3 flex-1 h-5 rounded-md bg-white border border-[#E5EAF1] flex items-center px-3 shadow-xs">
-          <span className="text-[9px] text-[#6B7280] font-mono truncate">https://nexoradigitalsol.com</span>
+          <span className="text-[9px] text-[#6B7280] font-mono truncate">NEXORA DIGITAL</span>
         </div>
       </div>
       {children}
