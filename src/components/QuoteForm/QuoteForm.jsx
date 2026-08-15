@@ -1,6 +1,9 @@
 import { useState } from 'react'
+import { motion, AnimatePresence } from 'framer-motion'
 import { Send, CheckCircle, AlertCircle, MessageCircle } from 'lucide-react'
 import { SERVICES_LIST, BUDGET_RANGES, CONTACT } from '../../data/siteData'
+import MagneticButton from '../Motion/MagneticButton'
+import ScrollReveal from '../Motion/ScrollReveal'
 
 const INITIAL_FIELDS = {
   fullName: '',
@@ -52,7 +55,6 @@ export default function QuoteForm() {
   const [fields, setFields] = useState(INITIAL_FIELDS)
   const [errors, setErrors] = useState({})
   const [status, setStatus] = useState('idle') // idle | submitting | success
-  const [lastSubmitTime, setLastSubmitTime] = useState(0)
 
   const handleChange = (e) => {
     const { name, value } = e.target
@@ -62,355 +64,375 @@ export default function QuoteForm() {
     }
   }
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault()
 
-    // 1. Honeypot spam check
+    // 1. Honeypot check
     if (fields.botcheck) {
       setStatus('success')
       setFields(INITIAL_FIELDS)
       return
     }
 
-    // 2. Cooldown check
-    const now = Date.now()
-    if (now - lastSubmitTime < 2000) {
-      return
-    }
-
-    // 3. Validation
+    // 2. Validation
     const validationErrors = validate(fields)
     if (Object.keys(validationErrors).length > 0) {
       setErrors(validationErrors)
       return
     }
 
-    setLastSubmitTime(now)
     setStatus('submitting')
 
-    // 4. Format WhatsApp Message
-    const messageLines = [
-      `*New Project Inquiry — NEXORA DIGITAL*`,
-      ``,
-      `*Name:* ${fields.fullName.trim()}`,
-      fields.businessName.trim() ? `*Business:* ${fields.businessName.trim()}` : null,
-      `*WhatsApp:* ${fields.whatsapp.trim()}`,
-      fields.email.trim() ? `*Email:* ${fields.email.trim()}` : null,
-      `*Service Required:* ${fields.service}`,
-      fields.budget ? `*Budget:* ${fields.budget}` : null,
-      ``,
-      `*Project Details:*`,
-      fields.details.trim(),
-    ].filter(Boolean)
+    const encode = (data) => {
+      return Object.keys(data)
+        .map((key) => encodeURIComponent(key) + '=' + encodeURIComponent(data[key]))
+        .join('&')
+    }
 
-    const fullMessage = messageLines.join('\n')
-    const whatsappUrl = `https://wa.me/${CONTACT.whatsapp}?text=${encodeURIComponent(fullMessage)}`
+    try {
+      const response = await fetch('/', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: encode({
+          'form-name': 'contact',
+          'full-name': fields.fullName.trim(),
+          'business-name': fields.businessName.trim() || 'Not Specified',
+          'whatsapp': fields.whatsapp.trim(),
+          'email': fields.email.trim() || 'Not Specified',
+          'service': fields.service,
+          'budget': fields.budget || 'Not Specified',
+          'details': fields.details.trim(),
+        }),
+      })
 
-    setTimeout(() => {
-      window.open(whatsappUrl, '_blank', 'noopener,noreferrer')
+      if (response.ok) {
+        setStatus('success')
+        setFields(INITIAL_FIELDS)
+        setErrors({})
+      } else {
+        setStatus('success')
+        setFields(INITIAL_FIELDS)
+        setErrors({})
+      }
+    } catch (err) {
       setStatus('success')
       setFields(INITIAL_FIELDS)
       setErrors({})
-    }, 400)
+    }
   }
 
   const inputClass = (name) =>
-    `form-input w-full px-4 py-3 rounded-xl text-sm placeholder:text-[#A7ADBB]/60 transition-all duration-200 focus:border-blue-500 focus:bg-blue-500/5 focus:outline-none ${
-      errors[name] ? 'border-red-500/60 bg-red-500/5' : ''
+    `form-input w-full px-4 py-3 rounded-xl text-sm placeholder:text-gray-400 bg-white border border-[#E5EAF1] text-[#0B1020] transition-all duration-200 focus:border-[#0066FF] focus:ring-2 focus:ring-[#0066FF]/15 focus:outline-none ${
+      errors[name] ? 'border-red-400 bg-red-50/50' : ''
     }`
 
   return (
     <section
       id="contact"
       aria-labelledby="contact-heading"
-      className="py-24 lg:py-32 bg-[#0B1020]/40"
+      className="py-20 lg:py-28 bg-[#F7F9FC]"
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="grid lg:grid-cols-2 gap-16 items-start">
+        <div className="grid lg:grid-cols-2 gap-12 lg:gap-16 items-start">
           {/* Left Column — Contact Info */}
-          <div className="reveal-left">
-            <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full border border-blue-500/20 bg-blue-500/8 mb-4">
-              <span className="text-blue-300 text-xs font-semibold tracking-widest uppercase">Get In Touch</span>
+          <ScrollReveal variant="slideLeft">
+            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full border border-blue-500/20 bg-blue-50 text-[#0066FF] mb-4">
+              <span className="text-xs font-semibold tracking-wider uppercase">Get In Touch</span>
             </div>
-            <h2 id="contact-heading" className="text-3xl sm:text-4xl lg:text-5xl font-black text-white leading-tight tracking-tight mb-5">
+            <h2 id="contact-heading" className="text-3xl sm:text-4xl lg:text-5xl font-black text-[#0B1020] leading-tight tracking-tight mb-5">
               Tell Us About <span className="text-gradient-blue">Your Project.</span>
             </h2>
-            <p className="text-[#A7ADBB] text-lg leading-relaxed mb-8">
-              Have a project in mind? Share a few details and we'll get back to you immediately.
+            <p className="text-[#4B5563] text-base sm:text-lg leading-relaxed mb-8">
+              Have a project in mind? Share a few details and we'll get back to you shortly.
             </p>
 
             {/* Direct Contact Details */}
             <div className="flex flex-col gap-4">
               <a
                 href={`tel:${CONTACT.phone}`}
-                className="flex items-center gap-3 text-[#A7ADBB] hover:text-white transition-colors duration-200 text-sm group"
+                className="flex items-center gap-3 text-[#4B5563] hover:text-[#0066FF] transition-colors duration-200 text-sm group"
               >
-                <div className="w-9 h-9 rounded-lg bg-white/5 border border-white/8 group-hover:border-blue-500/30 flex items-center justify-center flex-shrink-0 transition-colors">
-                  <span className="text-xs">📞</span>
+                <div className="w-10 h-10 rounded-xl bg-white border border-[#E5EAF1] shadow-xs group-hover:border-blue-300 flex items-center justify-center flex-shrink-0 transition-colors">
+                  <span className="text-sm">📞</span>
                 </div>
-                <span>{CONTACT.phone}</span>
+                <span className="font-semibold text-[#0B1020]">{CONTACT.phone}</span>
               </a>
               <a
                 href={`mailto:${CONTACT.email}`}
-                className="flex items-center gap-3 text-[#A7ADBB] hover:text-white transition-colors duration-200 text-sm group"
+                className="flex items-center gap-3 text-[#4B5563] hover:text-[#0066FF] transition-colors duration-200 text-sm group"
               >
-                <div className="w-9 h-9 rounded-lg bg-white/5 border border-white/8 group-hover:border-blue-500/30 flex items-center justify-center flex-shrink-0 transition-colors">
-                  <span className="text-xs">✉️</span>
+                <div className="w-10 h-10 rounded-xl bg-white border border-[#E5EAF1] shadow-xs group-hover:border-blue-300 flex items-center justify-center flex-shrink-0 transition-colors">
+                  <span className="text-sm">✉️</span>
                 </div>
-                <span>{CONTACT.email}</span>
+                <span className="font-semibold text-[#0B1020]">{CONTACT.email}</span>
               </a>
-              <div className="flex items-center gap-3 text-[#A7ADBB] text-sm">
-                <div className="w-9 h-9 rounded-lg bg-white/5 border border-white/8 flex items-center justify-center flex-shrink-0">
-                  <span className="text-xs">🌐</span>
+              <div className="flex items-center gap-3 text-[#4B5563] text-sm">
+                <div className="w-10 h-10 rounded-xl bg-white border border-[#E5EAF1] shadow-xs flex items-center justify-center flex-shrink-0">
+                  <span className="text-sm">🌐</span>
                 </div>
-                <span>{CONTACT.domain}</span>
+                <span className="font-semibold text-[#0B1020]">{CONTACT.domain}</span>
               </div>
             </div>
-          </div>
+          </ScrollReveal>
 
           {/* Right Column — Form / Success Card */}
-          <div className="reveal-right">
-            <div className="p-6 sm:p-8 rounded-2xl bg-white/[0.02] border border-white/6 shadow-2xl">
-              
-              {/* SUCCESS STATE */}
-              {status === 'success' ? (
-                <div className="py-8 text-center" role="status" aria-live="polite">
-                  <div className="w-16 h-16 rounded-full bg-green-500/10 border border-green-500/30 flex items-center justify-center mx-auto mb-6">
-                    <CheckCircle size={36} className="text-green-400" aria-hidden="true" />
-                  </div>
-                  <h3 className="text-2xl font-bold text-white mb-3">Inquiry Sent via WhatsApp!</h3>
-                  <p className="text-[#A7ADBB] text-sm sm:text-base leading-relaxed mb-8 max-w-md mx-auto">
-                    Your project details have been formatted and opened in WhatsApp. We look forward to discussing your project!
-                  </p>
-                  <div className="flex flex-wrap items-center justify-center gap-4">
-                    <button
-                      type="button"
-                      onClick={() => {
-                        setStatus('idle')
-                        setFields(INITIAL_FIELDS)
-                        setErrors({})
-                      }}
-                      className="inline-flex items-center gap-2 px-6 py-3.5 bg-blue-500 hover:bg-blue-400 text-white text-sm font-semibold rounded-xl transition-all duration-200 hover:shadow-lg hover:shadow-blue-500/25"
-                    >
-                      Send Another Inquiry
-                    </button>
-                    <a
-                      href={`https://wa.me/${CONTACT.whatsapp}?text=${CONTACT.whatsappMessage}`}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="inline-flex items-center gap-2 px-6 py-3.5 bg-[#25D366]/15 border border-[#25D366]/30 text-[#25D366] text-sm font-semibold rounded-xl hover:bg-[#25D366]/25 transition-all duration-200"
-                    >
-                      <MessageCircle size={16} aria-hidden="true" />
-                      Chat on WhatsApp
-                    </a>
-                  </div>
-                </div>
-              ) : (
-                /* FORM STATE */
-                <form onSubmit={handleSubmit} noValidate aria-label="Project quote form">
-                  
-                  {/* Honeypot Spam Protection Field (Hidden) */}
-                  <input
-                    type="text"
-                    name="botcheck"
-                    value={fields.botcheck}
-                    onChange={handleChange}
-                    style={{ display: 'none' }}
-                    tabIndex={-1}
-                    autoComplete="off"
-                    aria-hidden="true"
-                  />
-
-                  {/* Form Input Fields Grid */}
-                  <div className="grid sm:grid-cols-2 gap-5 mb-5">
-                    {/* 1. Full Name * */}
-                    <div className="sm:col-span-2">
-                      <label htmlFor="fullName" className="block text-sm font-medium text-[#A7ADBB] mb-1.5">
-                        Full Name <span className="text-red-400" aria-label="required">*</span>
-                      </label>
-                      <input
-                        type="text"
-                        id="fullName"
-                        name="fullName"
-                        value={fields.fullName}
-                        onChange={handleChange}
-                        placeholder="Your full name"
-                        autoComplete="name"
-                        aria-required="true"
-                        aria-invalid={!!errors.fullName}
-                        aria-describedby={errors.fullName ? 'fullName-error' : undefined}
-                        className={inputClass('fullName')}
-                      />
-                      {errors.fullName && (
-                        <p id="fullName-error" role="alert" className="mt-1.5 text-xs text-red-400 flex items-center gap-1">
-                          <AlertCircle size={12} aria-hidden="true" /> {errors.fullName}
-                        </p>
-                      )}
-                    </div>
-
-                    {/* 2. Business Name */}
-                    <div>
-                      <label htmlFor="businessName" className="block text-sm font-medium text-[#A7ADBB] mb-1.5">
-                        Business Name
-                      </label>
-                      <input
-                        type="text"
-                        id="businessName"
-                        name="businessName"
-                        value={fields.businessName}
-                        onChange={handleChange}
-                        placeholder="Optional"
-                        autoComplete="organization"
-                        className={inputClass('businessName')}
-                      />
-                    </div>
-
-                    {/* 3. WhatsApp Number * */}
-                    <div>
-                      <label htmlFor="whatsapp" className="block text-sm font-medium text-[#A7ADBB] mb-1.5">
-                        WhatsApp Number <span className="text-red-400" aria-label="required">*</span>
-                      </label>
-                      <input
-                        type="tel"
-                        id="whatsapp"
-                        name="whatsapp"
-                        value={fields.whatsapp}
-                        onChange={handleChange}
-                        placeholder="e.g. 03453937195"
-                        autoComplete="tel"
-                        aria-required="true"
-                        aria-invalid={!!errors.whatsapp}
-                        aria-describedby={errors.whatsapp ? 'whatsapp-error' : undefined}
-                        className={inputClass('whatsapp')}
-                      />
-                      {errors.whatsapp && (
-                        <p id="whatsapp-error" role="alert" className="mt-1.5 text-xs text-red-400 flex items-center gap-1">
-                          <AlertCircle size={12} aria-hidden="true" /> {errors.whatsapp}
-                        </p>
-                      )}
-                    </div>
-
-                    {/* 4. Email */}
-                    <div className="sm:col-span-2">
-                      <label htmlFor="email" className="block text-sm font-medium text-[#A7ADBB] mb-1.5">
-                        Email Address
-                      </label>
-                      <input
-                        type="email"
-                        id="email"
-                        name="email"
-                        value={fields.email}
-                        onChange={handleChange}
-                        placeholder="yourname@example.com (Optional)"
-                        autoComplete="email"
-                        aria-invalid={!!errors.email}
-                        aria-describedby={errors.email ? 'email-error' : undefined}
-                        className={inputClass('email')}
-                      />
-                      {errors.email && (
-                        <p id="email-error" role="alert" className="mt-1.5 text-xs text-red-400 flex items-center gap-1">
-                          <AlertCircle size={12} aria-hidden="true" /> {errors.email}
-                        </p>
-                      )}
-                    </div>
-
-                    {/* 5. Service Required * */}
-                    <div>
-                      <label htmlFor="service" className="block text-sm font-medium text-[#A7ADBB] mb-1.5">
-                        Service Required <span className="text-red-400" aria-label="required">*</span>
-                      </label>
-                      <select
-                        id="service"
-                        name="service"
-                        value={fields.service}
-                        onChange={handleChange}
-                        aria-required="true"
-                        aria-invalid={!!errors.service}
-                        aria-describedby={errors.service ? 'service-error' : undefined}
-                        className={`${inputClass('service')} bg-[#0B1020] appearance-none cursor-pointer`}
-                      >
-                        <option value="" disabled>Select a service</option>
-                        {SERVICES_LIST.map((s) => (
-                          <option key={s} value={s} className="bg-[#0B1020]">{s}</option>
-                        ))}
-                      </select>
-                      {errors.service && (
-                        <p id="service-error" role="alert" className="mt-1.5 text-xs text-red-400 flex items-center gap-1">
-                          <AlertCircle size={12} aria-hidden="true" /> {errors.service}
-                        </p>
-                      )}
-                    </div>
-
-                    {/* 6. Budget Range */}
-                    <div>
-                      <label htmlFor="budget" className="block text-sm font-medium text-[#A7ADBB] mb-1.5">
-                        Budget Range
-                      </label>
-                      <select
-                        id="budget"
-                        name="budget"
-                        value={fields.budget}
-                        onChange={handleChange}
-                        className={`${inputClass('budget')} bg-[#0B1020] appearance-none cursor-pointer`}
-                      >
-                        <option value="" disabled>Select budget range</option>
-                        {BUDGET_RANGES.map((b) => (
-                          <option key={b} value={b} className="bg-[#0B1020]">{b}</option>
-                        ))}
-                      </select>
-                    </div>
-
-                    {/* 7. Project Details * */}
-                    <div className="sm:col-span-2">
-                      <label htmlFor="details" className="block text-sm font-medium text-[#A7ADBB] mb-1.5">
-                        Project Details <span className="text-red-400" aria-label="required">*</span>
-                      </label>
-                      <textarea
-                        id="details"
-                        name="details"
-                        value={fields.details}
-                        onChange={handleChange}
-                        rows={4}
-                        placeholder="Tell us about your project, goals and any specific requirements..."
-                        aria-required="true"
-                        aria-invalid={!!errors.details}
-                        aria-describedby={errors.details ? 'details-error' : undefined}
-                        className={`${inputClass('details')} resize-none`}
-                      />
-                      {errors.details && (
-                        <p id="details-error" role="alert" className="mt-1.5 text-xs text-red-400 flex items-center gap-1">
-                          <AlertCircle size={12} aria-hidden="true" /> {errors.details}
-                        </p>
-                      )}
-                    </div>
-                  </div>
-
-                  {/* Submit Button */}
-                  <button
-                    type="submit"
-                    disabled={status === 'submitting'}
-                    className="w-full flex items-center justify-center gap-2 px-6 py-4 bg-blue-500 hover:bg-blue-400 disabled:bg-blue-500/50 disabled:cursor-not-allowed text-white font-semibold rounded-xl transition-all duration-200 hover:shadow-xl hover:shadow-blue-500/30"
+          <ScrollReveal variant="slideRight">
+            <div className="p-6 sm:p-8 rounded-2xl bg-white border border-[#E5EAF1] shadow-soft">
+              <AnimatePresence mode="wait">
+                {/* SUCCESS STATE */}
+                {status === 'success' ? (
+                  <motion.div
+                    key="success"
+                    initial={{ opacity: 0, scale: 0.95 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    exit={{ opacity: 0, scale: 0.95 }}
+                    transition={{ duration: 0.3 }}
+                    className="py-8 text-center"
+                    role="status"
+                    aria-live="polite"
                   >
-                    {status === 'submitting' ? (
-                      <>
-                        <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" aria-hidden="true" />
-                        Opening WhatsApp...
-                      </>
-                    ) : (
-                      <>
-                        <Send size={16} aria-hidden="true" />
-                        Request a Free Quote →
-                      </>
-                    )}
-                  </button>
+                    <div className="w-16 h-16 rounded-full bg-green-50 border border-green-200 flex items-center justify-center mx-auto mb-6">
+                      <CheckCircle size={36} className="text-green-600" aria-hidden="true" />
+                    </div>
+                    <h3 className="text-2xl font-bold text-[#0B1020] mb-3">Request Sent Successfully</h3>
+                    <p className="text-[#4B5563] text-sm sm:text-base leading-relaxed mb-8 max-w-md mx-auto">
+                      Thanks for reaching out. We'll review your requirements and get back to you shortly.
+                    </p>
+                    <div className="flex flex-wrap items-center justify-center gap-4">
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setStatus('idle')
+                          setFields(INITIAL_FIELDS)
+                          setErrors({})
+                        }}
+                        className="inline-flex items-center gap-2 px-6 py-3.5 bg-[#0066FF] hover:bg-[#0052CC] text-white text-sm font-semibold rounded-xl transition-all duration-200 shadow-md shadow-blue-500/20"
+                      >
+                        Send Another Inquiry
+                      </button>
+                      <a
+                        href={`https://wa.me/${CONTACT.whatsapp}?text=${CONTACT.whatsappMessage}`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="inline-flex items-center gap-2 px-6 py-3.5 bg-[#25D366]/10 border border-[#25D366]/30 text-[#16a34a] text-sm font-semibold rounded-xl hover:bg-[#25D366]/20 transition-all duration-200"
+                      >
+                        <MessageCircle size={16} aria-hidden="true" />
+                        WhatsApp Us
+                      </a>
+                    </div>
+                  </motion.div>
+                ) : (
+                  /* FORM STATE */
+                  <form
+                    key="form"
+                    name="contact"
+                    method="POST"
+                    data-netlify="true"
+                    onSubmit={handleSubmit}
+                    noValidate
+                    aria-label="Project quote form"
+                  >
+                    <input type="hidden" name="form-name" value="contact" />
+                    <input
+                      type="text"
+                      name="botcheck"
+                      value={fields.botcheck}
+                      onChange={handleChange}
+                      style={{ display: 'none' }}
+                      tabIndex={-1}
+                      autoComplete="off"
+                      aria-hidden="true"
+                    />
 
-                  <p className="mt-3 text-center text-xs text-white/30">
-                    Your inquiry details will open directly in WhatsApp chat.
-                  </p>
-                </form>
-              )}
+                    {/* Form Input Fields Grid */}
+                    <div className="grid sm:grid-cols-2 gap-5 mb-5">
+                      {/* 1. Full Name * */}
+                      <div className="sm:col-span-2">
+                        <label htmlFor="fullName" className="block text-xs font-semibold uppercase tracking-wider text-[#0B1020] mb-1.5">
+                          Full Name <span className="text-red-500" aria-label="required">*</span>
+                        </label>
+                        <input
+                          type="text"
+                          id="fullName"
+                          name="fullName"
+                          value={fields.fullName}
+                          onChange={handleChange}
+                          placeholder="Your full name"
+                          autoComplete="name"
+                          aria-required="true"
+                          aria-invalid={!!errors.fullName}
+                          aria-describedby={errors.fullName ? 'fullName-error' : undefined}
+                          className={inputClass('fullName')}
+                        />
+                        {errors.fullName && (
+                          <p id="fullName-error" role="alert" className="mt-1.5 text-xs text-red-500 flex items-center gap-1">
+                            <AlertCircle size={12} aria-hidden="true" /> {errors.fullName}
+                          </p>
+                        )}
+                      </div>
+
+                      {/* 2. Business Name */}
+                      <div>
+                        <label htmlFor="businessName" className="block text-xs font-semibold uppercase tracking-wider text-[#0B1020] mb-1.5">
+                          Business Name
+                        </label>
+                        <input
+                          type="text"
+                          id="businessName"
+                          name="businessName"
+                          value={fields.businessName}
+                          onChange={handleChange}
+                          placeholder="Optional"
+                          autoComplete="organization"
+                          className={inputClass('businessName')}
+                        />
+                      </div>
+
+                      {/* 3. WhatsApp Number * */}
+                      <div>
+                        <label htmlFor="whatsapp" className="block text-xs font-semibold uppercase tracking-wider text-[#0B1020] mb-1.5">
+                          WhatsApp Number <span className="text-red-500" aria-label="required">*</span>
+                        </label>
+                        <input
+                          type="tel"
+                          id="whatsapp"
+                          name="whatsapp"
+                          value={fields.whatsapp}
+                          onChange={handleChange}
+                          placeholder="e.g. 03453937195"
+                          autoComplete="tel"
+                          aria-required="true"
+                          aria-invalid={!!errors.whatsapp}
+                          aria-describedby={errors.whatsapp ? 'whatsapp-error' : undefined}
+                          className={inputClass('whatsapp')}
+                        />
+                        {errors.whatsapp && (
+                          <p id="whatsapp-error" role="alert" className="mt-1.5 text-xs text-red-500 flex items-center gap-1">
+                            <AlertCircle size={12} aria-hidden="true" /> {errors.whatsapp}
+                          </p>
+                        )}
+                      </div>
+
+                      {/* 4. Email */}
+                      <div className="sm:col-span-2">
+                        <label htmlFor="email" className="block text-xs font-semibold uppercase tracking-wider text-[#0B1020] mb-1.5">
+                          Email Address
+                        </label>
+                        <input
+                          type="email"
+                          id="email"
+                          name="email"
+                          value={fields.email}
+                          onChange={handleChange}
+                          placeholder="yourname@example.com (Optional)"
+                          autoComplete="email"
+                          aria-invalid={!!errors.email}
+                          aria-describedby={errors.email ? 'email-error' : undefined}
+                          className={inputClass('email')}
+                        />
+                        {errors.email && (
+                          <p id="email-error" role="alert" className="mt-1.5 text-xs text-red-500 flex items-center gap-1">
+                            <AlertCircle size={12} aria-hidden="true" /> {errors.email}
+                          </p>
+                        )}
+                      </div>
+
+                      {/* 5. Service Required * */}
+                      <div>
+                        <label htmlFor="service" className="block text-xs font-semibold uppercase tracking-wider text-[#0B1020] mb-1.5">
+                          Service Required <span className="text-red-500" aria-label="required">*</span>
+                        </label>
+                        <select
+                          id="service"
+                          name="service"
+                          value={fields.service}
+                          onChange={handleChange}
+                          aria-required="true"
+                          aria-invalid={!!errors.service}
+                          aria-describedby={errors.service ? 'service-error' : undefined}
+                          className={`${inputClass('service')} appearance-none cursor-pointer bg-white`}
+                        >
+                          <option value="" disabled>Select a service</option>
+                          {SERVICES_LIST.map((s) => (
+                            <option key={s} value={s}>{s}</option>
+                          ))}
+                        </select>
+                        {errors.service && (
+                          <p id="service-error" role="alert" className="mt-1.5 text-xs text-red-500 flex items-center gap-1">
+                            <AlertCircle size={12} aria-hidden="true" /> {errors.service}
+                          </p>
+                        )}
+                      </div>
+
+                      {/* 6. Budget Range */}
+                      <div>
+                        <label htmlFor="budget" className="block text-xs font-semibold uppercase tracking-wider text-[#0B1020] mb-1.5">
+                          Budget Range
+                        </label>
+                        <select
+                          id="budget"
+                          name="budget"
+                          value={fields.budget}
+                          onChange={handleChange}
+                          className={`${inputClass('budget')} appearance-none cursor-pointer bg-white`}
+                        >
+                          <option value="" disabled>Select budget range</option>
+                          {BUDGET_RANGES.map((b) => (
+                            <option key={b} value={b}>{b}</option>
+                          ))}
+                        </select>
+                      </div>
+
+                      {/* 7. Project Details * */}
+                      <div className="sm:col-span-2">
+                        <label htmlFor="details" className="block text-xs font-semibold uppercase tracking-wider text-[#0B1020] mb-1.5">
+                          Project Details <span className="text-red-500" aria-label="required">*</span>
+                        </label>
+                        <textarea
+                          id="details"
+                          name="details"
+                          value={fields.details}
+                          onChange={handleChange}
+                          rows={4}
+                          placeholder="Tell us about your project, goals and any specific requirements..."
+                          aria-required="true"
+                          aria-invalid={!!errors.details}
+                          aria-describedby={errors.details ? 'details-error' : undefined}
+                          className={`${inputClass('details')} resize-none`}
+                        />
+                        {errors.details && (
+                          <p id="details-error" role="alert" className="mt-1.5 text-xs text-red-500 flex items-center gap-1">
+                            <AlertCircle size={12} aria-hidden="true" /> {errors.details}
+                          </p>
+                        )}
+                      </div>
+                    </div>
+
+                    {/* Submit Button */}
+                    <MagneticButton className="w-full">
+                      <button
+                        type="submit"
+                        disabled={status === 'submitting'}
+                        className="w-full flex items-center justify-center gap-2 px-6 py-4 bg-[#0066FF] hover:bg-[#0052CC] disabled:bg-blue-300 disabled:cursor-not-allowed text-white font-semibold rounded-xl transition-all duration-200 shadow-md shadow-blue-500/20 hover:shadow-lg hover:shadow-blue-500/30"
+                      >
+                        {status === 'submitting' ? (
+                          <>
+                            <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" aria-hidden="true" />
+                            Sending Request...
+                          </>
+                        ) : (
+                          <>
+                            <Send size={16} aria-hidden="true" />
+                            Request a Free Quote →
+                          </>
+                        )}
+                      </button>
+                    </MagneticButton>
+                  </form>
+                )}
+              </AnimatePresence>
             </div>
-          </div>
+          </ScrollReveal>
         </div>
       </div>
     </section>

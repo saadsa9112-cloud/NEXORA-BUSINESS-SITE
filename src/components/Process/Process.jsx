@@ -1,52 +1,81 @@
+import { useRef } from 'react'
+import { motion, useScroll, useSpring, useReducedMotion } from 'framer-motion'
 import { PROCESS_STEPS } from '../../data/siteData'
+import ScrollReveal from '../Motion/ScrollReveal'
 
 export default function Process() {
+  const sectionRef = useRef(null)
+  const shouldReduceMotion = useReducedMotion()
+
+  // Track scroll progress within process section for timeline line animation
+  const { scrollYProgress } = useScroll({
+    target: sectionRef,
+    offset: ['start center', 'end center'],
+  })
+
+  const scaleX = useSpring(scrollYProgress, { stiffness: 100, damping: 20 })
+
   return (
     <section
+      ref={sectionRef}
       id="process"
       aria-labelledby="process-heading"
-      className="py-24 lg:py-32 bg-[#0B1020]/40 overflow-hidden"
+      className="py-20 lg:py-28 bg-white border-y border-[#E5EAF1] overflow-hidden"
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
-        <div className="max-w-2xl mx-auto text-center mb-16 reveal">
-          <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full border border-blue-500/20 bg-blue-500/8 mb-4">
-            <span className="text-blue-300 text-xs font-semibold tracking-widest uppercase">Our Process</span>
+        <ScrollReveal variant="fadeUp" className="max-w-2xl mx-auto text-center mb-16">
+          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full border border-blue-500/20 bg-blue-50 text-[#0066FF] mb-4">
+            <span className="text-xs font-semibold tracking-wider uppercase">Our Process</span>
           </div>
-          <h2 id="process-heading" className="text-3xl sm:text-4xl lg:text-5xl font-black text-white leading-tight tracking-tight mb-4">
+          <h2 id="process-heading" className="text-3xl sm:text-4xl lg:text-5xl font-black text-[#0B1020] leading-tight tracking-tight mb-4">
             From Idea to <span className="text-gradient-blue">Launch.</span>
           </h2>
-        </div>
+          <p className="text-[#4B5563] text-base leading-relaxed">
+            A clear, structured 6-step path to deliver your digital project efficiently.
+          </p>
+        </ScrollReveal>
 
-        {/* Desktop: horizontal timeline */}
+        {/* Desktop: horizontal timeline with animated progress line */}
         <div className="hidden md:grid md:grid-cols-6 gap-0 relative">
-          {/* Connecting line */}
+          {/* Base connecting line */}
           <div
-            className="absolute top-10 left-[calc(1/12*100%)] right-[calc(1/12*100%)] h-px"
-            style={{
-              background: 'linear-gradient(90deg, rgba(59,130,246,0.05), rgba(59,130,246,0.4) 50%, rgba(59,130,246,0.05))',
-            }}
+            className="absolute top-10 left-[calc(1/12*100%)] right-[calc(1/12*100%)] h-0.5 bg-slate-200"
             aria-hidden="true"
           />
 
+          {/* Animated active progress line */}
+          {!shouldReduceMotion && (
+            <motion.div
+              style={{ scaleX, transformOrigin: 'left' }}
+              className="absolute top-10 left-[calc(1/12*100%)] right-[calc(1/12*100%)] h-0.5 bg-[#0066FF] z-0"
+              aria-hidden="true"
+            />
+          )}
+
           {PROCESS_STEPS.map((step, idx) => (
-            <div
+            <ScrollReveal
               key={step.number}
-              className="reveal flex flex-col items-center text-center px-3 relative"
-              style={{ transitionDelay: `${idx * 0.1}s` }}
+              variant="fadeUp"
+              delay={idx * 0.08}
+              className="flex flex-col items-center text-center px-3 relative z-10"
             >
               {/* Step circle */}
-              <div className="relative z-10 mb-5">
-                <div className="w-20 h-20 rounded-full border border-blue-500/20 bg-[#05070D] flex flex-col items-center justify-center group hover:border-blue-500/50 hover:bg-blue-500/5 transition-all duration-300 cursor-default">
-                  <span className="text-[10px] font-bold text-blue-400 tracking-widest">{step.number}</span>
-                  <span className="text-[8px] text-[#A7ADBB] uppercase tracking-widest font-semibold mt-0.5">{step.title}</span>
-                </div>
+              <div className="mb-5">
+                <motion.div
+                  whileHover={{ scale: 1.1, rotate: 3 }}
+                  transition={{ type: 'spring', stiffness: 350, damping: 20 }}
+                  className="w-20 h-20 rounded-full border-2 border-[#E5EAF1] bg-white shadow-soft flex flex-col items-center justify-center group hover:border-[#0066FF] hover:bg-blue-50/50 transition-all duration-300 cursor-default"
+                >
+                  <span className="text-xs font-bold text-[#0066FF] tracking-wider">{step.number}</span>
+                  <span className="text-[9px] text-[#0B1020] font-bold uppercase tracking-wider mt-0.5">{step.title}</span>
+                </motion.div>
               </div>
 
               {/* Content */}
-              <h3 className="text-white font-bold text-sm mb-2">{step.title}</h3>
-              <p className="text-[#A7ADBB] text-xs leading-relaxed">{step.description}</p>
-            </div>
+              <h3 className="text-[#0B1020] font-bold text-base mb-1">{step.title}</h3>
+              <p className="text-[#4B5563] text-xs leading-relaxed max-w-[160px]">{step.description}</p>
+            </ScrollReveal>
           ))}
         </div>
 
@@ -54,33 +83,31 @@ export default function Process() {
         <div className="md:hidden relative">
           {/* Vertical line */}
           <div
-            className="absolute left-8 top-0 bottom-0 w-px"
-            style={{
-              background: 'linear-gradient(180deg, rgba(59,130,246,0.05), rgba(59,130,246,0.4) 50%, rgba(59,130,246,0.05))',
-            }}
+            className="absolute left-8 top-0 bottom-0 w-0.5 bg-slate-200"
             aria-hidden="true"
           />
 
           <div className="flex flex-col gap-8">
             {PROCESS_STEPS.map((step, idx) => (
-              <div
+              <ScrollReveal
                 key={step.number}
-                className="reveal flex items-start gap-6 pl-0"
-                style={{ transitionDelay: `${idx * 0.1}s` }}
+                variant="fadeUp"
+                delay={idx * 0.08}
+                className="flex items-start gap-6 pl-0 relative z-10"
               >
                 {/* Circle */}
-                <div className="relative z-10 flex-shrink-0">
-                  <div className="w-16 h-16 rounded-full border border-blue-500/25 bg-[#05070D] flex flex-col items-center justify-center">
-                    <span className="text-[9px] font-bold text-blue-400 tracking-widest">{step.number}</span>
+                <div className="flex-shrink-0">
+                  <div className="w-16 h-16 rounded-full border-2 border-[#E5EAF1] bg-white shadow-soft flex flex-col items-center justify-center">
+                    <span className="text-xs font-bold text-[#0066FF] tracking-wider">{step.number}</span>
                   </div>
                 </div>
 
                 {/* Content */}
-                <div className="pt-3">
-                  <h3 className="text-white font-bold text-base mb-1">{step.title}</h3>
-                  <p className="text-[#A7ADBB] text-sm leading-relaxed">{step.description}</p>
+                <div className="pt-2">
+                  <h3 className="text-[#0B1020] font-bold text-base mb-1">{step.title}</h3>
+                  <p className="text-[#4B5563] text-sm leading-relaxed">{step.description}</p>
                 </div>
-              </div>
+              </ScrollReveal>
             ))}
           </div>
         </div>

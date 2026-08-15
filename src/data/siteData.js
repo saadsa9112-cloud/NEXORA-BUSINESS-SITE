@@ -163,33 +163,33 @@ export const WHY_US = [
 export const PROCESS_STEPS = [
   {
     number: '01',
-    title: 'Discovery',
-    description: 'We understand your business, audience and goals.',
+    title: 'Discover',
+    description: 'Understanding your business, audience & goals.',
   },
   {
     number: '02',
-    title: 'Strategy',
-    description: 'We plan the right structure and digital solution.',
+    title: 'Plan',
+    description: 'Structuring the sitemap & digital solution.',
   },
   {
     number: '03',
     title: 'Design',
-    description: 'We create the visual experience and user journey.',
+    description: 'Creating the modern UI/UX experience.',
   },
   {
     number: '04',
-    title: 'Development',
-    description: 'We build, integrate and optimize your website.',
+    title: 'Develop',
+    description: 'Building & optimizing your responsive site.',
   },
   {
     number: '05',
-    title: 'Testing',
-    description: 'We test responsiveness, functionality, speed and usability.',
+    title: 'Test',
+    description: 'Ensuring speed, security & usability.',
   },
   {
     number: '06',
     title: 'Launch',
-    description: 'Your website goes live and is ready for growth.',
+    description: 'Deploying live & preparing for growth.',
   },
 ]
 
@@ -201,7 +201,13 @@ export const PRICING = [
     period: '',
     note: 'Starting From',
     highlight: true,
-    features: ['Responsive Design', 'Up to 5 Pages', 'Contact Form', 'SEO Setup', 'Basic Hosting Setup'],
+    badge: 'Recommended',
+    features: [
+      'Up to 5 Pages',
+      'Responsive Design',
+      'Contact Form',
+      'SEO-Ready Setup',
+    ],
   },
   {
     id: 2,
@@ -210,7 +216,12 @@ export const PRICING = [
     period: '',
     note: 'Starting From',
     highlight: false,
-    features: ['Custom Theme', 'CMS Integration', 'Blog Setup', 'Plugin Configuration', 'Admin Training'],
+    features: [
+      'Custom Theme',
+      'CMS Integration',
+      'Blog Setup',
+      'Plugin Configuration',
+    ],
   },
   {
     id: 3,
@@ -219,7 +230,12 @@ export const PRICING = [
     period: '',
     note: 'Starting From',
     highlight: false,
-    features: ['Product Catalogue', 'Payment Integration', 'Inventory Setup', 'Order Management', 'Mobile Optimized'],
+    features: [
+      'Product Catalogue',
+      'Payment Integration',
+      'Inventory Setup',
+      'Mobile Optimized',
+    ],
   },
   {
     id: 4,
@@ -228,7 +244,12 @@ export const PRICING = [
     period: '/month',
     note: 'Starting From',
     highlight: false,
-    features: ['Keyword Research', 'On-Page SEO', 'Technical SEO', 'Monthly Reporting', 'Content Guidance'],
+    features: [
+      'Keyword Research',
+      'On-Page SEO',
+      'Technical SEO',
+      'Monthly Reporting',
+    ],
   },
   {
     id: 5,
@@ -237,7 +258,12 @@ export const PRICING = [
     period: '+',
     note: 'Starting From',
     highlight: false,
-    features: ['Logo Design', 'Brand Identity', 'Social Media Graphics', 'Marketing Materials', 'File Formats Included'],
+    features: [
+      'Logo Design',
+      'Brand Identity',
+      'Social Graphics',
+      'Marketing Materials',
+    ],
   },
   {
     id: 6,
@@ -246,7 +272,12 @@ export const PRICING = [
     period: '/year',
     note: 'Starting From',
     highlight: false,
-    features: ['Managed Hosting', 'Domain Registration', 'SSL Certificate', 'Email Setup', 'Uptime Monitoring'],
+    features: [
+      'Managed Hosting',
+      'Domain Registration',
+      'SSL Certificate',
+      'Email Setup',
+    ],
   },
   {
     id: 7,
@@ -255,7 +286,12 @@ export const PRICING = [
     period: '/month',
     note: 'Starting From',
     highlight: false,
-    features: ['Regular Updates', 'Security Monitoring', 'Backups', 'Performance Checks', 'Priority Support'],
+    features: [
+      'Regular Updates',
+      'Security Monitoring',
+      'Backups',
+      'Performance Checks',
+    ],
   },
 ]
 

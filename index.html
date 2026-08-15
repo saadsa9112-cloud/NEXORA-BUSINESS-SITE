@@ -67,6 +67,18 @@
     </script>
   </head>
   <body>
+    <!-- Netlify Static Form Crawler Detection -->
+    <form name="contact" netlify netlify-honeypot="botcheck" hidden aria-hidden="true">
+      <input type="text" name="full-name" />
+      <input type="text" name="business-name" />
+      <input type="tel" name="whatsapp" />
+      <input type="email" name="email" />
+      <input type="text" name="service" />
+      <input type="text" name="budget" />
+      <textarea name="details"></textarea>
+      <input type="text" name="botcheck" />
+    </form>
+
     <div id="root"></div>
     <script type="module" src="/src/main.jsx"></script>
   </body>

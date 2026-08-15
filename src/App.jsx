@@ -13,10 +13,11 @@ import FAQ from './components/FAQ/FAQ'
 import QuoteForm from './components/QuoteForm/QuoteForm'
 import FinalCTA from './components/FinalCTA/FinalCTA'
 import WhatsAppButton from './components/WhatsAppButton/WhatsAppButton'
+import FloatingActionBar from './components/FloatingBar/FloatingActionBar'
 import Footer from './components/Footer/Footer'
 
 export default function App() {
-  // Scroll-reveal animation observer
+  // Scroll-reveal animation observer fallback
   useEffect(() => {
     const selectors = ['.reveal', '.reveal-left', '.reveal-right']
     const allElements = selectors.flatMap((sel) =>
@@ -41,7 +42,7 @@ export default function App() {
   }, [])
 
   return (
-    <div className="min-h-screen bg-[#05070D] text-white overflow-x-hidden">
+    <div className="min-h-screen bg-[#F7F9FC] text-[#0B1020] overflow-x-hidden">
       {/* Skip to main content — accessibility */}
       <a
         href="#home"
@@ -68,6 +69,7 @@ export default function App() {
       </main>
 
       <Footer />
+      <FloatingActionBar />
       <WhatsAppButton />
     </div>
   )
