@@ -3,7 +3,7 @@ import {
 } from 'lucide-react'
 import corporateImg from '../assets/portfolio/corporate.jpg'
 import ecommerceImg from '../assets/portfolio/ecommerce.jpg'
-import wordpressImg from '../assets/portfolio/wordpress.jpg'
+import haqTransportImg from '../assets/portfolio/haq-transport.jpg'
 import restaurantImg from '../assets/portfolio/restaurant.jpg'
 import dashboardImg from '../assets/portfolio/dashboard.jpg'
 import landingImg from '../assets/portfolio/landing.jpg'
@@ -91,12 +91,12 @@ export const PORTFOLIO_ITEMS = [
   },
   {
     id: 3,
-    category: 'WordPress Website',
-    title: 'Professional Business Website',
-    description: 'WordPress-powered business site with editorial blog, services overview and portfolio.',
-    image: wordpressImg,
-    tag: 'Featured Concept',
-    type: 'wordpress',
+    category: 'Logistics & Transport',
+    title: 'Haq Transport & Logistics',
+    description: 'Modern transport and logistics management website featuring fleet services, tracking, and quote requests.',
+    image: haqTransportImg,
+    tag: 'Live Project',
+    type: 'transport',
   },
   {
     id: 4,

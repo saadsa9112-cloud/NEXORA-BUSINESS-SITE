@@ -5,7 +5,7 @@ import { PORTFOLIO_ITEMS } from '../../data/siteData'
 import TiltCard from '../Motion/TiltCard'
 import ScrollReveal from '../Motion/ScrollReveal'
 
-const CATEGORIES = ['All', 'Web Development', 'WordPress', 'E-Commerce']
+const CATEGORIES = ['All', 'Web Development', 'Logistics', 'E-Commerce']
 
 export default function Portfolio() {
   const [activeCategory, setActiveCategory] = useState('All')
