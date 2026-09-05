@@ -47,7 +47,7 @@ export default function Services() {
         </ScrollReveal>
 
         {/* Services 3D Tilt Card Grid */}
-        <div className="grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+        <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
           {SERVICES.map((service, idx) => {
             const Icon = service.icon
             return (

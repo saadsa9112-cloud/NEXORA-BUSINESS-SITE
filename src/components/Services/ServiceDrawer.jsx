@@ -106,6 +106,21 @@ const SERVICE_DETAILS = {
     techStack: ['Regular Updates', 'Security Monitoring', 'Backups', 'Performance Checks'],
     timeline: 'Ongoing Monthly Service',
   },
+  'Custom Web Application': {
+    price: 'Rs. 45,000',
+    pricePeriod: 'Starting From',
+    overview: 'Tailored web applications, portals and custom software solutions built for complex business workflows.',
+    deliverables: [
+      'Custom React / Node.js Application Architecture',
+      'Database Design, Authentication & Role Permissions',
+      'REST / GraphQL API Integration & Webhooks',
+      'Admin Dashboard & Management Interfaces',
+      'High-Performance Scalable Cloud Deployment',
+      'Comprehensive Technical Documentation & Handoff',
+    ],
+    techStack: ['Custom Architecture', 'React / Node.js', 'API & Database', 'Cloud Hosting', 'Scalable Security'],
+    timeline: '10 – 20 Business Days',
+  },
 }
 
 export default function ServiceDrawer({ service, onClose, onSelectService }) {

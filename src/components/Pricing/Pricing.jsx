@@ -31,7 +31,7 @@ export default function Pricing() {
         </ScrollReveal>
 
         {/* Pricing Grid (Compact 4-feature interactive 3D cards) */}
-        <div className="grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 pt-4 mb-12">
+        <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6 pt-4 mb-12">
           {PRICING.map((plan, idx) => (
             <ScrollReveal
               key={plan.id}

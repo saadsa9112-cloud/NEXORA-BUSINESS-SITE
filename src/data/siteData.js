@@ -1,5 +1,5 @@
 import {
-  Globe, Code, ShoppingCart, Search, Palette, Server, Wrench
+  Globe, Code, ShoppingCart, Search, Palette, Server, Wrench, Layers
 } from 'lucide-react'
 import corporateImg from '../assets/portfolio/corporate.jpg'
 import ecommerceImg from '../assets/portfolio/ecommerce.jpg'
@@ -67,6 +67,13 @@ export const SERVICES = [
     title: 'Website Maintenance',
     description: 'Updates, backups, security and performance support after launch.',
     color: 'blue',
+  },
+  {
+    id: 8,
+    icon: Layers,
+    title: 'Custom Web Application',
+    description: 'Tailored web applications, portals and custom software solutions for complex business workflows.',
+    color: 'emerald',
   },
 ]
 
@@ -291,6 +298,20 @@ export const PRICING = [
       'Security Monitoring',
       'Backups',
       'Performance Checks',
+    ],
+  },
+  {
+    id: 8,
+    title: 'Custom Web App',
+    price: 'Rs. 45,000',
+    period: '',
+    note: 'Starting From',
+    highlight: false,
+    features: [
+      'Custom Architecture',
+      'API & Database Setup',
+      'Scalable Backend',
+      'Admin Dashboard',
     ],
   },
 ]
