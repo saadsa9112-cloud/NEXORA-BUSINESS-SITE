@@ -138,8 +138,7 @@ export default function Portfolio() {
 
         {/* Disclosure note */}
         <p className="mt-12 text-center text-xs text-[#6B7280] max-w-xl mx-auto leading-relaxed">
-          All projects shown are self-created demonstration concepts produced by NEXORA DIGITAL
-          to showcase design and development capabilities.
+          Explore selected digital client work &amp; showcase projects produced by NEXORA DIGITAL.
         </p>
       </div>
 
@@ -226,7 +225,7 @@ export default function Portfolio() {
                 <div className="p-6 border-t border-[#E5EAF1] bg-[#F8FAFC] flex flex-wrap items-center justify-between gap-4">
                   <div className="flex items-center gap-2 text-xs text-[#6B7280]">
                     <ShieldCheck size={16} className="text-[#0066FF]" />
-                    <span>NEXORA DIGITAL Verified Demo Concept</span>
+                    <span>NEXORA DIGITAL Verified Project</span>
                   </div>
                   <button
                     type="button"

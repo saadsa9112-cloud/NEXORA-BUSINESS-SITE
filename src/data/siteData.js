@@ -84,7 +84,7 @@ export const PORTFOLIO_ITEMS = [
     title: 'Modern Corporate Website',
     description: 'A clean, conversion-focused corporate presence with service pages, team section and lead capture.',
     image: corporateImg,
-    tag: 'Featured Concept',
+    tag: 'Featured Project',
     type: 'corporate',
   },
   {
@@ -93,7 +93,7 @@ export const PORTFOLIO_ITEMS = [
     title: 'Modern Online Store',
     description: 'Full-featured Shopify store with product grids, cart functionality and a seamless checkout flow.',
     image: ecommerceImg,
-    tag: 'Featured Concept',
+    tag: 'Featured Project',
     type: 'ecommerce',
   },
   {
@@ -102,7 +102,7 @@ export const PORTFOLIO_ITEMS = [
     title: 'HAQ Transport Network',
     description: 'Real-world corporate logistics platform for HAQ Group featuring fleet management, cargo solutions, and freight quotes.',
     image: haqTransportImg,
-    tag: 'Real Client Project',
+    tag: 'Featured Project',
     type: 'transport',
   },
   {
@@ -111,7 +111,7 @@ export const PORTFOLIO_ITEMS = [
     title: 'Premium Restaurant Experience',
     description: 'High-end restaurant website with visual menu, online reservations and brand storytelling.',
     image: restaurantImg,
-    tag: 'Featured Concept',
+    tag: 'Featured Project',
     type: 'restaurant',
   },
   {
@@ -120,7 +120,7 @@ export const PORTFOLIO_ITEMS = [
     title: 'Modern Business Dashboard',
     description: 'Data-rich analytics dashboard with KPI cards, charts and an intuitive management interface.',
     image: dashboardImg,
-    tag: 'Featured Concept',
+    tag: 'Featured Project',
     type: 'dashboard',
   },
   {
@@ -129,7 +129,7 @@ export const PORTFOLIO_ITEMS = [
     title: 'High-Converting Landing Experience',
     description: 'Conversion-optimised landing page with bold hero, feature highlights and integrated pricing.',
     image: landingImg,
-    tag: 'Featured Concept',
+    tag: 'Featured Project',
     type: 'landing',
   },
 ]
