@@ -357,6 +357,7 @@ export const CONTACT = {
   whatsapp: '923453937195',
   email: 'hello.nexoradigitals@gmail.com',
   domain: 'nexoradigitalsol.com',
+  facebook: 'https://www.facebook.com/profile.php?id=61592546954736',
   whatsappMessage: encodeURIComponent(
     "Hello NEXORA DIGITAL, I'm interested in your services and would like to discuss my project."
   ),
