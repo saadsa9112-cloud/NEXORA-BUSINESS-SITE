@@ -99,8 +99,8 @@ export const PORTFOLIO_ITEMS = [
   {
     id: 3,
     category: 'Logistics & Transport',
-    title: 'HAQ Transport Network',
-    description: 'Real-world corporate logistics platform for HAQ Group featuring fleet management, cargo solutions, and freight quotes.',
+    title: 'Haq Transport Network',
+    description: 'Official corporate website for HAQ Group featuring nationwide freight, 500+ heavy transport fleet, and industrial supply chain solutions.',
     image: haqTransportImg,
     tag: 'Featured Project',
     type: 'transport',
