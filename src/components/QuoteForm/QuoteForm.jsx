@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { Send, CheckCircle, AlertCircle, MessageCircle } from 'lucide-react'
+import { Send, CheckCircle, AlertCircle, MessageCircle, Phone, Mail } from 'lucide-react'
 import { SERVICES_LIST, BUDGET_RANGES, CONTACT } from '../../data/siteData'
 import MagneticButton from '../Motion/MagneticButton'
 import ScrollReveal from '../Motion/ScrollReveal'
@@ -152,18 +152,20 @@ export default function QuoteForm() {
                 href={`tel:${CONTACT.phone}`}
                 className="flex items-center gap-3 text-[#4B5563] hover:text-[#0066FF] transition-colors duration-200 text-sm group"
               >
-                <div className="w-10 h-10 rounded-xl bg-white border border-[#E5EAF1] shadow-xs group-hover:border-blue-300 flex items-center justify-center flex-shrink-0 transition-colors">
-                  <span className="text-sm">📞</span>
+                <div className="w-10 h-10 rounded-xl bg-blue-50 text-[#0066FF] border border-blue-100 shadow-xs group-hover:bg-[#0066FF] group-hover:text-white flex items-center justify-center flex-shrink-0 transition-all">
+                  <Phone size={18} />
                 </div>
-                <span className="font-semibold text-[#0B1020]">{CONTACT.phone}</span>
+                <span className="font-bold text-[#0B1020] group-hover:text-[#0066FF] transition-colors">{CONTACT.phone}</span>
               </a>
+
               <a
                 href={`mailto:${CONTACT.email}`}
                 className="flex items-center gap-3 text-[#4B5563] hover:text-[#0066FF] transition-colors duration-200 text-sm group"
               >
-                <div className="w-10 h-10 rounded-xl bg-white border border-[#E5EAF1] shadow-xs group-hover:border-blue-300 flex items-center justify-center flex-shrink-0 transition-colors">
-                  <span className="text-sm">✉️</span>
+                <div className="w-10 h-10 rounded-xl bg-blue-50 text-[#0066FF] border border-blue-100 shadow-xs group-hover:bg-[#0066FF] group-hover:text-white flex items-center justify-center flex-shrink-0 transition-all">
+                  <Mail size={18} />
                 </div>
+                <span className="font-bold text-[#0B1020] group-hover:text-[#0066FF] transition-colors break-all">{CONTACT.email}</span>
               </a>
             </div>
           </ScrollReveal>
