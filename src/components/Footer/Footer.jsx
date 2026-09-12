@@ -137,7 +137,7 @@ export default function Footer() {
         {/* Bottom bar */}
         <div className="border-t border-white/10 pt-8 flex flex-col sm:flex-row items-center justify-between gap-4">
           <p className="text-[#A7ADBB] text-xs">
-            © 2026 NEXORA DIGITAL. All Rights Reserved.
+            © 2026 NEXORA DIGITAL by HMS (Hafiz Muhammad Saad). All Rights Reserved.
           </p>
           <div className="flex flex-wrap justify-center gap-4 sm:gap-6">
             {LEGAL_LINKS.map((link) => (

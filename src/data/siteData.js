@@ -355,11 +355,11 @@ export const FAQ_ITEMS = [
 export const CONTACT = {
   phone: '0345-3937195',
   whatsapp: '923453937195',
-  email: 'hello.nexoradigitals@gmail.com',
-  domain: 'nexoradigitalsol.com',
+  email: 'sales.nexorahms@gmail.com',
+  domain: 'nexorabyhms.netlify.app',
   facebook: 'https://www.facebook.com/profile.php?id=61592546954736',
   whatsappMessage: encodeURIComponent(
-    "Hello NEXORA DIGITAL, I'm interested in your services and would like to discuss my project."
+    "Hello NEXORA DIGITAL (by HMS), I'm interested in your services and would like to discuss my project."
   ),
 }
 
