@@ -53,7 +53,7 @@ export default function Footer() {
             <div className="flex gap-3" aria-label="Social media links">
               {[
                 { Icon: FacebookIcon, label: 'Facebook', href: CONTACT.facebook },
-                { Icon: InstagramIcon, label: 'Instagram', href: '#' },
+                { Icon: InstagramIcon, label: 'Instagram', href: CONTACT.instagram },
                 { Icon: LinkedinIcon, label: 'LinkedIn', href: '#' },
               ].map(({ Icon, label, href }) => (
                 <a

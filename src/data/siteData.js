@@ -358,6 +358,7 @@ export const CONTACT = {
   email: 'sales.nexorahms@gmail.com',
   domain: 'nexorabyhms.netlify.app',
   facebook: 'https://www.facebook.com/profile.php?id=61592546954736',
+  instagram: 'https://www.instagram.com/nexorabyhms',
   whatsappMessage: encodeURIComponent(
     "Hello NEXORA DIGITAL (by HMS), I'm interested in your services and would like to discuss my project."
   ),
