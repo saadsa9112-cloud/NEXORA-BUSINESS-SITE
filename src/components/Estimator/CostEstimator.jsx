@@ -1,7 +1,16 @@
 import { useState } from 'react'
-import { motion, AnimatePresence } from 'framer-motion'
-import { Calculator, Check, ArrowRight, Globe, Code, ShoppingCart, Palette, Layers, Sparkles } from 'lucide-react'
+import { motion } from 'framer-motion'
+import { Calculator, Check, ArrowRight, Globe, Code, ShoppingCart, Palette, Layers } from 'lucide-react'
 import ScrollReveal from '../Motion/ScrollReveal'
+
+const CORPORATE_BLUE_THEME = {
+  gradient: 'from-[#0066FF] via-[#1F90FF] to-blue-400',
+  badgeBg: 'bg-blue-50 text-[#0066FF] border-blue-200',
+  activeBtn: 'bg-blue-50/90 border-[#0066FF] text-[#0066FF] ring-1 ring-[#0066FF]',
+  activeCheckbox: 'bg-[#0066FF] border-[#0066FF]',
+  actionBtn: 'bg-[#0066FF] hover:bg-[#0052CC] shadow-blue-500/20',
+  totalText: 'text-[#0066FF]',
+}
 
 const DOMAIN_CONFIGS = {
   business: {
@@ -10,14 +19,7 @@ const DOMAIN_CONFIGS = {
     icon: Globe,
     basePricePKR: 15000,
     basePriceUSD: 299,
-    theme: {
-      gradient: 'from-[#0066FF] via-[#1F90FF] to-blue-400',
-      badgeBg: 'bg-blue-50 text-[#0066FF] border-blue-200',
-      activeBtn: 'bg-blue-50/90 border-[#0066FF] text-[#0066FF] ring-1 ring-[#0066FF]',
-      activeCheckbox: 'bg-[#0066FF] border-[#0066FF]',
-      actionBtn: 'bg-[#0066FF] hover:bg-[#0052CC] shadow-blue-500/20',
-      totalText: 'text-[#0066FF]',
-    },
+    theme: CORPORATE_BLUE_THEME,
     scopeLabel: '2. Select Page & Content Scope',
     addonLabel: '3. Optional Business & Growth Add-ons',
     scopesPKR: [
@@ -50,14 +52,7 @@ const DOMAIN_CONFIGS = {
     icon: Code,
     basePricePKR: 20000,
     basePriceUSD: 399,
-    theme: {
-      gradient: 'from-indigo-600 via-indigo-500 to-blue-500',
-      badgeBg: 'bg-indigo-50 text-indigo-600 border-indigo-200',
-      activeBtn: 'bg-indigo-50/90 border-indigo-600 text-indigo-600 ring-1 ring-indigo-600',
-      activeCheckbox: 'bg-indigo-600 border-indigo-600',
-      actionBtn: 'bg-indigo-600 hover:bg-indigo-700 shadow-indigo-500/20',
-      totalText: 'text-indigo-600',
-    },
+    theme: CORPORATE_BLUE_THEME,
     scopeLabel: '2. Select Architecture & CMS Scope',
     addonLabel: '3. Optional Theme & Plugin Extensions',
     scopesPKR: [
@@ -90,14 +85,7 @@ const DOMAIN_CONFIGS = {
     icon: ShoppingCart,
     basePricePKR: 35000,
     basePriceUSD: 599,
-    theme: {
-      gradient: 'from-purple-600 via-indigo-600 to-violet-500',
-      badgeBg: 'bg-purple-50 text-purple-600 border-purple-200',
-      activeBtn: 'bg-purple-50/90 border-purple-600 text-purple-600 ring-1 ring-purple-600',
-      activeCheckbox: 'bg-purple-600 border-purple-600',
-      actionBtn: 'bg-purple-600 hover:bg-purple-700 shadow-purple-500/20',
-      totalText: 'text-purple-600',
-    },
+    theme: CORPORATE_BLUE_THEME,
     scopeLabel: '2. Select Catalog & Product Scope',
     addonLabel: '3. Optional E-Commerce & Checkout Add-ons',
     scopesPKR: [
@@ -130,14 +118,7 @@ const DOMAIN_CONFIGS = {
     icon: Palette,
     basePricePKR: 2000,
     basePriceUSD: 49,
-    theme: {
-      gradient: 'from-violet-600 via-purple-500 to-fuchsia-600',
-      badgeBg: 'bg-violet-50 text-violet-700 border-violet-200',
-      activeBtn: 'bg-violet-50/90 border-violet-600 text-violet-700 ring-1 ring-violet-600',
-      activeCheckbox: 'bg-violet-600 border-violet-600',
-      actionBtn: 'bg-violet-600 hover:bg-violet-700 shadow-violet-500/20',
-      totalText: 'text-violet-600',
-    },
+    theme: CORPORATE_BLUE_THEME,
     scopeLabel: '2. Select Design & Deliverables Scope',
     addonLabel: '3. Optional Source Files & Asset Add-ons',
     scopesPKR: [
@@ -170,14 +151,7 @@ const DOMAIN_CONFIGS = {
     icon: Layers,
     basePricePKR: 45000,
     basePriceUSD: 999,
-    theme: {
-      gradient: 'from-emerald-600 via-teal-500 to-cyan-600',
-      badgeBg: 'bg-emerald-50 text-emerald-700 border-emerald-200',
-      activeBtn: 'bg-emerald-50/90 border-emerald-600 text-emerald-700 ring-1 ring-emerald-600',
-      activeCheckbox: 'bg-emerald-600 border-emerald-600',
-      actionBtn: 'bg-emerald-600 hover:bg-emerald-700 shadow-emerald-500/20',
-      totalText: 'text-emerald-600',
-    },
+    theme: CORPORATE_BLUE_THEME,
     scopeLabel: '2. Select Functional Software Scope',
     addonLabel: '3. Optional Cloud & Architecture Add-ons',
     scopesPKR: [
@@ -284,13 +258,13 @@ export default function CostEstimator({ currency = 'PKR', setCurrency }) {
   return (
     <ScrollReveal variant="fadeUp" className="mt-16 mb-8 max-w-4xl mx-auto">
       <div className="p-6 sm:p-8 rounded-2xl bg-white border border-[#E5EAF1] shadow-soft relative overflow-hidden transition-all duration-300">
-        {/* Dynamic Theme Gradient Accent Line */}
-        <div className={`absolute top-0 left-0 right-0 h-1.5 bg-gradient-to-r ${domain.theme.gradient} transition-all duration-500`} />
+        {/* Unified Corporate Blue Theme Accent Line */}
+        <div className={`absolute top-0 left-0 right-0 h-1.5 bg-gradient-to-r ${CORPORATE_BLUE_THEME.gradient}`} />
 
         {/* Title & Currency Switcher Header */}
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8">
           <div>
-            <div className={`inline-flex items-center gap-2 px-3 py-1 rounded-full border text-xs font-semibold uppercase tracking-wider mb-2 transition-all duration-300 ${domain.theme.badgeBg}`}>
+            <div className={`inline-flex items-center gap-2 px-3 py-1 rounded-full border text-xs font-semibold uppercase tracking-wider mb-2 transition-all duration-300 ${CORPORATE_BLUE_THEME.badgeBg}`}>
               <IconComponent size={13} />
               <span>{domain.name} Scope Estimator</span>
             </div>
@@ -300,7 +274,7 @@ export default function CostEstimator({ currency = 'PKR', setCurrency }) {
 
           <div className="bg-[#F8FAFC] p-4 rounded-xl border border-[#E5EAF1] text-right flex sm:flex-col justify-between items-baseline sm:items-end">
             <span className="text-[10px] text-[#6B7280] font-bold uppercase tracking-wider">Estimated Investment</span>
-            <div className={`text-2xl font-black transition-colors duration-300 ${domain.theme.totalText}`}>
+            <div className={`text-2xl font-black transition-colors duration-300 ${CORPORATE_BLUE_THEME.totalText}`}>
               {currencySymbol}{estimatedTotal.toLocaleString()}
             </div>
           </div>
@@ -325,7 +299,7 @@ export default function CostEstimator({ currency = 'PKR', setCurrency }) {
                     onClick={() => handleSelectService(item.id)}
                     className={`p-3 rounded-xl text-left border text-xs font-semibold transition-all duration-200 cursor-pointer flex flex-col justify-between ${
                       isSelected
-                        ? item.theme.activeBtn
+                        ? CORPORATE_BLUE_THEME.activeBtn
                         : 'bg-white border-[#E5EAF1] text-[#4B5563] hover:border-gray-300 hover:bg-slate-50'
                     }`}
                   >
@@ -361,7 +335,7 @@ export default function CostEstimator({ currency = 'PKR', setCurrency }) {
                       onClick={() => setSelectedScopeId(opt.id)}
                       className={`p-3.5 rounded-xl flex items-center justify-between border text-xs font-semibold transition-all duration-200 cursor-pointer ${
                         isSelected
-                          ? domain.theme.activeBtn
+                          ? CORPORATE_BLUE_THEME.activeBtn
                           : 'bg-white border-[#E5EAF1] text-[#4B5563] hover:border-gray-300 hover:bg-slate-50'
                       }`}
                     >
@@ -390,13 +364,13 @@ export default function CostEstimator({ currency = 'PKR', setCurrency }) {
                       onClick={() => toggleAddon(addon.id)}
                       className={`p-3 rounded-xl flex items-center justify-between border text-xs font-semibold transition-all duration-200 cursor-pointer ${
                         isSelected
-                          ? domain.theme.activeBtn
+                          ? CORPORATE_BLUE_THEME.activeBtn
                           : 'bg-white border-[#E5EAF1] text-[#4B5563] hover:border-gray-300 hover:bg-slate-50'
                       }`}
                     >
                       <div className="flex items-center gap-2 pr-2 text-left">
                         <div className={`w-4 h-4 rounded border flex items-center justify-center flex-shrink-0 transition-colors ${
-                          isSelected ? `${domain.theme.activeCheckbox} text-white` : 'border-slate-300 bg-white'
+                          isSelected ? `${CORPORATE_BLUE_THEME.activeCheckbox} text-white` : 'border-slate-300 bg-white'
                         }`}>
                           {isSelected && <Check size={10} />}
                         </div>
@@ -419,7 +393,7 @@ export default function CostEstimator({ currency = 'PKR', setCurrency }) {
           <button
             type="button"
             onClick={handleApplyToQuote}
-            className={`w-full sm:w-auto py-3.5 px-6 text-white text-xs font-bold rounded-xl shadow-md flex items-center justify-center gap-2 transition-all duration-200 cursor-pointer ${domain.theme.actionBtn}`}
+            className={`w-full sm:w-auto py-3.5 px-6 text-white text-xs font-bold rounded-xl shadow-md flex items-center justify-center gap-2 transition-all duration-200 cursor-pointer ${CORPORATE_BLUE_THEME.actionBtn}`}
           >
             <span>Apply {domain.name} Estimate to Quote Form</span>
             <ArrowRight size={14} />
