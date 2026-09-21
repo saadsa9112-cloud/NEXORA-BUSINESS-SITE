@@ -16,31 +16,33 @@ const DOMAIN_CONFIGS = {
   business: {
     id: 'business',
     name: 'Business Website',
+    estimatorTitle: 'BUSINESS WEBSITE ESTIMATOR',
+    subtitle: 'Choose the features and website size you need to get an estimated project price.',
     icon: Globe,
     basePricePKR: 15000,
     basePriceUSD: 299,
     theme: CORPORATE_BLUE_THEME,
-    scopeLabel: '2. Select Page & Content Scope',
-    addonLabel: '3. Optional Business & Growth Add-ons',
+    scopeLabel: '2. SELECT WEBSITE SIZE & CONTENT',
+    addonLabel: '3. OPTIONAL FEATURES & UPGRADES',
     scopesPKR: [
-      { id: 'b_std', name: '1 - 5 Corporate Pages', addOn: 0 },
-      { id: 'b_med', name: '6 - 10 Custom Pages', addOn: 5000 },
-      { id: 'b_lrg', name: '10+ Multi-Section Portal', addOn: 10000 },
+      { id: 'b_std', name: '1–5 Business Pages', addOn: 0 },
+      { id: 'b_med', name: '6–10 Custom Pages', addOn: 5000 },
+      { id: 'b_lrg', name: '10+ Pages & Advanced Website Features', addOn: 10000 },
     ],
     scopesUSD: [
-      { id: 'b_std', name: '1 - 5 Corporate Pages', addOn: 0 },
-      { id: 'b_med', name: '6 - 10 Custom Pages', addOn: 99 },
-      { id: 'b_lrg', name: '10+ Multi-Section Portal', addOn: 199 },
+      { id: 'b_std', name: '1–5 Business Pages', addOn: 0 },
+      { id: 'b_med', name: '6–10 Custom Pages', addOn: 99 },
+      { id: 'b_lrg', name: '10+ Pages & Advanced Website Features', addOn: 199 },
     ],
     addonsPKR: [
-      { id: 'seo', name: 'Advanced Technical SEO & Schema', price: 10000 },
-      { id: 'contact', name: 'Interactive Lead Capture Funnel', price: 5000 },
-      { id: 'hosting', name: 'Managed Cloud Hosting & Domain', price: 12000 },
+      { id: 'seo', name: 'Advanced SEO & Google Setup', price: 10000 },
+      { id: 'contact', name: 'Interactive Lead Form', price: 5000 },
+      { id: 'hosting', name: 'Managed Hosting & Domain', price: 12000 },
     ],
     addonsUSD: [
-      { id: 'seo', name: 'Advanced Technical SEO & Schema', price: 199 },
-      { id: 'contact', name: 'Interactive Lead Capture Funnel', price: 79 },
-      { id: 'hosting', name: 'Managed Cloud Hosting & Domain', price: 149 },
+      { id: 'seo', name: 'Advanced SEO & Google Setup', price: 199 },
+      { id: 'contact', name: 'Interactive Lead Form', price: 79 },
+      { id: 'hosting', name: 'Managed Hosting & Domain', price: 149 },
     ],
     defaultScope: 'b_std',
     defaultAddons: ['seo'],
@@ -49,31 +51,33 @@ const DOMAIN_CONFIGS = {
   wordpress: {
     id: 'wordpress',
     name: 'WordPress Website',
+    estimatorTitle: 'WORDPRESS WEBSITE ESTIMATOR',
+    subtitle: 'Choose the features and website size you need to get an estimated project price.',
     icon: Code,
     basePricePKR: 20000,
     basePriceUSD: 399,
     theme: CORPORATE_BLUE_THEME,
-    scopeLabel: '2. Select Architecture & CMS Scope',
-    addonLabel: '3. Optional Theme & Plugin Extensions',
+    scopeLabel: '2. SELECT WEBSITE SIZE & CONTENT',
+    addonLabel: '3. OPTIONAL FEATURES & UPGRADES',
     scopesPKR: [
-      { id: 'wp_std', name: '1 - 5 Pages & Blog Hub', addOn: 0 },
-      { id: 'wp_med', name: '6 - 15 Custom Theme Pages', addOn: 6000 },
-      { id: 'wp_lrg', name: '15+ Enterprise CMS Portal', addOn: 12000 },
+      { id: 'wp_std', name: '1–5 Pages + Blog', addOn: 0 },
+      { id: 'wp_med', name: '6–15 Custom Pages', addOn: 6000 },
+      { id: 'wp_lrg', name: '15+ Pages & Advanced Website Management', addOn: 12000 },
     ],
     scopesUSD: [
-      { id: 'wp_std', name: '1 - 5 Pages & Blog Hub', addOn: 0 },
-      { id: 'wp_med', name: '6 - 15 Custom Theme Pages', addOn: 119 },
-      { id: 'wp_lrg', name: '15+ Enterprise CMS Portal', addOn: 229 },
+      { id: 'wp_std', name: '1–5 Pages + Blog', addOn: 0 },
+      { id: 'wp_med', name: '6–15 Custom Pages', addOn: 119 },
+      { id: 'wp_lrg', name: '15+ Pages & Advanced Website Management', addOn: 229 },
     ],
     addonsPKR: [
-      { id: 'plugins', name: 'Custom Plugin & API Integration', price: 8000 },
-      { id: 'security', name: 'Hardened Security & Speed Caching', price: 6000 },
-      { id: 'training', name: '1-on-1 Admin Dashboard Training', price: 4000 },
+      { id: 'plugins', name: 'Custom Features & Integrations', price: 8000 },
+      { id: 'security', name: 'Advanced Security & Speed Optimization', price: 6000 },
+      { id: 'training', name: 'Personal Website Management Training', price: 4000 },
     ],
     addonsUSD: [
-      { id: 'plugins', name: 'Custom Plugin & API Integration', price: 129 },
-      { id: 'security', name: 'Hardened Security & Speed Caching', price: 99 },
-      { id: 'training', name: '1-on-1 Admin Dashboard Training', price: 69 },
+      { id: 'plugins', name: 'Custom Features & Integrations', price: 129 },
+      { id: 'security', name: 'Advanced Security & Speed Optimization', price: 99 },
+      { id: 'training', name: 'Personal Website Management Training', price: 69 },
     ],
     defaultScope: 'wp_std',
     defaultAddons: ['plugins'],
@@ -82,31 +86,33 @@ const DOMAIN_CONFIGS = {
   shopify: {
     id: 'shopify',
     name: 'Shopify E-Commerce Store',
+    estimatorTitle: 'SHOPIFY E-COMMERCE STORE ESTIMATOR',
+    subtitle: 'Choose the store size and features you need to get an estimated project price.',
     icon: ShoppingCart,
     basePricePKR: 35000,
     basePriceUSD: 599,
     theme: CORPORATE_BLUE_THEME,
-    scopeLabel: '2. Select Catalog & Product Scope',
-    addonLabel: '3. Optional E-Commerce & Checkout Add-ons',
+    scopeLabel: '2. SELECT STORE SIZE',
+    addonLabel: '3. OPTIONAL STORE FEATURES',
     scopesPKR: [
-      { id: 'sh_std', name: 'Up to 25 Products Catalog', addOn: 0 },
-      { id: 'sh_med', name: '26 - 100 Products & Collections', addOn: 8000 },
-      { id: 'sh_lrg', name: '100+ Enterprise Multi-Category Store', addOn: 15000 },
+      { id: 'sh_std', name: 'Up to 25 Products', addOn: 0 },
+      { id: 'sh_med', name: '26–100 Products & Collections', addOn: 8000 },
+      { id: 'sh_lrg', name: '100+ Products & Large Store Setup', addOn: 15000 },
     ],
     scopesUSD: [
-      { id: 'sh_std', name: 'Up to 25 Products Catalog', addOn: 0 },
-      { id: 'sh_med', name: '26 - 100 Products & Collections', addOn: 149 },
-      { id: 'sh_lrg', name: '100+ Enterprise Multi-Category Store', addOn: 279 },
+      { id: 'sh_std', name: 'Up to 25 Products', addOn: 0 },
+      { id: 'sh_med', name: '26–100 Products & Collections', addOn: 149 },
+      { id: 'sh_lrg', name: '100+ Products & Large Store Setup', addOn: 279 },
     ],
     addonsPKR: [
-      { id: 'payment', name: 'Multi-Currency Payment Gateways', price: 8000 },
-      { id: 'inventory', name: 'Automated Shipping & Inventory Sync', price: 7000 },
-      { id: 'cro', name: 'CRO Checkout & Cart Abandonment', price: 6000 },
+      { id: 'payment', name: 'Multiple Currencies & Payment Options', price: 8000 },
+      { id: 'inventory', name: 'Shipping & Inventory Automation', price: 7000 },
+      { id: 'cro', name: 'Checkout Optimization & Abandoned Cart Recovery', price: 6000 },
     ],
     addonsUSD: [
-      { id: 'payment', name: 'Multi-Currency Payment Gateways', price: 149 },
-      { id: 'inventory', name: 'Automated Shipping & Inventory Sync', price: 119 },
-      { id: 'cro', name: 'CRO Checkout & Cart Abandonment', price: 99 },
+      { id: 'payment', name: 'Multiple Currencies & Payment Options', price: 149 },
+      { id: 'inventory', name: 'Shipping & Inventory Automation', price: 119 },
+      { id: 'cro', name: 'Checkout Optimization & Abandoned Cart Recovery', price: 99 },
     ],
     defaultScope: 'sh_std',
     defaultAddons: ['payment'],
@@ -115,12 +121,14 @@ const DOMAIN_CONFIGS = {
   graphic: {
     id: 'graphic',
     name: 'Graphic & Brand Design',
+    estimatorTitle: 'GRAPHIC & BRAND DESIGN ESTIMATOR',
+    subtitle: 'Choose the design options and deliverables you need to get an estimated project price.',
     icon: Palette,
     basePricePKR: 2000,
     basePriceUSD: 49,
     theme: CORPORATE_BLUE_THEME,
-    scopeLabel: '2. Select Design & Deliverables Scope',
-    addonLabel: '3. Optional Source Files & Asset Add-ons',
+    scopeLabel: '2. SELECT DESIGN DELIVERABLES',
+    addonLabel: '3. OPTIONAL ASSET EXTENSIONS',
     scopesPKR: [
       { id: 'gd_std', name: 'Single Logo / Asset Design (3 Concepts)', addOn: 0 },
       { id: 'gd_med', name: 'Brand Kit (Logo + Palette + Social Covers)', addOn: 3000 },
@@ -148,31 +156,33 @@ const DOMAIN_CONFIGS = {
   app: {
     id: 'app',
     name: 'Custom Web Application',
+    estimatorTitle: 'CUSTOM WEB APPLICATION ESTIMATOR',
+    subtitle: 'Choose the features and functionality your web application needs to get an estimated project price.',
     icon: Layers,
     basePricePKR: 45000,
     basePriceUSD: 999,
     theme: CORPORATE_BLUE_THEME,
-    scopeLabel: '2. Select Functional Software Scope',
-    addonLabel: '3. Optional Cloud & Architecture Add-ons',
+    scopeLabel: '2. SELECT APPLICATION FEATURES',
+    addonLabel: '3. OPTIONAL FEATURES & ADVANCED OPTIONS',
     scopesPKR: [
-      { id: 'app_std', name: 'Core MVP & User Portal Architecture', addOn: 0 },
-      { id: 'app_med', name: 'Multi-Role Admin Dashboard & Database', addOn: 15000 },
-      { id: 'app_lrg', name: 'Enterprise SaaS Platform & Permissions', addOn: 30000 },
+      { id: 'app_std', name: 'Core Features + User Account', addOn: 0 },
+      { id: 'app_med', name: 'Advanced Admin Dashboard', addOn: 15000 },
+      { id: 'app_lrg', name: 'Advanced Multi-User Platform', addOn: 30000 },
     ],
     scopesUSD: [
-      { id: 'app_std', name: 'Core MVP & User Portal Architecture', addOn: 0 },
-      { id: 'app_med', name: 'Multi-Role Admin Dashboard & Database', addOn: 249 },
-      { id: 'app_lrg', name: 'Enterprise SaaS Platform & Permissions', addOn: 499 },
+      { id: 'app_std', name: 'Core Features + User Account', addOn: 0 },
+      { id: 'app_med', name: 'Advanced Admin Dashboard', addOn: 249 },
+      { id: 'app_lrg', name: 'Advanced Multi-User Platform', addOn: 499 },
     ],
     addonsPKR: [
-      { id: 'api', name: 'Custom REST / GraphQL API & Webhooks', price: 12000 },
-      { id: 'rbac', name: 'RBAC Security & Role Permissions', price: 10000 },
-      { id: 'cloud', name: 'High-Availability Cloud Server Deployment', price: 15000 },
+      { id: 'api', name: 'Custom API & Third-Party Integrations', price: 12000 },
+      { id: 'rbac', name: 'Multiple User Roles & Access Control', price: 10000 },
+      { id: 'cloud', name: 'Advanced Cloud Hosting & Deployment', price: 15000 },
     ],
     addonsUSD: [
-      { id: 'api', name: 'Custom REST / GraphQL API & Webhooks', price: 199 },
-      { id: 'rbac', name: 'RBAC Security & Role Permissions', price: 169 },
-      { id: 'cloud', name: 'High-Availability Cloud Server Deployment', price: 229 },
+      { id: 'api', name: 'Custom API & Third-Party Integrations', price: 199 },
+      { id: 'rbac', name: 'Multiple User Roles & Access Control', price: 169 },
+      { id: 'cloud', name: 'Advanced Cloud Hosting & Deployment', price: 229 },
     ],
     defaultScope: 'app_std',
     defaultAddons: ['api'],
@@ -266,10 +276,10 @@ export default function CostEstimator({ currency = 'PKR', setCurrency }) {
           <div>
             <div className={`inline-flex items-center gap-2 px-3 py-1 rounded-full border text-xs font-semibold uppercase tracking-wider mb-2 transition-all duration-300 ${CORPORATE_BLUE_THEME.badgeBg}`}>
               <IconComponent size={13} />
-              <span>{domain.name} Scope Estimator</span>
+              <span>{domain.estimatorTitle}</span>
             </div>
             <h3 className="text-2xl font-bold text-[#0B1020]">Project Scope &amp; Budget Calculator</h3>
-            <p className="text-sm text-[#4B5563]">Select your tailored solution scope to estimate project investment in real-time.</p>
+            <p className="text-sm text-[#4B5563]">{domain.subtitle}</p>
           </div>
 
           <div className="bg-[#F8FAFC] p-4 rounded-xl border border-[#E5EAF1] text-right flex sm:flex-col justify-between items-baseline sm:items-end">
@@ -285,7 +295,7 @@ export default function CostEstimator({ currency = 'PKR', setCurrency }) {
           {/* 1. Solution Type Selector Buttons */}
           <div>
             <label className="block text-xs font-bold uppercase tracking-wider text-[#0B1020] mb-3">
-              1. Select Solution Type
+              1. SELECT WEBSITE TYPE
             </label>
             <div className="grid grid-cols-2 sm:grid-cols-5 gap-2.5">
               {Object.values(DOMAIN_CONFIGS).map((item) => {
@@ -341,7 +351,7 @@ export default function CostEstimator({ currency = 'PKR', setCurrency }) {
                     >
                       <span className="font-bold text-[#0B1020] pr-2 text-left">{opt.name}</span>
                       <span className="text-[10px] text-[#6B7280] whitespace-nowrap">
-                        {opt.addOn === 0 ? 'Base Scope Included' : `+ ${currencySymbol}${opt.addOn.toLocaleString()}`}
+                        {opt.addOn === 0 ? 'Included in Base Price' : `+ ${currencySymbol}${opt.addOn.toLocaleString()}`}
                       </span>
                     </button>
                   )
@@ -388,14 +398,14 @@ export default function CostEstimator({ currency = 'PKR', setCurrency }) {
         {/* Action Button */}
         <div className="pt-5 border-t border-[#F1F5F9] flex flex-col sm:flex-row items-center justify-between gap-4">
           <p className="text-xs text-[#6B7280]">
-            Selected domain: <strong className="text-[#0B1020]">{domain.name}</strong> • Final quotation provided after detailed scope review.
+            Selected service: <strong className="text-[#0B1020]">{domain.name}</strong> • Final quotation will be confirmed after reviewing your requirements.
           </p>
           <button
             type="button"
             onClick={handleApplyToQuote}
             className={`w-full sm:w-auto py-3.5 px-6 text-white text-xs font-bold rounded-xl shadow-md flex items-center justify-center gap-2 transition-all duration-200 cursor-pointer ${CORPORATE_BLUE_THEME.actionBtn}`}
           >
-            <span>Apply {domain.name} Estimate to Quote Form</span>
+            <span>Continue with This Estimate</span>
             <ArrowRight size={14} />
           </button>
         </div>
