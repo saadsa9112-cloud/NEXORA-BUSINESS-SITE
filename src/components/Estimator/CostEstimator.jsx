@@ -7,6 +7,7 @@ const SERVICE_OPTIONS_PKR = [
   { id: 'business', name: 'Business Website', basePrice: 15000 },
   { id: 'wordpress', name: 'WordPress Website', basePrice: 20000 },
   { id: 'shopify', name: 'Shopify E-Commerce Store', basePrice: 35000 },
+  { id: 'graphic', name: 'Graphic & Brand Design', basePrice: 2000 },
   { id: 'app', name: 'Custom Web Application', basePrice: 45000 },
 ]
 
@@ -14,6 +15,7 @@ const SERVICE_OPTIONS_USD = [
   { id: 'business', name: 'Business Website', basePrice: 299 },
   { id: 'wordpress', name: 'WordPress Website', basePrice: 399 },
   { id: 'shopify', name: 'Shopify E-Commerce Store', basePrice: 599 },
+  { id: 'graphic', name: 'Graphic & Brand Design', basePrice: 49 },
   { id: 'app', name: 'Custom Web Application', basePrice: 999 },
 ]
 

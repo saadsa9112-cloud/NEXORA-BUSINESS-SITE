@@ -383,10 +383,22 @@ export const SERVICES_LIST = [
   'Other',
 ]
 
-export const BUDGET_RANGES = [
-  'Under Rs. 15,000 / $100',
-  'Rs. 15,000 – Rs. 35,000 / $299',
-  'Rs. 35,000 – Rs. 75,000 / $599',
-  'Rs. 75,000+ / $999+',
+export const BUDGET_RANGES_PKR = [
+  'Under Rs. 15,000',
+  'Rs. 15,000 – Rs. 35,000',
+  'Rs. 35,000 – Rs. 75,000',
+  'Rs. 75,000+',
   'Custom Enterprise Scope',
 ]
+
+export const BUDGET_RANGES_USD = [
+  'Under $100',
+  '$100 – $299',
+  '$299 – $599',
+  '$599 – $999',
+  '$999+',
+  'Custom Enterprise Scope',
+]
+
+export const BUDGET_RANGES = BUDGET_RANGES_PKR
+

@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { Send, CheckCircle, AlertCircle, MessageCircle, Phone, Mail } from 'lucide-react'
-import { SERVICES_LIST, BUDGET_RANGES, CONTACT } from '../../data/siteData'
+import { Send, CheckCircle, AlertCircle, MessageCircle, Phone, Mail, Globe } from 'lucide-react'
+import { SERVICES_LIST, BUDGET_RANGES_PKR, BUDGET_RANGES_USD, CONTACT } from '../../data/siteData'
 import MagneticButton from '../Motion/MagneticButton'
 import ScrollReveal from '../Motion/ScrollReveal'
 
@@ -51,10 +51,12 @@ function validate(fields) {
   return errors
 }
 
-export default function QuoteForm() {
+export default function QuoteForm({ currency = 'PKR', setCurrency }) {
   const [fields, setFields] = useState(INITIAL_FIELDS)
   const [errors, setErrors] = useState({})
   const [status, setStatus] = useState('idle') // idle | submitting | success
+
+  const activeBudgetRanges = currency === 'USD' ? BUDGET_RANGES_USD : BUDGET_RANGES_PKR
 
   const handleChange = (e) => {
     const { name, value } = e.target
@@ -361,9 +363,29 @@ export default function QuoteForm() {
 
                       {/* 6. Budget Range */}
                       <div>
-                        <label htmlFor="budget" className="block text-xs font-semibold uppercase tracking-wider text-[#0B1020] mb-1.5">
-                          Budget Range
-                        </label>
+                        <div className="flex items-center justify-between mb-1.5">
+                          <label htmlFor="budget" className="block text-xs font-semibold uppercase tracking-wider text-[#0B1020]">
+                            Budget Range ({currency})
+                          </label>
+                          {setCurrency && (
+                            <div className="inline-flex items-center gap-1 bg-[#F1F5F9] p-0.5 rounded-md text-[10px] font-bold">
+                              <button
+                                type="button"
+                                onClick={() => setCurrency('PKR')}
+                                className={`px-1.5 py-0.5 rounded transition-colors ${currency === 'PKR' ? 'bg-[#0066FF] text-white shadow-xs' : 'text-slate-600 hover:text-slate-900'}`}
+                              >
+                                PKR
+                              </button>
+                              <button
+                                type="button"
+                                onClick={() => setCurrency('USD')}
+                                className={`px-1.5 py-0.5 rounded transition-colors ${currency === 'USD' ? 'bg-[#0066FF] text-white shadow-xs' : 'text-slate-600 hover:text-slate-900'}`}
+                              >
+                                USD
+                              </button>
+                            </div>
+                          )}
+                        </div>
                         <select
                           id="budget"
                           name="budget"
@@ -371,8 +393,10 @@ export default function QuoteForm() {
                           onChange={handleChange}
                           className={`${inputClass('budget')} appearance-none cursor-pointer bg-white`}
                         >
-                          <option value="" disabled>Select budget range</option>
-                          {BUDGET_RANGES.map((b) => (
+                          <option value="" disabled>
+                            Select budget range ({currency === 'USD' ? '$ USD' : 'Rs. PKR'})
+                          </option>
+                          {activeBudgetRanges.map((b) => (
                             <option key={b} value={b}>{b}</option>
                           ))}
                         </select>

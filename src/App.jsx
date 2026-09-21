@@ -1,4 +1,4 @@
-import { useEffect } from 'react'
+import { useState, useEffect } from 'react'
 import Navbar from './components/Navbar/Navbar'
 import Hero from './components/Hero/Hero'
 import TrustStrip from './components/TrustStrip/TrustStrip'
@@ -17,6 +17,8 @@ import FloatingActionBar from './components/FloatingBar/FloatingActionBar'
 import Footer from './components/Footer/Footer'
 
 export default function App() {
+  const [currency, setCurrency] = useState('PKR')
+
   // Scroll-reveal animation observer fallback
   useEffect(() => {
     const selectors = ['.reveal', '.reveal-left', '.reveal-right']
@@ -60,11 +62,11 @@ export default function App() {
         <Portfolio />
         <WhyChooseUs />
         <Process />
-        <Pricing />
+        <Pricing currency={currency} setCurrency={setCurrency} />
         <About />
         <QualitySecurity />
         <FAQ />
-        <QuoteForm />
+        <QuoteForm currency={currency} setCurrency={setCurrency} />
         <FinalCTA />
       </main>
 

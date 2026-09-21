@@ -6,8 +6,10 @@ import MagneticButton from '../Motion/MagneticButton'
 import ScrollReveal from '../Motion/ScrollReveal'
 import CostEstimator from '../Estimator/CostEstimator'
 
-export default function Pricing() {
-  const [currency, setCurrency] = useState('PKR')
+export default function Pricing({ currency: propCurrency, setCurrency: propSetCurrency }) {
+  const [localCurrency, setLocalCurrency] = useState('PKR')
+  const currency = propCurrency !== undefined ? propCurrency : localCurrency
+  const setCurrency = propSetCurrency || setLocalCurrency
 
   const scrollToContact = () => {
     const el = document.getElementById('contact')
