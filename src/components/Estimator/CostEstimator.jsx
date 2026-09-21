@@ -1,39 +1,68 @@
-import { useState, useId } from 'react'
+import { useState } from 'react'
 import { motion } from 'framer-motion'
-import { Calculator, Check, ArrowRight, Sparkles } from 'lucide-react'
+import { Calculator, Check, ArrowRight, Globe } from 'lucide-react'
 import ScrollReveal from '../Motion/ScrollReveal'
 
-const SERVICE_OPTIONS = [
+const SERVICE_OPTIONS_PKR = [
   { id: 'business', name: 'Business Website', basePrice: 15000 },
   { id: 'wordpress', name: 'WordPress Website', basePrice: 20000 },
   { id: 'shopify', name: 'Shopify E-Commerce Store', basePrice: 35000 },
   { id: 'app', name: 'Custom Web Application', basePrice: 45000 },
 ]
 
-const PAGE_OPTIONS = [
+const SERVICE_OPTIONS_USD = [
+  { id: 'business', name: 'Business Website', basePrice: 299 },
+  { id: 'wordpress', name: 'WordPress Website', basePrice: 399 },
+  { id: 'shopify', name: 'Shopify E-Commerce Store', basePrice: 599 },
+  { id: 'app', name: 'Custom Web Application', basePrice: 999 },
+]
+
+const PAGE_OPTIONS_PKR = [
   { id: '5', name: '1 - 5 Pages', addOn: 0 },
   { id: '10', name: '6 - 10 Pages', addOn: 5000 },
   { id: '15', name: '10+ Custom Pages', addOn: 10000 },
 ]
 
-const ADDONS_OPTIONS = [
+const PAGE_OPTIONS_USD = [
+  { id: '5', name: '1 - 5 Pages', addOn: 0 },
+  { id: '10', name: '6 - 10 Pages', addOn: 99 },
+  { id: '15', name: '10+ Custom Pages', addOn: 199 },
+]
+
+const ADDONS_OPTIONS_PKR = [
   { id: 'seo', name: 'Advanced SEO & Meta Setup', price: 10000 },
   { id: 'payment', name: 'Payment Gateway Integration', price: 8000 },
   { id: 'hosting', name: 'Managed Hosting & Domain Setup', price: 12000 },
 ]
 
-export default function CostEstimator() {
-  const [selectedService, setSelectedService] = useState(SERVICE_OPTIONS[0])
-  const [selectedPages, setSelectedPages] = useState(PAGE_OPTIONS[0])
+const ADDONS_OPTIONS_USD = [
+  { id: 'seo', name: 'Advanced SEO & Meta Setup', price: 199 },
+  { id: 'payment', name: 'Payment Gateway Integration', price: 149 },
+  { id: 'hosting', name: 'Managed Hosting & Domain Setup', price: 149 },
+]
+
+export default function CostEstimator({ currency = 'PKR', setCurrency }) {
+  const isUsd = currency === 'USD'
+
+  const serviceList = isUsd ? SERVICE_OPTIONS_USD : SERVICE_OPTIONS_PKR
+  const pageList = isUsd ? PAGE_OPTIONS_USD : PAGE_OPTIONS_PKR
+  const addonList = isUsd ? ADDONS_OPTIONS_USD : ADDONS_OPTIONS_PKR
+
+  const [selectedServiceId, setSelectedServiceId] = useState('business')
+  const [selectedPageId, setSelectedPageId] = useState('5')
   const [selectedAddons, setSelectedAddons] = useState(['seo'])
+
+  const selectedService = serviceList.find((s) => s.id === selectedServiceId) || serviceList[0]
+  const selectedPages = pageList.find((p) => p.id === selectedPageId) || pageList[0]
 
   const basePrice = selectedService.basePrice + selectedPages.addOn
   const addonsTotal = selectedAddons.reduce((sum, addonId) => {
-    const found = ADDONS_OPTIONS.find((a) => a.id === addonId)
+    const found = addonList.find((a) => a.id === addonId)
     return sum + (found ? found.price : 0)
   }, 0)
 
   const estimatedTotal = basePrice + addonsTotal
+  const currencySymbol = isUsd ? '$' : 'Rs. '
 
   const toggleAddon = (addonId) => {
     setSelectedAddons((prev) =>
@@ -46,21 +75,19 @@ export default function CostEstimator() {
   const handleApplyToQuote = () => {
     const el = document.getElementById('contact')
     if (el) {
-      // Pre-fill details textarea
       const detailsField = document.getElementById('details')
       if (detailsField) {
         const addonNames = selectedAddons
-          .map((id) => ADDONS_OPTIONS.find((a) => a.id === id)?.name)
+          .map((id) => addonList.find((a) => a.id === id)?.name)
           .filter(Boolean)
           .join(', ')
 
-        detailsField.value = `Estimated Project Scope: ${selectedService.name} (${selectedPages.name}). Add-ons: ${
+        detailsField.value = `Estimated Project Scope (${isUsd ? 'Global USD' : 'Domestic PKR'}): ${selectedService.name} (${selectedPages.name}). Add-ons: ${
           addonNames || 'None'
-        }. Estimated Starting Investment: Rs. ${estimatedTotal.toLocaleString()}`
+        }. Estimated Starting Investment: ${currencySymbol}${estimatedTotal.toLocaleString()}`
         detailsField.dispatchEvent(new Event('input', { bubbles: true }))
       }
 
-      // Pre-fill service select
       const serviceSelect = document.getElementById('service')
       if (serviceSelect) {
         const matched = Array.from(serviceSelect.options).find((opt) =>
@@ -84,20 +111,21 @@ export default function CostEstimator() {
         {/* Decorative Top Accent */}
         <div className="absolute top-0 left-0 right-0 h-1.5 bg-gradient-to-r from-[#0066FF] via-[#1F90FF] to-blue-400" />
 
-        {/* Title */}
+        {/* Title & Currency Switcher Header */}
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8">
           <div>
             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-50 text-[#0066FF] text-xs font-semibold uppercase tracking-wider mb-2">
               <Calculator size={13} />
-              Interactive Estimator
+              Interactive Investment Estimator
             </div>
-            <h3 className="text-2xl font-bold text-[#0B1020]">Project Investment Estimator</h3>
-            <p className="text-sm text-[#4B5563]">Select your scope to estimate your project budget in real-time.</p>
+            <h3 className="text-2xl font-bold text-[#0B1020]">Project Scope &amp; Budget Calculator</h3>
+            <p className="text-sm text-[#4B5563]">Select your scope to estimate project investment in real-time.</p>
           </div>
+
           <div className="bg-[#F8FAFC] p-4 rounded-xl border border-[#E5EAF1] text-right flex sm:flex-col justify-between items-baseline sm:items-end">
             <span className="text-[10px] text-[#6B7280] font-bold uppercase tracking-wider">Estimated Total</span>
             <div className="text-2xl font-black text-[#0066FF]">
-              Rs. {estimatedTotal.toLocaleString()}
+              {currencySymbol}{estimatedTotal.toLocaleString()}
             </div>
           </div>
         </div>
@@ -110,19 +138,19 @@ export default function CostEstimator() {
               1. Select Solution Type
             </label>
             <div className="grid grid-cols-2 gap-2.5">
-              {SERVICE_OPTIONS.map((opt) => (
+              {serviceList.map((opt) => (
                 <button
                   key={opt.id}
                   type="button"
-                  onClick={() => setSelectedService(opt)}
+                  onClick={() => setSelectedServiceId(opt.id)}
                   className={`p-3 rounded-xl text-left border text-xs font-semibold transition-all cursor-pointer ${
-                    selectedService.id === opt.id
+                    selectedServiceId === opt.id
                       ? 'bg-blue-50 border-[#0066FF] text-[#0066FF] ring-1 ring-[#0066FF]'
                       : 'bg-white border-[#E5EAF1] text-[#4B5563] hover:border-gray-300'
                   }`}
                 >
                   <div className="font-bold text-[#0B1020]">{opt.name}</div>
-                  <div className="text-[10px] text-[#6B7280]">From Rs. {opt.basePrice.toLocaleString()}</div>
+                  <div className="text-[10px] text-[#6B7280]">From {currencySymbol}{opt.basePrice.toLocaleString()}</div>
                 </button>
               ))}
             </div>
@@ -134,20 +162,20 @@ export default function CostEstimator() {
               2. Select Page Scope
             </label>
             <div className="flex flex-col gap-2">
-              {PAGE_OPTIONS.map((opt) => (
+              {pageList.map((opt) => (
                 <button
                   key={opt.id}
                   type="button"
-                  onClick={() => setSelectedPages(opt)}
+                  onClick={() => setSelectedPageId(opt.id)}
                   className={`p-3 rounded-xl flex items-center justify-between border text-xs font-semibold transition-all cursor-pointer ${
-                    selectedPages.id === opt.id
+                    selectedPageId === opt.id
                       ? 'bg-blue-50 border-[#0066FF] text-[#0066FF] ring-1 ring-[#0066FF]'
                       : 'bg-white border-[#E5EAF1] text-[#4B5563] hover:border-gray-300'
                   }`}
                 >
                   <span className="font-bold text-[#0B1020]">{opt.name}</span>
                   <span className="text-[10px] text-[#6B7280]">
-                    {opt.addOn === 0 ? 'Included' : `+ Rs. ${opt.addOn.toLocaleString()}`}
+                    {opt.addOn === 0 ? 'Included' : `+ ${currencySymbol}${opt.addOn.toLocaleString()}`}
                   </span>
                 </button>
               ))}
@@ -160,7 +188,7 @@ export default function CostEstimator() {
               3. Optional Growth Add-ons
             </label>
             <div className="grid sm:grid-cols-3 gap-2.5">
-              {ADDONS_OPTIONS.map((addon) => {
+              {addonList.map((addon) => {
                 const isSelected = selectedAddons.includes(addon.id)
                 return (
                   <button
@@ -179,7 +207,7 @@ export default function CostEstimator() {
                       </div>
                       <span className="font-semibold text-[#0B1020]">{addon.name}</span>
                     </div>
-                    <span className="text-[10px] text-[#6B7280] ml-2">+Rs. {addon.price.toLocaleString()}</span>
+                    <span className="text-[10px] text-[#6B7280] ml-2">+{currencySymbol}{addon.price.toLocaleString()}</span>
                   </button>
                 )
               })}
@@ -190,12 +218,12 @@ export default function CostEstimator() {
         {/* Action Button */}
         <div className="pt-4 border-t border-[#F1F5F9] flex flex-col sm:flex-row items-center justify-between gap-4">
           <p className="text-xs text-[#6B7280]">
-            Estimated prices are subject to project requirements review.
+            Estimated starting investment based on selected scope. Final quotation provided after review.
           </p>
           <button
             type="button"
             onClick={handleApplyToQuote}
-            className="w-full sm:w-auto py-3 px-6 bg-[#0066FF] hover:bg-[#0052CC] text-white text-xs font-bold rounded-xl shadow-md shadow-blue-500/20 flex items-center justify-center gap-2 transition-all"
+            className="w-full sm:w-auto py-3 px-6 bg-[#0066FF] hover:bg-[#0052CC] text-white text-xs font-bold rounded-xl shadow-md shadow-blue-500/20 flex items-center justify-center gap-2 transition-all cursor-pointer"
           >
             <span>Apply Estimate to Quote Form</span>
             <ArrowRight size={14} />

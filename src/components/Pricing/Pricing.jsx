@@ -1,4 +1,5 @@
-import { Check } from 'lucide-react'
+import { useState } from 'react'
+import { Check, Globe } from 'lucide-react'
 import { PRICING } from '../../data/siteData'
 import TiltCard from '../Motion/TiltCard'
 import MagneticButton from '../Motion/MagneticButton'
@@ -6,6 +7,8 @@ import ScrollReveal from '../Motion/ScrollReveal'
 import CostEstimator from '../Estimator/CostEstimator'
 
 export default function Pricing() {
+  const [currency, setCurrency] = useState('PKR')
+
   const scrollToContact = () => {
     const el = document.getElementById('contact')
     if (el) {
@@ -18,16 +21,42 @@ export default function Pricing() {
     <section id="pricing" aria-labelledby="pricing-heading" className="py-20 lg:py-28 bg-[#F7F9FC]">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
-        <ScrollReveal variant="fadeUp" className="max-w-2xl mx-auto text-center mb-14">
+        <ScrollReveal variant="fadeUp" className="max-w-2xl mx-auto text-center mb-12">
           <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full border border-blue-500/20 bg-blue-50 text-[#0066FF] mb-4">
-            <span className="text-xs font-semibold tracking-wider uppercase">Pricing</span>
+            <span className="text-xs font-semibold tracking-wider uppercase">Pricing & Plans</span>
           </div>
           <h2 id="pricing-heading" className="text-3xl sm:text-4xl lg:text-5xl font-black text-[#0B1020] leading-tight tracking-tight mb-4">
             Simple. Transparent. <span className="text-gradient-blue">Affordable.</span>
           </h2>
-          <p className="text-[#4B5563] text-base sm:text-lg leading-relaxed">
-            Professional digital services with clear starting prices for growing businesses.
+          <p className="text-[#4B5563] text-base sm:text-lg leading-relaxed mb-6">
+            Professional digital services with clear starting prices for local and international businesses.
           </p>
+
+          {/* Dual Currency Switcher Toggle */}
+          <div className="inline-flex items-center p-1.5 rounded-2xl bg-white border border-[#E5EAF1] shadow-xs">
+            <button
+              type="button"
+              onClick={() => setCurrency('PKR')}
+              className={`px-4 py-2 rounded-xl text-xs font-bold transition-all duration-200 cursor-pointer ${
+                currency === 'PKR'
+                  ? 'bg-[#0066FF] text-white shadow-md shadow-blue-500/20'
+                  : 'text-[#4B5563] hover:text-[#0B1020]'
+              }`}
+            >
+              🇵🇰 PKR (Domestic)
+            </button>
+            <button
+              type="button"
+              onClick={() => setCurrency('USD')}
+              className={`px-4 py-2 rounded-xl text-xs font-bold transition-all duration-200 cursor-pointer ${
+                currency === 'USD'
+                  ? 'bg-[#0066FF] text-white shadow-md shadow-blue-500/20'
+                  : 'text-[#4B5563] hover:text-[#0B1020]'
+              }`}
+            >
+              🇺🇸 USD (Global Clients)
+            </button>
+          </div>
         </ScrollReveal>
 
         {/* Pricing Grid (Compact 4-feature interactive 3D cards) */}
@@ -64,7 +93,7 @@ export default function Pricing() {
                   <div className="text-[10px] text-[#6B7280] font-semibold uppercase tracking-wider mb-1">{plan.note}</div>
                   <div className="flex items-baseline gap-1">
                     <span className={`text-2xl font-black ${plan.highlight ? 'text-[#0066FF]' : 'text-[#0B1020]'}`}>
-                      {plan.price}
+                      {currency === 'USD' ? plan.priceUsd : plan.price}
                     </span>
                     {plan.period && (
                       <span className="text-xs text-[#6B7280] font-medium">{plan.period}</span>
@@ -110,12 +139,16 @@ export default function Pricing() {
         </div>
 
         {/* Interactive Scope & Cost Estimator Widget */}
-        <CostEstimator />
+        <CostEstimator currency={currency} setCurrency={setCurrency} />
 
-        {/* Global Pricing Disclaimer */}
+        {/* Global Pricing Disclaimer & Trust Badges */}
         <ScrollReveal variant="fadeIn" delay={0.4} className="text-center max-w-2xl mx-auto">
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white border border-[#E5EAF1] text-[11px] font-semibold text-[#6B7280] mb-3">
+            <Globe size={13} className="text-[#0066FF]" />
+            <span>Serving Global Clients Across US, UK, UAE &amp; Pakistan</span>
+          </div>
           <p className="text-xs text-[#6B7280] leading-relaxed">
-            All prices are starting prices. Final pricing depends on project scope, content, integrations and requirements.
+            All prices are starting estimates. Final quotation depends on project scope, custom features, integrations and hosting requirements.
           </p>
         </ScrollReveal>
       </div>
