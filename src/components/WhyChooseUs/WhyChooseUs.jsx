@@ -10,13 +10,13 @@ export default function WhyChooseUs() {
           {/* Left — Header */}
           <ScrollReveal variant="slideLeft">
             <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full border border-blue-500/20 bg-blue-50 text-[#0066FF] mb-4">
-              <span className="text-xs font-semibold tracking-wider uppercase">Why Choose Us</span>
+              <span className="text-xs font-semibold tracking-wider uppercase">Strategic Advantage</span>
             </div>
             <h2 id="why-heading" className="text-3xl sm:text-4xl lg:text-5xl font-black text-[#0B1020] leading-tight tracking-tight mb-5">
-              Why Choose <span className="text-gradient-blue">NEXORA DIGITAL?</span>
+              Why Partner With <span className="text-gradient-blue">NEXORA DIGITAL?</span>
             </h2>
             <p className="text-[#4B5563] text-base sm:text-lg leading-relaxed mb-6 max-w-md">
-              Professional digital solutions focused on quality, usability and real business growth.
+              High-impact digital engineering grounded in technical excellence, strategic usability, and measurable ROI for global clients.
             </p>
 
             {/* Decorative line */}

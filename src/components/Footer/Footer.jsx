@@ -45,9 +45,9 @@ export default function Footer() {
               <NexoraBrand variant="footer" />
             </div>
             <p className="text-[#A7ADBB] text-sm leading-relaxed mb-4 max-w-xs">
-              Professional website development, SEO, e-commerce and digital solutions for growing businesses.
+              Enterprise digital engineering, custom web applications, e-commerce architectures, technical SEO, and cloud infrastructure for ambitious global brands.
             </p>
-            <p className="text-[#1F90FF] text-xs font-bold tracking-wider uppercase mb-5">"We Build. You Grow."</p>
+            <p className="text-[#1F90FF] text-xs font-bold tracking-wider uppercase mb-5">"Engineering Digital Excellence."</p>
 
             {/* Social */}
             <div className="flex gap-3" aria-label="Social media links">

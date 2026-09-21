@@ -19,15 +19,15 @@ export default function FinalCTA() {
           {/* Label */}
           <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full border border-blue-500/20 bg-blue-50 text-[#0066FF] mb-6">
             <span className="w-2 h-2 rounded-full bg-[#0066FF] animate-pulse" aria-hidden="true" />
-            <span className="text-xs font-semibold tracking-wider uppercase">Ready to Grow?</span>
+            <span className="text-xs font-semibold tracking-wider uppercase">Strategic Digital Growth</span>
           </div>
 
           <h2 id="finalcta-heading" className="text-3xl sm:text-4xl lg:text-5xl font-black text-[#0B1020] leading-tight tracking-tight mb-5">
-            Ready to Grow <span className="text-gradient-blue">Your Business?</span>
+            Ready to Accelerate <span className="text-gradient-blue">Your Digital Presence?</span>
           </h2>
 
           <p className="text-[#4B5563] text-base sm:text-lg leading-relaxed max-w-xl mx-auto mb-8">
-            Let's build a professional digital presence that works for your business.
+            Partner with NEXORA DIGITAL (by HMS) to engineer a high-performance web platform that commands authority and drives measurable enterprise growth.
           </p>
 
           {/* Magnetic Buttons */}

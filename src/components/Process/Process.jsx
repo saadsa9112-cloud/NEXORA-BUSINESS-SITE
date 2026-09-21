@@ -26,13 +26,13 @@ export default function Process() {
         {/* Header */}
         <ScrollReveal variant="fadeUp" className="max-w-2xl mx-auto text-center mb-16">
           <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full border border-blue-500/20 bg-blue-50 text-[#0066FF] mb-4">
-            <span className="text-xs font-semibold tracking-wider uppercase">Our Process</span>
+            <span className="text-xs font-semibold tracking-wider uppercase">Engineering Methodology</span>
           </div>
           <h2 id="process-heading" className="text-3xl sm:text-4xl lg:text-5xl font-black text-[#0B1020] leading-tight tracking-tight mb-4">
-            From Idea to <span className="text-gradient-blue">Launch.</span>
+            From Blueprint to <span className="text-gradient-blue">Global Deployment.</span>
           </h2>
           <p className="text-[#4B5563] text-base leading-relaxed">
-            A clear, structured 6-step path to deliver your digital project efficiently.
+            A disciplined, 6-phase engineering process designed to deliver technical excellence on time and within scope.
           </p>
         </ScrollReveal>
 

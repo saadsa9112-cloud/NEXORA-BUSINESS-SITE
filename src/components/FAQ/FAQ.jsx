@@ -72,13 +72,13 @@ export default function FAQ() {
           {/* Left */}
           <ScrollReveal variant="slideLeft">
             <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full border border-blue-500/20 bg-blue-50 text-[#0066FF] mb-4">
-              <span className="text-xs font-semibold tracking-wider uppercase">FAQ</span>
+              <span className="text-xs font-semibold tracking-wider uppercase">Executive FAQ</span>
             </div>
             <h2 id="faq-heading" className="text-3xl sm:text-4xl lg:text-5xl font-black text-[#0B1020] leading-tight tracking-tight mb-4">
               Frequently Asked <span className="text-gradient-blue">Questions.</span>
             </h2>
             <p className="text-[#4B5563] text-base sm:text-lg leading-relaxed mb-6">
-              Got questions? We've got answers. If you need further assistance, feel free to reach out.
+              Clear technical insights regarding our development process, delivery timelines, investment options, and SLA technical governance.
             </p>
           </ScrollReveal>
 

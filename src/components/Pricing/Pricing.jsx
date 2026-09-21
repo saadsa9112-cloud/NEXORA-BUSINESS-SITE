@@ -23,13 +23,13 @@ export default function Pricing() {
         {/* Header */}
         <ScrollReveal variant="fadeUp" className="max-w-2xl mx-auto text-center mb-12">
           <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full border border-blue-500/20 bg-blue-50 text-[#0066FF] mb-4">
-            <span className="text-xs font-semibold tracking-wider uppercase">Pricing & Plans</span>
+            <span className="text-xs font-semibold tracking-wider uppercase">Investment &amp; Pricing Architecture</span>
           </div>
           <h2 id="pricing-heading" className="text-3xl sm:text-4xl lg:text-5xl font-black text-[#0B1020] leading-tight tracking-tight mb-4">
-            Simple. Transparent. <span className="text-gradient-blue">Affordable.</span>
+            Transparent. Scalable. <span className="text-gradient-blue">Value-Driven.</span>
           </h2>
           <p className="text-[#4B5563] text-base sm:text-lg leading-relaxed mb-6">
-            Professional digital services with clear starting prices for local and international businesses.
+            Clear investment structures tailored for domestic enterprises and global international organizations.
           </p>
 
           {/* Dual Currency Switcher Toggle */}

@@ -137,13 +137,13 @@ export default function QuoteForm() {
           {/* Left Column — Contact Info */}
           <ScrollReveal variant="slideLeft">
             <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full border border-blue-500/20 bg-blue-50 text-[#0066FF] mb-4">
-              <span className="text-xs font-semibold tracking-wider uppercase">Get In Touch</span>
+              <span className="text-xs font-semibold tracking-wider uppercase">Initiate Your Project</span>
             </div>
             <h2 id="contact-heading" className="text-3xl sm:text-4xl lg:text-5xl font-black text-[#0B1020] leading-tight tracking-tight mb-5">
-              Tell Us About <span className="text-gradient-blue">Your Project.</span>
+              Request An Executive <span className="text-gradient-blue">Proposal &amp; Quote.</span>
             </h2>
             <p className="text-[#4B5563] text-base sm:text-lg leading-relaxed mb-8">
-              Have a project in mind? Share a few details and we'll get back to you shortly.
+              Ready to initiate your digital transformation? Outline your project requirements below to receive a comprehensive technical proposal and scope breakdown within 24 hours.
             </p>
 
             {/* Direct Contact Details */}

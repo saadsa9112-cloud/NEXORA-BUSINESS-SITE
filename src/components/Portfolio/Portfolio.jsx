@@ -36,14 +36,13 @@ export default function Portfolio() {
         {/* Header */}
         <ScrollReveal variant="fadeUp" className="max-w-3xl mb-12">
           <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full border border-blue-500/20 bg-blue-50 text-[#0066FF] mb-4">
-            <span className="text-xs font-semibold tracking-wider uppercase">Featured Work</span>
+            <span className="text-xs font-semibold tracking-wider uppercase">Case Studies &amp; Portfolio</span>
           </div>
           <h2 id="work-heading" className="text-3xl sm:text-4xl lg:text-5xl font-black text-[#0B1020] leading-tight tracking-tight mb-4">
-            See What We <span className="text-gradient-blue">Build.</span>
+            Engineered Portfolio <span className="text-gradient-blue">&amp; Case Studies.</span>
           </h2>
           <p className="text-[#4B5563] text-base sm:text-lg leading-relaxed max-w-2xl">
-            Explore selected digital experiences created to demonstrate our approach to design,
-            usability and modern development.
+            Explore selected enterprise client engineering projects and showcase digital solutions crafted with meticulous UI design standards and robust software architecture.
           </p>
         </ScrollReveal>
 

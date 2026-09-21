@@ -1,10 +1,10 @@
 import { CheckCircle2 } from 'lucide-react'
 
 const TRUST_ITEMS = [
-  'Modern Solutions',
-  'Responsive Design',
-  'SEO Ready',
-  'Fast & Secure',
+  'Enterprise Web Architecture',
+  'Adaptive Mobile UX',
+  'Technical SEO Supremacy',
+  'OWASP Hardened Security',
 ]
 
 export default function TrustStrip() {
@@ -29,7 +29,7 @@ export default function TrustStrip() {
 
         {/* Tagline */}
         <p className="text-center text-xs text-[#6B7280] font-medium tracking-widest uppercase">
-          Built for Startups&nbsp;&nbsp;•&nbsp;&nbsp;Small Businesses&nbsp;&nbsp;•&nbsp;&nbsp;Growing Brands
+          Trusted by Global Enterprises&nbsp;&nbsp;•&nbsp;&nbsp;High-Growth Startups&nbsp;&nbsp;•&nbsp;&nbsp;Industrial Networks
         </p>
       </div>
     </section>
