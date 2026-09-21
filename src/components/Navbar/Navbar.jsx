@@ -9,10 +9,35 @@ export default function Navbar() {
   const [activeSection, setActiveSection] = useState('home')
 
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 20)
-    onScroll()
-    window.addEventListener('scroll', onScroll, { passive: true })
-    return () => window.removeEventListener('scroll', onScroll)
+    const handleScroll = () => {
+      setScrolled(window.scrollY > 20)
+
+      const sectionIds = NAV_LINKS.map((link) => link.href.replace('#', ''))
+      const scrollPosition = window.scrollY + 120
+
+      if (window.scrollY < 100) {
+        setActiveSection('home')
+        return
+      }
+
+      const isAtBottom = window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 50
+
+      for (let i = sectionIds.length - 1; i >= 0; i--) {
+        const id = sectionIds[i]
+        const el = document.getElementById(id)
+        if (el) {
+          const top = el.offsetTop
+          if (scrollPosition >= top || (isAtBottom && i === sectionIds.length - 1)) {
+            setActiveSection(id)
+            break
+          }
+        }
+      }
+    }
+
+    handleScroll()
+    window.addEventListener('scroll', handleScroll, { passive: true })
+    return () => window.removeEventListener('scroll', handleScroll)
   }, [])
 
   // Close mobile menu on ESC key
@@ -151,16 +176,23 @@ export default function Navbar() {
 
         {/* Mobile nav links */}
         <nav aria-label="Mobile navigation" className="px-4 py-6 flex flex-col gap-1">
-          {NAV_LINKS.map((link) => (
-            <a
-              key={link.href}
-              href={link.href}
-              onClick={(e) => { e.preventDefault(); handleNavClick(link.href) }}
-              className="flex items-center px-4 py-3 text-sm font-medium text-[#4B5563] hover:text-[#0B1020] hover:bg-gray-100 rounded-lg transition-all duration-200"
-            >
-              {link.label}
-            </a>
-          ))}
+          {NAV_LINKS.map((link) => {
+            const isActive = activeSection === link.href.replace('#', '')
+            return (
+              <a
+                key={link.href}
+                href={link.href}
+                onClick={(e) => { e.preventDefault(); handleNavClick(link.href) }}
+                className={`flex items-center px-4 py-3 text-sm font-medium rounded-lg transition-all duration-200 ${
+                  isActive
+                    ? 'text-[#0066FF] font-semibold bg-blue-50'
+                    : 'text-[#4B5563] hover:text-[#0B1020] hover:bg-gray-100'
+                }`}
+              >
+                {link.label}
+              </a>
+            )
+          })}
         </nav>
 
         {/* Mobile CTA */}
