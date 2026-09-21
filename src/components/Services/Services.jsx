@@ -34,14 +34,14 @@ export default function Services() {
         {/* Header */}
         <ScrollReveal variant="fadeUp" className="max-w-3xl mb-16">
           <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full border border-blue-500/20 bg-blue-50 text-[#0066FF] mb-4">
-            <span className="text-xs font-semibold tracking-wider uppercase">Services &amp; Capabilities</span>
+            <span className="text-xs font-semibold tracking-wider uppercase">Our Services</span>
           </div>
           <h2 id="services-heading" className="text-3xl sm:text-4xl lg:text-5xl font-black text-[#0B1020] leading-tight tracking-tight mb-4">
-            Comprehensive Digital Engineering<br className="hidden sm:block" /> Built for{' '}
-            <span className="text-gradient-blue">Global Scale.</span>
+            Digital Services Built to<br className="hidden sm:block" />{' '}
+            <span className="text-gradient-blue">Grow Your Business.</span>
           </h2>
           <p className="text-[#4B5563] text-base sm:text-lg leading-relaxed max-w-2xl">
-            From bespoke corporate web applications to technical SEO, we engineer high-impact solutions designed for conversion, performance, and market expansion. Click any service card to inspect full deliverables and scope.
+            From custom website development to ongoing search optimization and maintenance, we provide end-to-end digital services tailored to your goals. Click any card to view detailed deliverables.
           </p>
         </ScrollReveal>
 

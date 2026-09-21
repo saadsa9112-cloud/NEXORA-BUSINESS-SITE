@@ -267,20 +267,20 @@ export default function Hero() {
             <motion.div variants={itemVariants} className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full border border-blue-500/20 bg-blue-50 text-[#0066FF] mb-6">
               <span className="w-2 h-2 rounded-full bg-[#0066FF] animate-pulse" />
               <span className="text-xs font-semibold tracking-wider uppercase">
-                Enterprise Digital Solutions &amp; Web Engineering
+                NEXORA DIGITAL • BUILDING DIGITAL SUCCESS
               </span>
             </motion.div>
 
             {/* H1 Headline */}
             <motion.h1 variants={itemVariants} className="text-4xl sm:text-5xl lg:text-6xl font-black text-[#0B1020] leading-[1.1] tracking-tight mb-6">
-              We Architect High-Impact <br className="hidden sm:inline" />
-              <span className="text-gradient-blue">Digital Engineering Solutions.</span>
+              Digital Solutions That <br className="hidden sm:inline" />
+              <span className="text-gradient-blue">Move Your Business Forward.</span>
             </motion.h1>
 
             {/* Supporting copy */}
             <motion.p variants={itemVariants} className="text-[#4B5563] text-base sm:text-lg leading-relaxed mb-8 max-w-xl">
-              Delivering custom corporate web platforms, e-commerce architectures, technical SEO,
-              and enterprise digital engineering designed to build market authority and scale global brands.
+              Professional website development, WordPress, Shopify, SEO, graphic design,
+              hosting and maintenance services designed to help your business build trust and grow online.
             </motion.p>
 
             {/* CTAs with Magnetic Buttons */}

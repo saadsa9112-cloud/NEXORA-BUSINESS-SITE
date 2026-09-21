@@ -11,17 +11,17 @@ export default function About() {
           {/* Content */}
           <ScrollReveal variant="fadeUp" className="text-center mb-10">
             <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full border border-blue-500/20 bg-blue-50 text-[#0066FF] mb-4">
-              <span className="text-xs font-semibold tracking-wider uppercase">About Us • HMS Engineering</span>
+              <span className="text-xs font-semibold tracking-wider uppercase">About NEXORA DIGITAL</span>
             </div>
             <h2 id="about-heading" className="text-3xl sm:text-4xl font-black text-[#0B1020] leading-tight tracking-tight mb-5">
               Digital Solutions Built Around <span className="text-gradient-blue">Your Business.</span>
             </h2>
             <p className="text-[#4B5563] text-base sm:text-lg leading-relaxed max-w-2xl mx-auto mb-6">
-              NEXORA DIGITAL (by HMS) is led by <strong>Hafiz Muhammad Saad</strong>, providing startups, small businesses and enterprise clients with custom web engineering, e-commerce, SEO, and ongoing technical excellence.
+              <strong>NEXORA DIGITAL</strong> provides businesses with professional website development, WordPress CMS, Shopify e-commerce, SEO, graphic design, web hosting, and maintenance services.
             </p>
           </ScrollReveal>
 
-          {/* HMS Founder & Leadership Trust Badge */}
+          {/* Founder Badge */}
           <ScrollReveal variant="fadeUp" delay={0.15} className="mb-12">
             <div className="p-5 sm:p-6 rounded-2xl bg-[#F8FAFC] border border-[#E5EAF1] shadow-xs flex flex-col sm:flex-row items-center justify-between gap-4 max-w-2xl mx-auto">
               <div className="flex items-center gap-3">
@@ -29,13 +29,13 @@ export default function About() {
                   <UserCheck size={22} />
                 </div>
                 <div className="text-left">
-                  <span className="text-[10px] font-bold text-[#0066FF] uppercase tracking-wider block">Founder & Lead Engineer</span>
-                  <h3 className="text-base font-bold text-[#0B1020]">Hafiz Muhammad Saad (HMS)</h3>
+                  <span className="text-[10px] font-bold text-[#0066FF] uppercase tracking-wider block">Founder</span>
+                  <h3 className="text-base font-bold text-[#0B1020]">Hafiz Muhammad Saad</h3>
                 </div>
               </div>
               <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg bg-emerald-50 text-emerald-700 border border-emerald-200 text-xs font-semibold">
                 <ShieldCheck size={14} className="text-emerald-600" />
-                <span>Verified Direct Accountability</span>
+                <span>Dedicated Technical Support</span>
               </div>
             </div>
           </ScrollReveal>

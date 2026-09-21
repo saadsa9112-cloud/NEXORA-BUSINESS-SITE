@@ -9,7 +9,7 @@ export default function NexoraBrand({ variant = 'navbar', isScrolled = false, cl
       {/* Official Standalone N Icon */}
       <img
         src={nexoraIconMark}
-        alt="NEXORA DIGITAL by HMS"
+        alt="NEXORA DIGITAL logo"
         className={`w-auto object-contain flex-shrink-0 ${
           isFooter ? 'h-12 sm:h-14' : 'h-[38px]'
         }`}

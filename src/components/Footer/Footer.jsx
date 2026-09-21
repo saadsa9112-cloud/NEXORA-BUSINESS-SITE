@@ -45,16 +45,15 @@ export default function Footer() {
               <NexoraBrand variant="footer" />
             </div>
             <p className="text-[#A7ADBB] text-sm leading-relaxed mb-4 max-w-xs">
-              Enterprise digital engineering, custom web applications, e-commerce architectures, technical SEO, and cloud infrastructure for ambitious global brands.
+              Professional website development, WordPress, Shopify, SEO, graphic design, hosting and maintenance services.
             </p>
-            <p className="text-[#1F90FF] text-xs font-bold tracking-wider uppercase mb-5">"Engineering Digital Excellence."</p>
+            <p className="text-[#1F90FF] text-xs font-bold tracking-wider uppercase mb-5">"BUILDING DIGITAL SUCCESS"</p>
 
             {/* Social */}
             <div className="flex gap-3" aria-label="Social media links">
               {[
                 { Icon: FacebookIcon, label: 'Facebook', href: CONTACT.facebook },
                 { Icon: InstagramIcon, label: 'Instagram', href: CONTACT.instagram },
-                { Icon: LinkedinIcon, label: 'LinkedIn', href: '#' },
               ].map(({ Icon, label, href }) => (
                 <a
                   key={label}
@@ -137,7 +136,7 @@ export default function Footer() {
         {/* Bottom bar */}
         <div className="border-t border-white/10 pt-8 flex flex-col sm:flex-row items-center justify-between gap-4">
           <p className="text-[#A7ADBB] text-xs">
-            © 2026 NEXORA DIGITAL by HMS (Hafiz Muhammad Saad). All Rights Reserved.
+            © 2026 NEXORA DIGITAL. All Rights Reserved.
           </p>
           <div className="flex flex-wrap justify-center gap-4 sm:gap-6">
             {LEGAL_LINKS.map((link) => (
