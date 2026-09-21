@@ -13,26 +13,37 @@ export default function Navbar() {
       setScrolled(window.scrollY > 20)
 
       const sectionIds = NAV_LINKS.map((link) => link.href.replace('#', ''))
-      const scrollPosition = window.scrollY + 120
 
+      // Special fallback for top of page
       if (window.scrollY < 100) {
         setActiveSection('home')
         return
       }
 
-      const isAtBottom = window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 50
+      // Special fallback for bottom of page
+      const isAtBottom =
+        window.innerHeight + Math.ceil(window.scrollY) >=
+        document.documentElement.scrollHeight - 50
 
-      for (let i = sectionIds.length - 1; i >= 0; i--) {
+      if (isAtBottom) {
+        setActiveSection(sectionIds[sectionIds.length - 1])
+        return
+      }
+
+      // Deterministic viewport bounding box check
+      let currentSection = 'home'
+      for (let i = 0; i < sectionIds.length; i++) {
         const id = sectionIds[i]
         const el = document.getElementById(id)
         if (el) {
-          const top = el.offsetTop
-          if (scrollPosition >= top || (isAtBottom && i === sectionIds.length - 1)) {
-            setActiveSection(id)
-            break
+          const rect = el.getBoundingClientRect()
+          if (rect.top <= 200 && rect.bottom >= 100) {
+            currentSection = id
           }
         }
       }
+
+      setActiveSection(currentSection)
     }
 
     handleScroll()
@@ -100,8 +111,8 @@ export default function Navbar() {
                     className={`px-4 py-2 text-sm font-medium rounded-lg transition-all duration-200 ${
                       isActive
                         ? scrolled
-                          ? 'text-[#1F90FF] font-semibold bg-white/10'
-                          : 'text-[#1F90FF] font-semibold bg-blue-50'
+                          ? 'text-[#3B82F6] font-bold bg-white/10 ring-1 ring-[#3B82F6]/30'
+                          : 'text-[#0066FF] font-bold bg-blue-50 ring-1 ring-[#0066FF]/20'
                         : scrolled
                         ? 'text-[#A7ADBB] hover:text-white hover:bg-white/5'
                         : 'text-[#4B5563] hover:text-[#0B1020] hover:bg-gray-100'
