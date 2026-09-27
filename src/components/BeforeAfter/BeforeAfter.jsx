@@ -1,7 +1,8 @@
 import { useState, useRef } from 'react'
 import ScrollReveal from '../Motion/ScrollReveal'
-import { Sparkles, ArrowLeftRight, CheckCircle2, ShoppingCart, Star, ShieldCheck, Zap, XCircle } from 'lucide-react'
-import ecommerceImg from '../../assets/portfolio/ecommerce.jpg'
+import { Sparkles, ArrowLeftRight, CheckCircle2, ShoppingCart, Zap, XCircle } from 'lucide-react'
+import beforeStoreImg from '../../assets/before-after/before-store.png'
+import afterStoreImg from '../../assets/before-after/after-store.png'
 
 export default function BeforeAfter() {
   const [sliderPosition, setSliderPosition] = useState(50)
@@ -37,13 +38,13 @@ export default function BeforeAfter() {
           <ScrollReveal variant="fadeUp">
             <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-blue-50 border border-blue-200 text-[#0066FF] text-xs font-bold uppercase tracking-wider mb-4">
               <Sparkles size={14} />
-              <span>E-Commerce Redesign Comparison</span>
+              <span>Real E-Commerce Transformation</span>
             </div>
             <h2 className="text-3xl sm:text-4xl lg:text-5xl font-black text-[#0B1020] leading-tight tracking-tight mb-4">
-              Unoptimized Store vs. <span className="text-[#0066FF]">NEXORA Shopify Store</span>
+              Basic Web Store vs. <span className="text-[#0066FF]">NEXORA Redesign</span>
             </h2>
             <p className="text-base text-[#4B5563] leading-relaxed">
-              Drag the interactive slider to compare an old, unoptimized online store layout with NEXORA DIGITAL's high-converting 2026 e-commerce architecture.
+              Drag the interactive slider to see how NEXORA DIGITAL transforms plain, low-converting web stores into ultra-sleek, high-converting platforms.
             </p>
           </ScrollReveal>
         </div>
@@ -59,154 +60,47 @@ export default function BeforeAfter() {
             onTouchStart={() => setIsDragging(true)}
             onTouchEnd={() => setIsDragging(false)}
             onTouchMove={handleTouchMove}
-            className="relative h-[420px] sm:h-[500px] rounded-3xl overflow-hidden shadow-2xl border-4 border-white ring-1 ring-black/10 cursor-ew-resize bg-slate-900"
+            className="relative h-[360px] sm:h-[480px] lg:h-[540px] rounded-3xl overflow-hidden shadow-2xl border-4 border-white ring-1 ring-black/10 cursor-ew-resize bg-[#060B18]"
           >
             {/* ========================================================================= */}
-            {/* AFTER SIDE: Modern 2026 High-Converting NEXORA Store (Base Layer) */}
+            {/* AFTER SIDE: Ultra-Modern 2026 NEXORA Store (Base Layer) */}
             {/* ========================================================================= */}
-            <div className="absolute inset-0 bg-[#0A0D14] text-white flex flex-col justify-between p-6 sm:p-8 font-sans">
-              {/* Header Bar */}
-              <div className="flex items-center justify-between pb-3 border-b border-white/10 text-xs">
-                <div className="flex items-center gap-2">
-                  <div className="w-8 h-8 rounded-lg bg-[#0066FF] flex items-center justify-center font-black text-white text-sm">
-                    N
-                  </div>
-                  <div>
-                    <div className="font-bold text-white text-sm flex items-center gap-1.5">
-                      NEXORA Luxury Store
-                      <span className="px-2 py-0.5 bg-green-500/20 text-green-400 text-[10px] rounded-full border border-green-500/30">
-                        Live Store
-                      </span>
-                    </div>
-                    <div className="text-[10px] text-gray-400">Shopify Custom Liquid Theme • 99 Speed</div>
-                  </div>
-                </div>
-
-                <div className="flex items-center gap-2">
-                  <span className="hidden sm:inline-block px-3 py-1 bg-[#0066FF] text-white rounded-xl font-bold text-xs shadow-md">
-                    AFTER: NEXORA High-Converting Store
-                  </span>
-                </div>
-              </div>
-
-              {/* Modern Product Grid Showcase */}
-              <div className="my-auto grid sm:grid-cols-2 gap-4 items-center">
-                <div className="relative rounded-2xl overflow-hidden border border-white/10 shadow-lg aspect-video bg-slate-800">
-                  <img
-                    src={ecommerceImg}
-                    alt="Modern E-Commerce Store UI"
-                    className="w-full h-full object-cover object-center"
-                  />
-                  <div className="absolute top-3 left-3 bg-[#0066FF] text-white px-2.5 py-1 rounded-lg text-[10px] font-bold uppercase tracking-wider">
-                    -30% OFF TODAY
-                  </div>
-                </div>
-
-                <div className="space-y-3">
-                  <div className="flex items-center gap-1 text-amber-400 text-xs">
-                    {[...Array(5)].map((_, i) => (
-                      <Star key={i} size={12} fill="currentColor" />
-                    ))}
-                    <span className="text-gray-300 font-bold ml-1 text-[11px]">4.9 (1.4k Reviews)</span>
-                  </div>
-
-                  <h3 className="text-lg sm:text-xl font-bold leading-snug">
-                    Executive Chrono Watch Series
-                  </h3>
-
-                  <div className="flex items-baseline gap-2">
-                    <span className="text-2xl font-black text-green-400">$149.00</span>
-                    <span className="text-xs text-gray-500 line-through">$210.00</span>
-                    <span className="text-[10px] bg-green-500/20 text-green-400 font-bold px-2 py-0.5 rounded">Save $61</span>
-                  </div>
-
-                  <div className="flex items-center gap-2 pt-1">
-                    <button className="flex-1 py-2.5 bg-[#0066FF] hover:bg-[#0052CC] text-white font-bold text-xs rounded-xl shadow-md flex items-center justify-center gap-1.5">
-                      <ShoppingCart size={14} />
-                      <span>Add to Cart — Instant Checkout</span>
-                    </button>
-                  </div>
-
-                  <div className="flex items-center gap-3 text-[10px] text-gray-400 pt-1">
-                    <span className="flex items-center gap-1"><ShieldCheck size={12} className="text-[#0066FF]" /> 256-Bit SSL</span>
-                    <span className="flex items-center gap-1"><Zap size={12} className="text-green-400" /> Express Shipping</span>
-                  </div>
-                </div>
-              </div>
-
-              {/* Bottom Conversion Metric Bar */}
-              <div className="pt-3 border-t border-white/10 flex items-center justify-between text-[11px] text-gray-300">
-                <span className="text-green-400 font-bold flex items-center gap-1">
-                  <CheckCircle2 size={13} /> 3.8% Store Conversion Rate (+240% Lift)
-                </span>
-                <span className="hidden sm:inline-block text-gray-400">Mobile Express Checkout Ready</span>
+            <div className="absolute inset-0 bg-[#060B18] flex items-center justify-center">
+              <img
+                src={afterStoreImg}
+                alt="NEXORA High-Converting Redesigned Store"
+                className="w-full h-full object-contain sm:object-cover object-top"
+              />
+              
+              {/* After Label Badge */}
+              <div className="absolute top-4 right-4 bg-[#0066FF] text-white px-3.5 py-1.5 sm:px-4 sm:py-2 rounded-xl text-[10px] sm:text-xs font-bold uppercase tracking-wider shadow-lg flex items-center gap-1.5 backdrop-blur-md">
+                <CheckCircle2 size={15} />
+                <span>AFTER: NEXORA High-Converting Store (3.8% Conversion)</span>
               </div>
             </div>
 
             {/* ========================================================================= */}
-            {/* BEFORE SIDE: Unoptimized / Old E-Commerce Layout (Clipped Overlay) */}
+            {/* BEFORE SIDE: Basic Plain Store (Clipped Overlay Layer) */}
             {/* ========================================================================= */}
             <div
-              className="absolute inset-0 bg-white text-black flex flex-col justify-between p-6 sm:p-8 font-sans border-r-4 border-[#0066FF] shadow-2xl overflow-hidden"
+              className="absolute inset-0 bg-white overflow-hidden border-r-4 border-[#0066FF] shadow-2xl"
               style={{ width: `${sliderPosition}%` }}
             >
-              {/* Old Unoptimized Header Bar */}
-              <div className="flex items-center justify-between pb-3 border-b border-gray-300 text-xs">
-                <div className="flex items-center gap-2">
-                  <div className="w-8 h-8 bg-gray-200 border border-gray-400 text-black flex items-center justify-center font-bold text-xs">
-                    SHOP
-                  </div>
-                  <div>
-                    <div className="font-bold text-black text-xs">My Online Store (2018 Theme)</div>
-                    <div className="text-[10px] text-red-600 font-bold">⚠️ Unoptimized • Slow Loading (4.2s)</div>
-                  </div>
-                </div>
-
-                <div>
-                  <span className="bg-red-600 text-white px-3 py-1 text-[10px] font-bold uppercase tracking-wider">
-                    BEFORE: Unoptimized Old Store
-                  </span>
-                </div>
+              <div
+                className="relative h-full bg-white flex items-center justify-center"
+                style={{ width: containerRef.current ? containerRef.current.clientWidth : '100%' }}
+              >
+                <img
+                  src={beforeStoreImg}
+                  alt="Basic Plain Store Layout"
+                  className="w-full h-full object-contain sm:object-cover object-top"
+                />
               </div>
 
-              {/* Old Unoptimized Product Layout */}
-              <div className="my-auto grid sm:grid-cols-2 gap-4 items-center bg-gray-50 p-4 border border-gray-300">
-                <div className="relative border border-gray-300 aspect-video bg-gray-200 flex items-center justify-center text-gray-500 text-xs">
-                  <img
-                    src={ecommerceImg}
-                    alt="Old E-Commerce Store UI"
-                    className="w-full h-full object-cover filter grayscale contrast-125 brightness-75"
-                  />
-                  <span className="absolute top-2 left-2 bg-red-600 text-white text-[9px] px-1 font-bold">
-                    SALE!
-                  </span>
-                </div>
-
-                <div className="space-y-2">
-                  <div className="text-[10px] text-gray-500">Item #4082 — Category: Watches</div>
-                  <h4 className="text-sm font-bold text-black leading-tight underline">
-                    Men's Leather Strap Watch Product
-                  </h4>
-                  <div className="text-base font-bold text-black">
-                    Price: $149.00 <span className="text-xs text-red-600 font-normal line-through">$210.00</span>
-                  </div>
-                  <div className="pt-1">
-                    <button className="w-full py-2 bg-gray-300 text-black border border-gray-500 font-bold text-xs">
-                      [ ADD TO CART ]
-                    </button>
-                  </div>
-                  <div className="text-[10px] text-red-600 font-bold">
-                    ❌ High Abandoned Cart Rate (82%)
-                  </div>
-                </div>
-              </div>
-
-              {/* Bottom Unoptimized Warning */}
-              <div className="pt-3 border-t border-gray-300 flex items-center justify-between text-[11px] text-red-600 font-bold">
-                <span className="flex items-center gap-1">
-                  <XCircle size={13} /> Low 0.9% Conversion Rate (Legacy Layout)
-                </span>
-                <span className="hidden sm:inline-block text-gray-500">No Mobile Checkout Optimization</span>
+              {/* Before Label Badge */}
+              <div className="absolute top-4 left-4 bg-slate-900/90 text-red-400 border border-red-500/30 px-3.5 py-1.5 sm:px-4 sm:py-2 rounded-xl text-[10px] sm:text-xs font-bold uppercase tracking-wider shadow-lg flex items-center gap-1.5 backdrop-blur-md">
+                <XCircle size={15} />
+                <span>BEFORE: Basic / Plain Store (1.2% Conversion)</span>
               </div>
             </div>
 
@@ -228,8 +122,8 @@ export default function BeforeAfter() {
                 <Sparkles size={18} />
               </div>
               <div>
-                <h4 className="text-sm font-bold text-[#0B1020] mb-1">+240% Sales Lift</h4>
-                <p className="text-xs text-[#6B7280]">Modern UI hierarchy turns store visitors into immediate buyers.</p>
+                <h4 className="text-sm font-bold text-[#0B1020] mb-1">+240% Sales Growth</h4>
+                <p className="text-xs text-[#6B7280]">Converting basic layouts into high-converting visual storefronts.</p>
               </div>
             </div>
 
@@ -239,7 +133,7 @@ export default function BeforeAfter() {
               </div>
               <div>
                 <h4 className="text-sm font-bold text-[#0B1020] mb-1">&lt; 1s Mobile Checkout</h4>
-                <p className="text-xs text-[#6B7280]">Express checkout options eliminate cart abandonment.</p>
+                <p className="text-xs text-[#6B7280]">Streamlined checkout flow reduces cart abandonment to a minimum.</p>
               </div>
             </div>
 
@@ -248,8 +142,8 @@ export default function BeforeAfter() {
                 <CheckCircle2 size={18} />
               </div>
               <div>
-                <h4 className="text-sm font-bold text-[#0B1020] mb-1">99 PageSpeed Rating</h4>
-                <p className="text-xs text-[#6B7280]">Shopify Liquid custom theme optimization for ultra-fast loading.</p>
+                <h4 className="text-sm font-bold text-[#0B1020] mb-1">Custom Shopify Liquid</h4>
+                <p className="text-xs text-[#6B7280]">High-performance code architecture optimized for speed and SEO.</p>
               </div>
             </div>
           </div>
