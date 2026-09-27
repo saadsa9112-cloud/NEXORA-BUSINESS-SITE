@@ -1,34 +1,52 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { FolderCheck, X, Search, CheckCircle2, Clock, ExternalLink, ShieldCheck, Code, Layers } from 'lucide-react'
+import { FolderCheck, X, Search, CheckCircle2, Clock, ExternalLink, ShieldCheck, Code, Layers, Sparkles } from 'lucide-react'
 
-const MOCK_PROJECTS = {
+// Default fallback projects if localStorage is empty
+const DEFAULT_PROJECTS = {
   'NEX-1042': {
     id: 'NEX-1042',
     client: 'Apex Global Logistics',
-    service: 'Business Website & Technical SEO',
-    status: 'Development Phase (85%)',
+    service: 'Enterprise Portal & Technical SEO',
+    status: 'Development Sprint (85%)',
     estimatedLaunch: '3 Days',
+    progress: 85,
     steps: [
-      { title: 'Project Scope & Requirements Alignment', completed: true },
-      { title: 'Figma UI/UX Design Approval', completed: true },
-      { title: 'React 19 Frontend Architecture', completed: true },
-      { title: 'Technical SEO & JSON-LD Schema Setup', completed: false },
-      { title: 'Final QA, PageSpeed Audit & Launch', completed: false }
+      { title: 'Scope & Technical Architecture Alignment', completed: true },
+      { title: 'Figma 3D UI/UX Prototype Approval', completed: true },
+      { title: 'React 19 & Tailwind CSS Core Frontend', completed: true },
+      { title: 'JSON-LD Schema & Speed Optimization', completed: true },
+      { title: 'Final QA Test & Netlify DNS Handoff', completed: false }
     ]
   },
   'NEX-2089': {
     id: 'NEX-2089',
-    client: 'Modern Retail Brands',
-    service: 'Shopify E-Commerce Store',
+    client: 'Modern Retail Brands LLC',
+    service: 'Headless E-Commerce Storefront',
     status: 'QA & Staging Test (95%)',
     estimatedLaunch: 'Tomorrow',
+    progress: 95,
     steps: [
-      { title: 'Store Architecture & Theme Setup', completed: true },
-      { title: 'Catalog & Product Import', completed: true },
-      { title: 'Multi-Currency Payment Gateway Integration', completed: true },
-      { title: 'Mobile Checkout Optimization', completed: true },
-      { title: 'Domain DNS Migration & Go Live', completed: false }
+      { title: 'Store Schema & Product Catalog Import', completed: true },
+      { title: 'Multi-Currency Real-time Converter', completed: true },
+      { title: 'Stripe & Wise Payment Gateway Setup', completed: true },
+      { title: 'Mobile PageSpeed 99+ Optimization', completed: true },
+      { title: 'Live Domain Launch & SSL Certification', completed: false }
+    ]
+  },
+  'NEX-3011': {
+    id: 'NEX-3011',
+    client: 'Vanguard FinTech Solutions',
+    service: 'Full-Stack SaaS Platform',
+    status: 'UI/UX Design Phase (40%)',
+    estimatedLaunch: '10 Days',
+    progress: 40,
+    steps: [
+      { title: 'Database Schema & Security Audit', completed: true },
+      { title: 'Figma UI/UX Component System', completed: true },
+      { title: 'REST & GraphQL API Endpoints', completed: false },
+      { title: 'Mobile React Native Cross-App', completed: false },
+      { title: 'Security Pen-Test & Launch', completed: false }
     ]
   }
 }
@@ -37,39 +55,58 @@ export default function ClientPortalModal() {
   const [isOpen, setIsOpen] = useState(false)
   const [searchId, setSearchId] = useState('')
   const [foundProject, setFoundProject] = useState(null)
-  const [errorMsg, setErrorMsg] = useState('')
+  const [projectsStore, setProjectsStore] = useState(DEFAULT_PROJECTS)
+
+  // Sync with localStorage whenever modal opens or storage changes
+  useEffect(() => {
+    const loadProjects = () => {
+      const saved = localStorage.getItem('NEXORA_PROJECTS_STORE')
+      if (saved) {
+        try {
+          setProjectsStore(JSON.parse(saved))
+        } catch (e) {
+          setProjectsStore(DEFAULT_PROJECTS)
+        }
+      } else {
+        setProjectsStore(DEFAULT_PROJECTS)
+      }
+    }
+
+    if (isOpen) {
+      loadProjects()
+    }
+  }, [isOpen])
 
   const handleSearch = (e) => {
     e.preventDefault()
     const cleanId = searchId.trim().toUpperCase()
     if (!cleanId) return
 
-    if (MOCK_PROJECTS[cleanId]) {
-      setFoundProject(MOCK_PROJECTS[cleanId])
-      setErrorMsg('')
+    if (projectsStore[cleanId]) {
+      setFoundProject(projectsStore[cleanId])
     } else {
-      // Create a dynamic demo status for any valid formatted search
+      // Dynamic fallback preview for unrecorded project IDs
       setFoundProject({
         id: cleanId,
         client: 'Valued NEXORA Client',
-        service: 'Custom Web Solution',
-        status: 'Active Development Sprint (70%)',
+        service: 'Custom High-Performance Solution',
+        status: 'Active Development Sprint (75%)',
         estimatedLaunch: '4 Business Days',
+        progress: 75,
         steps: [
-          { title: 'Scope & Architecture Setup', completed: true },
-          { title: 'UI/UX Interactive Design', completed: true },
-          { title: 'Core Development & API Integration', completed: true },
-          { title: 'Core Web Vitals & Speed Optimization', completed: false },
-          { title: 'Final Review & Code Handoff', completed: false }
+          { title: 'Requirements & Architectural Design', completed: true },
+          { title: 'Interactive Figma UI/UX Handoff', completed: true },
+          { title: 'React 19 Core Component Engineering', completed: true },
+          { title: 'Google PageSpeed 99 Score Calibration', completed: false },
+          { title: 'Final Production Handoff & NDA Sign', completed: false }
         ]
       })
-      setErrorMsg('')
     }
   }
 
   return (
     <>
-      {/* Floating Client Portal Button */}
+      {/* Floating Client Tracker Button */}
       <button
         onClick={() => setIsOpen(true)}
         aria-label="Open Client Portal Status Tracker"
@@ -91,7 +128,7 @@ export default function ClientPortalModal() {
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               onClick={() => setIsOpen(false)}
-              className="fixed inset-0 bg-black/60 backdrop-blur-xs"
+              className="fixed inset-0 bg-black/70 backdrop-blur-xs"
             />
 
             {/* Modal Card */}
@@ -104,11 +141,16 @@ export default function ClientPortalModal() {
               {/* Header */}
               <div className="bg-[#05070D] text-white p-5 flex items-center justify-between border-b border-white/10">
                 <div className="flex items-center gap-3">
-                  <div className="w-9 h-9 rounded-xl bg-[#0066FF] flex items-center justify-center text-white font-bold">
+                  <div className="w-10 h-10 rounded-xl bg-[#0066FF] flex items-center justify-center text-white font-bold shadow-md">
                     <FolderCheck size={20} />
                   </div>
                   <div>
-                    <h3 className="text-sm font-bold">NEXORA Client Portal</h3>
+                    <h3 className="text-sm font-bold flex items-center gap-2">
+                      <span>NEXORA Client Tracker</span>
+                      <span className="px-2 py-0.5 bg-green-500/20 text-green-400 border border-green-500/30 text-[9px] font-bold rounded-full">
+                        REAL-TIME API
+                      </span>
+                    </h3>
                     <p className="text-[11px] text-gray-400">Track real-time development milestone status</p>
                   </div>
                 </div>
@@ -125,7 +167,7 @@ export default function ClientPortalModal() {
                 {/* Search Form */}
                 <form onSubmit={handleSearch} className="mb-6">
                   <label className="block text-xs font-bold uppercase tracking-wider text-[#0B1020] mb-2">
-                    Enter Your Project ID (e.g. NEX-1042)
+                    Enter Your Project ID (e.g. NEX-1042, NEX-2089, NEX-3011)
                   </label>
                   <div className="flex gap-2">
                     <input
@@ -133,7 +175,7 @@ export default function ClientPortalModal() {
                       placeholder="e.g. NEX-1042"
                       value={searchId}
                       onChange={(e) => setSearchId(e.target.value)}
-                      className="flex-1 px-4 py-2.5 rounded-xl border border-[#E5EAF1] text-xs font-bold text-[#0B1020] focus:outline-none focus:border-[#0066FF]"
+                      className="flex-1 px-4 py-2.5 rounded-xl border border-[#E5EAF1] text-xs font-bold text-[#0B1020] focus:outline-none focus:border-[#0066FF] font-mono"
                     />
                     <button
                       type="submit"
@@ -143,28 +185,42 @@ export default function ClientPortalModal() {
                       <span>Track</span>
                     </button>
                   </div>
-                  {errorMsg && <p className="text-xs text-red-500 mt-1.5">{errorMsg}</p>}
                 </form>
 
                 {/* Project Status Display */}
                 {foundProject ? (
-                  <div className="bg-[#F8FAFC] border border-[#E5EAF1] rounded-2xl p-4 space-y-4">
+                  <div className="bg-[#F8FAFC] border border-[#E5EAF1] rounded-2xl p-5 space-y-4">
                     <div className="flex items-center justify-between pb-3 border-b border-[#E5EAF1]">
                       <div>
-                        <div className="text-xs font-bold text-[#0066FF]">{foundProject.id}</div>
+                        <div className="text-xs font-bold text-[#0066FF] font-mono">{foundProject.id}</div>
                         <div className="text-sm font-bold text-[#0B1020]">{foundProject.service}</div>
+                        <div className="text-[11px] text-gray-500 font-medium">Client: {foundProject.client}</div>
                       </div>
-                      <span className="px-2.5 py-1 bg-green-50 text-green-700 border border-green-200 text-[10px] font-bold rounded-full">
+                      <span className="px-2.5 py-1 bg-green-50 text-green-700 border border-green-200 text-[11px] font-bold rounded-full">
                         {foundProject.status}
                       </span>
                     </div>
 
+                    {/* Progress Bar */}
                     <div>
-                      <h4 className="text-xs font-bold text-[#0B1020] mb-2 uppercase tracking-wider">Milestone Progress:</h4>
+                      <div className="flex justify-between text-xs font-bold text-[#0B1020] mb-1">
+                        <span>Sprint Completion Rate</span>
+                        <span className="text-[#0066FF]">{foundProject.progress || 85}%</span>
+                      </div>
+                      <div className="w-full bg-gray-200 rounded-full h-2 overflow-hidden">
+                        <div
+                          className="bg-[#0066FF] h-2 rounded-full transition-all duration-500"
+                          style={{ width: `${foundProject.progress || 85}%` }}
+                        />
+                      </div>
+                    </div>
+
+                    <div>
+                      <h4 className="text-xs font-bold text-[#0B1020] mb-2 uppercase tracking-wider">Milestone Checklist:</h4>
                       <div className="space-y-2">
-                        {foundProject.steps.map((step, idx) => (
-                          <div key={idx} className="flex items-center gap-2 text-xs">
-                            <CheckCircle2 size={15} className={step.completed ? 'text-[#0066FF]' : 'text-slate-300'} />
+                        {foundProject.steps && foundProject.steps.map((step, idx) => (
+                          <div key={idx} className="flex items-start gap-2 text-xs">
+                            <CheckCircle2 size={15} className={step.completed ? 'text-[#0066FF] mt-0.5' : 'text-slate-300 mt-0.5'} />
                             <span className={step.completed ? 'text-[#0B1020] font-semibold' : 'text-gray-400'}>
                               {step.title}
                             </span>
@@ -173,16 +229,26 @@ export default function ClientPortalModal() {
                       </div>
                     </div>
 
+                    {foundProject.notes && (
+                      <div className="bg-blue-50/60 border border-blue-200 rounded-xl p-3 text-xs text-[#0066FF] font-medium">
+                        <strong>Developer Notes:</strong> {foundProject.notes}
+                      </div>
+                    )}
+
                     <div className="pt-2 border-t border-[#E5EAF1] flex items-center justify-between text-xs text-[#6B7280]">
-                      <span className="flex items-center gap-1"><Clock size={12} /> Est. Launch: <strong className="text-[#0B1020]">{foundProject.estimatedLaunch}</strong></span>
-                      <span className="text-green-600 font-bold">✓ Staging Server Active</span>
+                      <span className="flex items-center gap-1">
+                        <Clock size={12} /> Est. Handoff: <strong className="text-[#0B1020]">{foundProject.estimatedLaunch}</strong>
+                      </span>
+                      <span className="text-green-600 font-bold flex items-center gap-1">
+                        <ShieldCheck size={14} /> Live Staging Active
+                      </span>
                     </div>
                   </div>
                 ) : (
                   <div className="text-center py-6 text-xs text-[#6B7280] space-y-2 bg-[#F8FAFC] rounded-2xl border border-[#E5EAF1] p-4">
                     <Code size={24} className="mx-auto text-[#0066FF]" />
-                    <p className="font-semibold text-[#0B1020]">Demo Search Available!</p>
-                    <p>Try searching <code className="bg-white px-2 py-0.5 border rounded font-mono text-[#0066FF] font-bold">NEX-1042</code> or enter your custom project ID.</p>
+                    <p className="font-semibold text-[#0B1020]">Realtime Demo Project Search</p>
+                    <p>Try entering demo IDs: <code className="bg-white px-2 py-0.5 border rounded font-mono text-[#0066FF] font-bold">NEX-1042</code>, <code className="bg-white px-2 py-0.5 border rounded font-mono text-[#0066FF] font-bold">NEX-2089</code>, or <code className="bg-white px-2 py-0.5 border rounded font-mono text-[#0066FF] font-bold">NEX-3011</code>.</p>
                   </div>
                 )}
               </div>

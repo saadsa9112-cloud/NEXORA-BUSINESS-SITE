@@ -1,4 +1,5 @@
-import { Mail, Phone, MapPin, Globe } from 'lucide-react'
+import { useState } from 'react'
+import { Mail, Phone, MapPin, Globe, Server, Shield } from 'lucide-react'
 import { NAV_LINKS, SERVICES_LIST, CONTACT } from '../../data/siteData'
 import NexoraBrand from '../NexoraBrand/NexoraBrand'
 
@@ -13,15 +14,10 @@ const InstagramIcon = () => (
     <rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/>
   </svg>
 )
-const LinkedinIcon = () => (
-  <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-    <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/>
-  </svg>
-)
 
 const LEGAL_LINKS = ['Privacy Policy', 'Terms & Conditions', 'Refund Policy']
 
-export default function Footer() {
+export default function Footer({ onOpenAdmin }) {
   const handleNavClick = (href) => {
     const id = href.replace('#', '')
     const el = document.getElementById(id)
@@ -138,17 +134,27 @@ export default function Footer() {
           <p className="text-[#A7ADBB] text-xs">
             © 2026 NEXORA DIGITAL. All Rights Reserved.
           </p>
-          <div className="flex flex-wrap justify-center gap-4 sm:gap-6">
-            {LEGAL_LINKS.map((link) => (
-              <a
-                key={link}
-                href="#"
-                onClick={(e) => e.preventDefault()}
-                className="text-[#A7ADBB] hover:text-white text-xs transition-colors duration-200"
-              >
-                {link}
-              </a>
-            ))}
+
+          <div className="flex items-center gap-4">
+            <button
+              onClick={onOpenAdmin}
+              className="px-3 py-1 bg-white/5 hover:bg-blue-600/20 text-gray-300 hover:text-blue-400 border border-white/10 hover:border-blue-500/30 rounded-lg text-xs font-semibold flex items-center gap-1.5 transition-all cursor-pointer"
+            >
+              <Server size={13} />
+              <span>Admin Console</span>
+            </button>
+            <div className="flex flex-wrap justify-center gap-4 sm:gap-6">
+              {LEGAL_LINKS.map((link) => (
+                <a
+                  key={link}
+                  href="#"
+                  onClick={(e) => e.preventDefault()}
+                  className="text-[#A7ADBB] hover:text-white text-xs transition-colors duration-200"
+                >
+                  {link}
+                </a>
+              ))}
+            </div>
           </div>
         </div>
       </div>

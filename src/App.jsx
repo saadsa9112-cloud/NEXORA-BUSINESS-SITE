@@ -20,10 +20,12 @@ import WhatsAppButton from './components/WhatsAppButton/WhatsAppButton'
 import FloatingActionBar from './components/FloatingBar/FloatingActionBar'
 import AiAssistantModal from './components/AiAssistant/AiAssistantModal'
 import ClientPortalModal from './components/ClientPortal/ClientPortalModal'
+import AdminPanelModal from './components/Admin/AdminPanelModal'
 import Footer from './components/Footer/Footer'
 
 export default function App() {
   const [currency, setCurrency] = useState('PKR')
+  const [isAdminOpen, setIsAdminOpen] = useState(false)
 
   // Auto-detect Geo-location currency (PKR for PK, USD for International)
   useEffect(() => {
@@ -103,11 +105,12 @@ export default function App() {
         <FinalCTA />
       </main>
 
-      <Footer />
+      <Footer onOpenAdmin={() => setIsAdminOpen(true)} />
       <FloatingActionBar />
       <WhatsAppButton />
       <AiAssistantModal />
       <ClientPortalModal />
+      <AdminPanelModal isOpen={isAdminOpen} onClose={() => setIsAdminOpen(false)} />
     </div>
   )
 }
