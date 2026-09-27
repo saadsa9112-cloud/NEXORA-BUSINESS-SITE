@@ -4,7 +4,6 @@ import Hero from './components/Hero/Hero'
 import TrustStrip from './components/TrustStrip/TrustStrip'
 import Services from './components/Services/Services'
 import Portfolio from './components/Portfolio/Portfolio'
-import BeforeAfter from './components/BeforeAfter/BeforeAfter'
 import TechStack from './components/TechStack/TechStack'
 import WhyChooseUs from './components/WhyChooseUs/WhyChooseUs'
 import Process from './components/Process/Process'
@@ -86,7 +85,6 @@ export default function App() {
         <TrustStrip />
         <Services />
         <Portfolio />
-        <BeforeAfter />
         <TechStack />
         <WhyChooseUs />
         <Process />
