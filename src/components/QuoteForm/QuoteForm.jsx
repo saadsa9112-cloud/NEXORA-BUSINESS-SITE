@@ -4,6 +4,7 @@ import { Send, CheckCircle, AlertCircle, MessageCircle, Phone, Mail, Globe } fro
 import { SERVICES_LIST, BUDGET_RANGES_PKR, BUDGET_RANGES_USD, CONTACT } from '../../data/siteData'
 import MagneticButton from '../Motion/MagneticButton'
 import ScrollReveal from '../Motion/ScrollReveal'
+import PaymentBadges from '../PaymentBadges/PaymentBadges'
 
 const INITIAL_FIELDS = {
   fullName: '',
@@ -426,6 +427,9 @@ export default function QuoteForm({ currency = 'PKR', setCurrency }) {
                         )}
                       </div>
                     </div>
+
+                    {/* International & Domestic Payment Trust Badges */}
+                    <PaymentBadges />
 
                     {/* Submit Button */}
                     <MagneticButton className="w-full">

@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react'
+import LaunchBanner from './components/LaunchBanner/LaunchBanner'
 import Navbar from './components/Navbar/Navbar'
 import Hero from './components/Hero/Hero'
 import TrustStrip from './components/TrustStrip/TrustStrip'
@@ -12,11 +13,13 @@ import Pricing from './components/Pricing/Pricing'
 import About from './components/About/About'
 import QualitySecurity from './components/QualitySecurity/QualitySecurity'
 import FAQ from './components/FAQ/FAQ'
+import WebsiteAuditWidget from './components/WebsiteAudit/WebsiteAuditWidget'
 import QuoteForm from './components/QuoteForm/QuoteForm'
 import FinalCTA from './components/FinalCTA/FinalCTA'
 import WhatsAppButton from './components/WhatsAppButton/WhatsAppButton'
 import FloatingActionBar from './components/FloatingBar/FloatingActionBar'
 import AiAssistantModal from './components/AiAssistant/AiAssistantModal'
+import ClientPortalModal from './components/ClientPortal/ClientPortalModal'
 import Footer from './components/Footer/Footer'
 
 export default function App() {
@@ -69,6 +72,9 @@ export default function App() {
 
   return (
     <div className="min-h-screen bg-[#F7F9FC] text-[#0B1020] overflow-x-hidden">
+      {/* Launch Offer Announcement Banner */}
+      <LaunchBanner />
+
       {/* Skip to main content — accessibility */}
       <a
         href="#home"
@@ -92,6 +98,7 @@ export default function App() {
         <About />
         <QualitySecurity />
         <FAQ />
+        <WebsiteAuditWidget />
         <QuoteForm currency={currency} setCurrency={setCurrency} />
         <FinalCTA />
       </main>
@@ -100,6 +107,7 @@ export default function App() {
       <FloatingActionBar />
       <WhatsAppButton />
       <AiAssistantModal />
+      <ClientPortalModal />
     </div>
   )
 }
