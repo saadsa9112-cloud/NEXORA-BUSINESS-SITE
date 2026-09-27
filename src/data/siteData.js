@@ -1,12 +1,12 @@
 import {
   Globe, Code, ShoppingCart, Search, Palette, Server, Wrench, Layers
 } from 'lucide-react'
-import corporateImg from '../assets/portfolio/corporate.jpg'
-import ecommerceImg from '../assets/portfolio/ecommerce.jpg'
-import haqTransportImg from '../assets/portfolio/haq-transport.jpg'
+import automobileImg from '../assets/portfolio/automobile.png'
+import nedAcademyImg from '../assets/portfolio/ned-academy.png'
+import universitySystemImg from '../assets/portfolio/university-system.png'
+import developerPortfolioImg from '../assets/portfolio/developer-portfolio.png'
 import restaurantImg from '../assets/portfolio/restaurant.jpg'
 import dashboardImg from '../assets/portfolio/dashboard.jpg'
-import landingImg from '../assets/portfolio/landing.jpg'
 
 export const NAV_LINKS = [
   { label: 'Home', href: '#home' },
@@ -80,57 +80,115 @@ export const SERVICES = [
 export const PORTFOLIO_ITEMS = [
   {
     id: 1,
-    category: 'Business Website',
-    title: 'Modern Corporate Website',
-    description: 'Modern corporate website with clean UI design, responsive service pages, and integrated contact form.',
-    image: corporateImg,
-    tag: 'Featured Project',
-    type: 'corporate',
+    category: 'Automobile 3D',
+    title: 'Automobile 3D Web Experience',
+    subtitle: 'Choreographed 3D Scroll Sequence & Aerodynamic Ingress',
+    description: 'Interactive 3D vehicle showcase featuring real-time camera sequence, aerodynamic ingress telemetry, and 360° cockpit customization.',
+    fullDescription: 'An immersive 3D automotive web application engineered with Three.js and WebGL. Features choreographed scroll-triggered camera motion, aerodynamic carbon monofuselage architecture, real-time lighting shaders, and an interactive 360° vehicle customizer.',
+    image: automobileImg,
+    tag: '3D Interactive',
+    type: 'automobile',
+    tags: ['WebGL', 'Three.js', 'React 19', '3D Interactive', 'Tailwind CSS'],
+    deliverables: [
+      '3D Canvas & WebGL Rendering Engine',
+      'Interactive 360° Vehicle Customizer',
+      'Choreographed Scroll Sequence Mechanics',
+      'Ultra-Smooth 60FPS Frame Performance',
+      'Responsive Mobile & Touch Controls'
+    ]
   },
   {
     id: 2,
-    category: 'E-commerce Store',
-    title: 'Modern Online Store',
-    description: 'Full-featured Shopify e-commerce store with product catalog, cart functionality, and mobile checkout.',
-    image: ecommerceImg,
-    tag: 'Featured Project',
-    type: 'ecommerce',
+    category: 'Education & Portal',
+    title: 'NED Academy Learning Platform',
+    subtitle: 'Pioneering the Next Frontier of Learning & Technology',
+    description: 'Modern academic platform for technology training, industry-integrated learning paths, degree programs, and research hubs.',
+    fullDescription: 'A high-performance educational portal for NED Academy connecting industry coding labs with actual enterprise projects. Features course catalogs, academic guides, admissions portals, and responsive student UI.',
+    image: nedAcademyImg,
+    tag: 'Academic Portal',
+    type: 'education',
+    tags: ['React 19', 'Tailwind CSS', 'Academic CMS', 'SEO Ready', 'Vite'],
+    deliverables: [
+      'Course Catalog & Academic Admissions Portal',
+      'Faculty & Research Project Directory',
+      'Student Application & Admission Guide',
+      'SEO-Optimized Schema Markup',
+      'High-Speed Dynamic Search & Filter'
+    ]
   },
   {
     id: 3,
-    category: 'Logistics & Supply Chain',
-    title: 'Global Fleet & Logistics Intelligence',
-    description: 'Enterprise logistics management portal featuring real-time fleet telemetry, multi-region dispatch, and cargo tracking.',
-    image: corporateImg,
-    tag: 'Featured Project',
-    type: 'transport',
+    category: 'Web Application',
+    title: 'University Management System',
+    subtitle: 'NED Academy Enterprise Admin & Student Management Portal',
+    description: 'Full-scale administrative web portal for managing student enrollments, faculty allocations, department analytics, notices, and academic accounts.',
+    fullDescription: 'Enterprise university management dashboard built for administrative control. Features real-time department enrollment analytics, faculty allocation charts, student roll number tracking, automated notices, and role-based security permissions.',
+    image: universitySystemImg,
+    tag: 'Enterprise System',
+    type: 'management',
+    tags: ['ASP.NET Core', 'React 19', 'Chart.js', 'SQL Server', 'Dashboard'],
+    deliverables: [
+      'Student & Faculty Management Modules',
+      'Real-Time Enrollment Analytics & Charts',
+      'Department Distribution Telemetry',
+      'Notice Board & Communication Hub',
+      'Role-Based Access Security (RBAC)'
+    ]
   },
   {
     id: 4,
-    category: 'Restaurant & Local Business',
-    title: 'Premium Restaurant Experience',
-    description: 'Hospitality website featuring visual dining menu, online reservation inquiries, and brand story.',
-    image: restaurantImg,
-    tag: 'Featured Project',
-    type: 'restaurant',
+    category: 'Web Application',
+    title: 'Full-Stack Developer Hub',
+    subtitle: 'HMS Developer — Full-Stack Software Engineer Hub',
+    description: 'Interactive developer portfolio & terminal HUD featuring live code telemetry, project showcases, recruiter mode, and CV downloads.',
+    fullDescription: 'High-tech software engineer hub architected with terminal HUD telemetry, C# / ASP.NET Core & MERN stack showcases, interactive code inspector windows, recruiter audio mode, and direct CV downloads.',
+    image: developerPortfolioImg,
+    tag: 'Developer Hub',
+    type: 'portfolio',
+    tags: ['React 19', 'ASP.NET Core', 'C#', 'SQL Server', 'Terminal UI'],
+    deliverables: [
+      'Interactive Terminal HUD & Code Inspector',
+      'Recruiter Mode & SFX Audio Engine',
+      'High-Concurrency Tech Stack Telemetry',
+      'Direct CV Download & Contact Integration',
+      'Zero-Trust Security Telemetry Header'
+    ]
   },
   {
     id: 5,
-    category: 'SaaS Dashboard',
-    title: 'Modern Business Dashboard',
-    description: 'Analytics dashboard UI design with key performance indicators, charts, and management controls.',
-    image: dashboardImg,
+    category: 'Business & Dashboard',
+    title: 'Premium Restaurant Experience',
+    subtitle: 'Luxury Dining & Culinary Brand Platform',
+    description: 'Hospitality website featuring visual dining menu, online reservation inquiries, and interactive brand story.',
+    fullDescription: 'Modern culinary brand website designed to showcase luxury dining menus, online reservation forms, chef specialties, and mobile-friendly brand presentation.',
+    image: restaurantImg,
     tag: 'Featured Project',
-    type: 'dashboard',
+    type: 'restaurant',
+    tags: ['React 19', 'Tailwind CSS', 'Hospitality', 'Responsive UI'],
+    deliverables: [
+      'Interactive Visual Dining Menu',
+      'Table Reservation Inquiry Flow',
+      'Mobile-First Responsive Layout',
+      'Social & Location Map Integration'
+    ]
   },
   {
     id: 6,
-    category: 'Landing Page',
-    title: 'High-Converting Landing Experience',
-    description: 'Focused landing page design optimized for fast loading, key features showcase, and lead generation.',
-    image: landingImg,
+    category: 'Business & Dashboard',
+    title: 'Modern Business Dashboard',
+    subtitle: 'Analytics & Executive Control System',
+    description: 'Analytics dashboard UI design with key performance indicators, real-time data charts, and administrative management controls.',
+    fullDescription: 'Executive SaaS analytics dashboard featuring real-time KPI metrics, revenue charts, user distribution widgets, and administrative controls.',
+    image: dashboardImg,
     tag: 'Featured Project',
-    type: 'landing',
+    type: 'dashboard',
+    tags: ['React 19', 'Chart.js', 'Tailwind CSS', 'SaaS Analytics'],
+    deliverables: [
+      'Real-Time Data Visualization & Charts',
+      'Key Performance Indicator (KPI) Widgets',
+      'Responsive Executive Layout',
+      'Dark / Light Theme Interface Controls'
+    ]
   },
 ]
 
