@@ -1,6 +1,7 @@
 import { useState, useRef } from 'react'
 import ScrollReveal from '../Motion/ScrollReveal'
-import { Sparkles, ArrowLeftRight, CheckCircle2, AlertTriangle, Lock, Unlock, Zap, RefreshCw } from 'lucide-react'
+import { Sparkles, ArrowLeftRight, CheckCircle2, ShoppingCart, Star, ShieldCheck, Zap, XCircle } from 'lucide-react'
+import ecommerceImg from '../../assets/portfolio/ecommerce.jpg'
 
 export default function BeforeAfter() {
   const [sliderPosition, setSliderPosition] = useState(50)
@@ -36,13 +37,13 @@ export default function BeforeAfter() {
           <ScrollReveal variant="fadeUp">
             <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-blue-50 border border-blue-200 text-[#0066FF] text-xs font-bold uppercase tracking-wider mb-4">
               <Sparkles size={14} />
-              <span>Real Visual Transformation</span>
+              <span>E-Commerce Redesign Comparison</span>
             </div>
             <h2 className="text-3xl sm:text-4xl lg:text-5xl font-black text-[#0B1020] leading-tight tracking-tight mb-4">
-              Outdated 2012 Site vs. <span className="text-[#0066FF]">2026 NEXORA Redesign</span>
+              Unoptimized Store vs. <span className="text-[#0066FF]">NEXORA Shopify Store</span>
             </h2>
             <p className="text-base text-[#4B5563] leading-relaxed">
-              Drag the interactive slider below to see how NEXORA DIGITAL transforms ugly, slow legacy sites into high-converting 2026 digital platforms.
+              Drag the interactive slider to compare an old, unoptimized online store layout with NEXORA DIGITAL's high-converting 2026 e-commerce architecture.
             </p>
           </ScrollReveal>
         </div>
@@ -58,110 +59,154 @@ export default function BeforeAfter() {
             onTouchStart={() => setIsDragging(true)}
             onTouchEnd={() => setIsDragging(false)}
             onTouchMove={handleTouchMove}
-            className="relative h-[420px] sm:h-[500px] rounded-3xl overflow-hidden shadow-2xl border-4 border-white ring-1 ring-black/10 cursor-ew-resize bg-[#05070D]"
+            className="relative h-[420px] sm:h-[500px] rounded-3xl overflow-hidden shadow-2xl border-4 border-white ring-1 ring-black/10 cursor-ew-resize bg-slate-900"
           >
             {/* ========================================================================= */}
-            {/* AFTER SIDE: Ultra-Modern 2026 NEXORA Platform (Base Layer) */}
+            {/* AFTER SIDE: Modern 2026 High-Converting NEXORA Store (Base Layer) */}
             {/* ========================================================================= */}
-            <div className="absolute inset-0 bg-[#05070D] text-white flex flex-col justify-between p-6 sm:p-10 font-sans">
-              {/* Browser Header Bar */}
-              <div className="flex items-center justify-between pb-4 border-b border-white/10 text-xs">
+            <div className="absolute inset-0 bg-[#0A0D14] text-white flex flex-col justify-between p-6 sm:p-8 font-sans">
+              {/* Header Bar */}
+              <div className="flex items-center justify-between pb-3 border-b border-white/10 text-xs">
                 <div className="flex items-center gap-2">
-                  <div className="w-3 h-3 rounded-full bg-red-500/80" />
-                  <div className="w-3 h-3 rounded-full bg-yellow-500/80" />
-                  <div className="w-3 h-3 rounded-full bg-green-500/80" />
-                  <div className="ml-2 px-3 py-1 bg-white/10 rounded-lg text-green-400 font-mono text-[11px] flex items-center gap-1.5 border border-green-500/30">
-                    <Lock size={11} /> https://nexorabyhms.netlify.app
+                  <div className="w-8 h-8 rounded-lg bg-[#0066FF] flex items-center justify-center font-black text-white text-sm">
+                    N
+                  </div>
+                  <div>
+                    <div className="font-bold text-white text-sm flex items-center gap-1.5">
+                      NEXORA Luxury Store
+                      <span className="px-2 py-0.5 bg-green-500/20 text-green-400 text-[10px] rounded-full border border-green-500/30">
+                        Live Store
+                      </span>
+                    </div>
+                    <div className="text-[10px] text-gray-400">Shopify Custom Liquid Theme • 99 Speed</div>
                   </div>
                 </div>
+
                 <div className="flex items-center gap-2">
-                  <span className="px-2.5 py-1 bg-green-500/20 text-green-400 rounded-full font-bold text-[10px] border border-green-500/30 flex items-center gap-1">
-                    <Zap size={10} /> 99 PageSpeed
-                  </span>
-                  <span className="bg-[#0066FF] text-white px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider">
-                    AFTER: NEXORA REDESIGN
+                  <span className="hidden sm:inline-block px-3 py-1 bg-[#0066FF] text-white rounded-xl font-bold text-xs shadow-md">
+                    AFTER: NEXORA High-Converting Store
                   </span>
                 </div>
               </div>
 
-              {/* Modern Hero Content Mockup */}
-              <div className="my-auto max-w-xl space-y-4">
-                <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#0066FF]/20 border border-[#0066FF]/40 text-[#1F90FF] text-[11px] font-bold uppercase tracking-wider">
-                  <Sparkles size={12} />
-                  <span>2026 Enterprise Web Architecture</span>
-                </div>
-                <h3 className="text-2xl sm:text-4xl font-black leading-tight tracking-tight">
-                  Building Digital Success For <span className="text-[#1F90FF]">High-Growth Brands</span>
-                </h3>
-                <p className="text-xs sm:text-sm text-gray-300 leading-relaxed max-w-md">
-                  Ultra-fast React 19 execution, responsive mobile layout, custom theme design, and built-in technical SEO schema.
-                </p>
-                <div className="flex items-center gap-3 pt-2">
-                  <div className="px-5 py-2.5 bg-[#0066FF] text-white text-xs font-bold rounded-xl shadow-lg shadow-blue-500/30 flex items-center gap-2">
-                    Get Free Quote →
+              {/* Modern Product Grid Showcase */}
+              <div className="my-auto grid sm:grid-cols-2 gap-4 items-center">
+                <div className="relative rounded-2xl overflow-hidden border border-white/10 shadow-lg aspect-video bg-slate-800">
+                  <img
+                    src={ecommerceImg}
+                    alt="Modern E-Commerce Store UI"
+                    className="w-full h-full object-cover object-center"
+                  />
+                  <div className="absolute top-3 left-3 bg-[#0066FF] text-white px-2.5 py-1 rounded-lg text-[10px] font-bold uppercase tracking-wider">
+                    -30% OFF TODAY
                   </div>
-                  <div className="px-4 py-2.5 bg-white/10 border border-white/20 text-xs font-semibold rounded-xl text-gray-200">
-                    Explore Case Studies
+                </div>
+
+                <div className="space-y-3">
+                  <div className="flex items-center gap-1 text-amber-400 text-xs">
+                    {[...Array(5)].map((_, i) => (
+                      <Star key={i} size={12} fill="currentColor" />
+                    ))}
+                    <span className="text-gray-300 font-bold ml-1 text-[11px]">4.9 (1.4k Reviews)</span>
+                  </div>
+
+                  <h3 className="text-lg sm:text-xl font-bold leading-snug">
+                    Executive Chrono Watch Series
+                  </h3>
+
+                  <div className="flex items-baseline gap-2">
+                    <span className="text-2xl font-black text-green-400">$149.00</span>
+                    <span className="text-xs text-gray-500 line-through">$210.00</span>
+                    <span className="text-[10px] bg-green-500/20 text-green-400 font-bold px-2 py-0.5 rounded">Save $61</span>
+                  </div>
+
+                  <div className="flex items-center gap-2 pt-1">
+                    <button className="flex-1 py-2.5 bg-[#0066FF] hover:bg-[#0052CC] text-white font-bold text-xs rounded-xl shadow-md flex items-center justify-center gap-1.5">
+                      <ShoppingCart size={14} />
+                      <span>Add to Cart — Instant Checkout</span>
+                    </button>
+                  </div>
+
+                  <div className="flex items-center gap-3 text-[10px] text-gray-400 pt-1">
+                    <span className="flex items-center gap-1"><ShieldCheck size={12} className="text-[#0066FF]" /> 256-Bit SSL</span>
+                    <span className="flex items-center gap-1"><Zap size={12} className="text-green-400" /> Express Shipping</span>
                   </div>
                 </div>
               </div>
 
-              {/* Bottom Feature Pill Grid */}
-              <div className="pt-4 border-t border-white/10 grid grid-cols-3 gap-3 text-center text-[11px] text-gray-300">
-                <div className="bg-white/5 p-2 rounded-xl border border-white/10">⚡ &lt; 0.8s Load Time</div>
-                <div className="bg-white/5 p-2 rounded-xl border border-white/10">📱 100% Responsive</div>
-                <div className="bg-white/5 p-2 rounded-xl border border-white/10">🎯 3.5x Conversion</div>
+              {/* Bottom Conversion Metric Bar */}
+              <div className="pt-3 border-t border-white/10 flex items-center justify-between text-[11px] text-gray-300">
+                <span className="text-green-400 font-bold flex items-center gap-1">
+                  <CheckCircle2 size={13} /> 3.8% Store Conversion Rate (+240% Lift)
+                </span>
+                <span className="hidden sm:inline-block text-gray-400">Mobile Express Checkout Ready</span>
               </div>
             </div>
 
             {/* ========================================================================= */}
-            {/* BEFORE SIDE: Outdated 2012 Retro Legacy Website (Clipped Overlay) */}
+            {/* BEFORE SIDE: Unoptimized / Old E-Commerce Layout (Clipped Overlay) */}
             {/* ========================================================================= */}
             <div
-              className="absolute inset-0 bg-[#D4D0C8] text-black flex flex-col justify-between p-4 sm:p-8 font-serif border-r-4 border-[#0066FF] shadow-2xl overflow-hidden"
+              className="absolute inset-0 bg-white text-black flex flex-col justify-between p-6 sm:p-8 font-sans border-r-4 border-[#0066FF] shadow-2xl overflow-hidden"
               style={{ width: `${sliderPosition}%` }}
             >
-              {/* Retro Browser Bar */}
-              <div className="bg-[#C0C0C0] p-2 border-2 border-t-white border-l-white border-b-gray-600 border-r-gray-600 mb-4 flex items-center justify-between font-sans text-xs">
+              {/* Old Unoptimized Header Bar */}
+              <div className="flex items-center justify-between pb-3 border-b border-gray-300 text-xs">
                 <div className="flex items-center gap-2">
-                  <span className="font-bold text-red-600 flex items-center gap-1 bg-red-100 px-2 py-0.5 border border-red-400">
-                    <Unlock size={12} /> http://old-unsecure-site.com
-                  </span>
-                  <span className="text-[10px] text-red-700 font-bold hidden sm:inline-block">⚠️ NOT SECURE</span>
+                  <div className="w-8 h-8 bg-gray-200 border border-gray-400 text-black flex items-center justify-center font-bold text-xs">
+                    SHOP
+                  </div>
+                  <div>
+                    <div className="font-bold text-black text-xs">My Online Store (2018 Theme)</div>
+                    <div className="text-[10px] text-red-600 font-bold">⚠️ Unoptimized • Slow Loading (4.2s)</div>
+                  </div>
                 </div>
-                <div className="bg-red-600 text-white px-2 py-0.5 font-sans font-bold text-[10px] uppercase">
-                  BEFORE: LEGACY 2012 SITE
+
+                <div>
+                  <span className="bg-red-600 text-white px-3 py-1 text-[10px] font-bold uppercase tracking-wider">
+                    BEFORE: Unoptimized Old Store
+                  </span>
                 </div>
               </div>
 
-              {/* Retro Cluttered Web Mockup */}
-              <div className="my-auto space-y-3 bg-yellow-50 p-4 border-2 border-gray-500 shadow-inner">
-                {/* Retro Banner Header */}
-                <div className="bg-blue-900 text-yellow-300 p-3 text-center border-2 border-yellow-400 font-serif">
-                  <div className="text-xl sm:text-2xl font-bold tracking-wider underline">*** WELCOME TO OUR WEBSITE ***</div>
-                  <div className="text-[10px] text-white mt-1 font-sans">Best viewed in Internet Explorer 8.0 @ 1024x768 resolution</div>
+              {/* Old Unoptimized Product Layout */}
+              <div className="my-auto grid sm:grid-cols-2 gap-4 items-center bg-gray-50 p-4 border border-gray-300">
+                <div className="relative border border-gray-300 aspect-video bg-gray-200 flex items-center justify-center text-gray-500 text-xs">
+                  <img
+                    src={ecommerceImg}
+                    alt="Old E-Commerce Store UI"
+                    className="w-full h-full object-cover filter grayscale contrast-125 brightness-75"
+                  />
+                  <span className="absolute top-2 left-2 bg-red-600 text-white text-[9px] px-1 font-bold">
+                    SALE!
+                  </span>
                 </div>
 
-                {/* Retro Content Grid */}
-                <div className="grid grid-cols-2 gap-2 text-xs font-sans">
-                  <div className="bg-white p-2 border border-gray-400">
-                    <span className="bg-red-600 text-white font-bold text-[9px] px-1 animate-pulse">🔥 HOT OFFER 🔥</span>
-                    <p className="mt-1 text-[11px] text-blue-900 font-bold underline">Click Here To Buy Product Now!!</p>
-                    <p className="text-[10px] text-gray-600 mt-1">Slow loading times, no mobile layout, broken links.</p>
+                <div className="space-y-2">
+                  <div className="text-[10px] text-gray-500">Item #4082 — Category: Watches</div>
+                  <h4 className="text-sm font-bold text-black leading-tight underline">
+                    Men's Leather Strap Watch Product
+                  </h4>
+                  <div className="text-base font-bold text-black">
+                    Price: $149.00 <span className="text-xs text-red-600 font-normal line-through">$210.00</span>
                   </div>
-                  <div className="bg-white p-2 border border-gray-400 text-center flex flex-col justify-between">
-                    <div className="text-[10px] text-red-600 font-bold">⚠️ Warning: Page takes 4.8 seconds to open</div>
-                    <button className="bg-yellow-400 text-black border-2 border-black font-bold text-[10px] py-1 mt-1 shadow-md">
-                      [ SUBMIT FORM ]
+                  <div className="pt-1">
+                    <button className="w-full py-2 bg-gray-300 text-black border border-gray-500 font-bold text-xs">
+                      [ ADD TO CART ]
                     </button>
                   </div>
+                  <div className="text-[10px] text-red-600 font-bold">
+                    ❌ High Abandoned Cart Rate (82%)
+                  </div>
                 </div>
               </div>
 
-              {/* Retro Visitor Counter Footer */}
-              <div className="bg-[#C0C0C0] p-2 border-2 border-gray-500 font-mono text-[10px] text-center text-black flex items-center justify-between">
-                <span>Visitor Count: 004812</span>
-                <span className="text-red-700 font-bold">❌ High 78% Visitor Bounce Rate</span>
+              {/* Bottom Unoptimized Warning */}
+              <div className="pt-3 border-t border-gray-300 flex items-center justify-between text-[11px] text-red-600 font-bold">
+                <span className="flex items-center gap-1">
+                  <XCircle size={13} /> Low 0.9% Conversion Rate (Legacy Layout)
+                </span>
+                <span className="hidden sm:inline-block text-gray-500">No Mobile Checkout Optimization</span>
               </div>
             </div>
 
@@ -183,8 +228,8 @@ export default function BeforeAfter() {
                 <Sparkles size={18} />
               </div>
               <div>
-                <h4 className="text-sm font-bold text-[#0B1020] mb-1">Modern UI/UX Design</h4>
-                <p className="text-xs text-[#6B7280]">Replaces outdated retro layouts with sleek 2026 visual aesthetics.</p>
+                <h4 className="text-sm font-bold text-[#0B1020] mb-1">+240% Sales Lift</h4>
+                <p className="text-xs text-[#6B7280]">Modern UI hierarchy turns store visitors into immediate buyers.</p>
               </div>
             </div>
 
@@ -193,8 +238,8 @@ export default function BeforeAfter() {
                 <CheckCircle2 size={18} />
               </div>
               <div>
-                <h4 className="text-sm font-bold text-[#0B1020] mb-1">&lt; 0.8s Load Speed</h4>
-                <p className="text-xs text-[#6B7280]">Eliminating code bloat stops users from abandoning your site.</p>
+                <h4 className="text-sm font-bold text-[#0B1020] mb-1">&lt; 1s Mobile Checkout</h4>
+                <p className="text-xs text-[#6B7280]">Express checkout options eliminate cart abandonment.</p>
               </div>
             </div>
 
@@ -203,8 +248,8 @@ export default function BeforeAfter() {
                 <CheckCircle2 size={18} />
               </div>
               <div>
-                <h4 className="text-sm font-bold text-[#0B1020] mb-1">100% Mobile Ready</h4>
-                <p className="text-xs text-[#6B7280]">Flawless user experience across all smartphones and tablets.</p>
+                <h4 className="text-sm font-bold text-[#0B1020] mb-1">99 PageSpeed Rating</h4>
+                <p className="text-xs text-[#6B7280]">Shopify Liquid custom theme optimization for ultra-fast loading.</p>
               </div>
             </div>
           </div>
