@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { motion } from 'framer-motion'
-import { Calculator, Check, ArrowRight, Globe, Code, ShoppingCart, Palette, Layers } from 'lucide-react'
+import { Calculator, Check, ArrowRight, Globe, Code, ShoppingCart, Palette, Layers, FileText } from 'lucide-react'
 import ScrollReveal from '../Motion/ScrollReveal'
 
 const CORPORATE_BLUE_THEME = {
@@ -263,6 +263,92 @@ export default function CostEstimator({ currency = 'PKR', setCurrency }) {
     }
   }
 
+  const handleExportPdf = () => {
+    const addonNames = selectedAddons
+      .map((id) => addonsList.find((a) => a.id === id)?.name)
+      .filter(Boolean)
+
+    const win = window.open('', '_blank')
+    if (!win) return
+
+    win.document.write(`
+      <!DOCTYPE html>
+      <html>
+        <head>
+          <title>NEXORA DIGITAL — Project Scope Proposal</title>
+          <style>
+            body { font-family: 'Segoe UI', Arial, sans-serif; color: #0B1020; margin: 40px; line-height: 1.6; background: #FFF; }
+            .header { border-bottom: 3px solid #0066FF; padding-bottom: 20px; margin-bottom: 30px; display: flex; justify-content: space-between; align-items: center; }
+            .logo { font-size: 24px; font-weight: 900; color: #0066FF; letter-spacing: 1px; }
+            .tagline { font-size: 11px; color: #6B7280; font-weight: 700; text-transform: uppercase; margin-top: 2px; }
+            .title { font-size: 20px; font-weight: bold; margin-bottom: 5px; color: #0B1020; }
+            .subtitle { font-size: 13px; color: #4B5563; margin-bottom: 25px; }
+            .box { background: #F8FAFC; border: 1px solid #E5EAF1; border-radius: 12px; padding: 20px; margin-bottom: 25px; }
+            .row { display: flex; justify-content: space-between; border-bottom: 1px solid #E5EAF1; padding: 10px 0; font-size: 13px; }
+            .row:last-child { border-bottom: none; }
+            .total { font-size: 20px; font-weight: 900; color: #0066FF; text-align: right; margin-top: 20px; border-top: 2px solid #0066FF; padding-top: 15px; }
+            .footer { margin-top: 50px; border-top: 1px solid #E5EAF1; padding-top: 20px; font-size: 11px; color: #6B7280; text-align: center; }
+          </style>
+        </head>
+        <body>
+          <div class="header">
+            <div>
+              <div class="logo">NEXORA DIGITAL</div>
+              <div class="tagline">BUILDING DIGITAL SUCCESS</div>
+            </div>
+            <div style="text-align: right; font-size: 12px; color: #6B7280;">
+              <strong>Date:</strong> ${new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}<br/>
+              <strong>Proposal Ref:</strong> NEX-${Math.floor(100000 + Math.random() * 900000)}
+            </div>
+          </div>
+
+          <div class="title">${domain.name} — Project Estimate</div>
+          <div class="subtitle">Official tailored scope proposal generated via NEXORA DIGITAL estimator.</div>
+
+          <div class="box">
+            <div class="row">
+              <strong>Service Domain:</strong>
+              <span>${domain.name}</span>
+            </div>
+            <div class="row">
+              <strong>Selected Scope:</strong>
+              <span>${selectedScopeObj.name}</span>
+            </div>
+            <div class="row">
+              <strong>Base Investment:</strong>
+              <span>${currencySymbol}${basePrice.toLocaleString()}</span>
+            </div>
+            <div class="row">
+              <strong>Scope Add-on:</strong>
+              <span>${scopeAddon === 0 ? 'Included in Base Price' : `+ ${currencySymbol}${scopeAddon.toLocaleString()}`}</span>
+            </div>
+            <div class="row">
+              <strong>Selected Features & Upgrades:</strong>
+              <span>${addonNames.length > 0 ? addonNames.join(', ') : 'None'}</span>
+            </div>
+          </div>
+
+          <div class="total">
+            Estimated Investment: ${currencySymbol}${estimatedTotal.toLocaleString()}
+          </div>
+
+          <div style="margin-top: 30px; font-size: 12px; color: #4B5563; background: #F0F7FF; padding: 15px; border-radius: 8px;">
+            <strong>Included Standard Guarantees:</strong> 100% Responsive Design • Core Web Vitals Optimization • Technical SEO & Schema • 30-Day Post-Launch Technical Support.
+          </div>
+
+          <div class="footer">
+            NEXORA DIGITAL • Website: https://nexorabyhms.netlify.app • Email: sales.nexorahms@gmail.com • WhatsApp: +92 345 3937195
+          </div>
+
+          <script>
+            window.onload = function() { window.print(); }
+          </script>
+        </body>
+      </html>
+    `)
+    win.document.close()
+  }
+
   const IconComponent = domain.icon
 
   return (
@@ -400,14 +486,24 @@ export default function CostEstimator({ currency = 'PKR', setCurrency }) {
           <p className="text-xs text-[#6B7280]">
             Selected service: <strong className="text-[#0B1020]">{domain.name}</strong> • Final quotation will be confirmed after reviewing your requirements.
           </p>
-          <button
-            type="button"
-            onClick={handleApplyToQuote}
-            className={`w-full sm:w-auto py-3.5 px-6 text-white text-xs font-bold rounded-xl shadow-md flex items-center justify-center gap-2 transition-all duration-200 cursor-pointer ${CORPORATE_BLUE_THEME.actionBtn}`}
-          >
-            <span>Continue with This Estimate</span>
-            <ArrowRight size={14} />
-          </button>
+          <div className="flex items-center gap-2.5 w-full sm:w-auto">
+            <button
+              type="button"
+              onClick={handleExportPdf}
+              className="w-1/2 sm:w-auto py-3.5 px-4 bg-slate-100 hover:bg-slate-200 text-[#0B1020] border border-[#E5EAF1] text-xs font-bold rounded-xl flex items-center justify-center gap-1.5 transition-all cursor-pointer"
+            >
+              <FileText size={14} className="text-[#0066FF]" />
+              <span>Export PDF Proposal</span>
+            </button>
+            <button
+              type="button"
+              onClick={handleApplyToQuote}
+              className={`w-1/2 sm:w-auto py-3.5 px-6 text-white text-xs font-bold rounded-xl shadow-md flex items-center justify-center gap-2 transition-all duration-200 cursor-pointer ${CORPORATE_BLUE_THEME.actionBtn}`}
+            >
+              <span>Continue with Estimate</span>
+              <ArrowRight size={14} />
+            </button>
+          </div>
         </div>
       </div>
     </ScrollReveal>
