@@ -9,13 +9,11 @@ import restaurantImg from '../assets/portfolio/restaurant.jpg'
 import dashboardImg from '../assets/portfolio/dashboard.jpg'
 
 export const NAV_LINKS = [
-  { label: 'Home', href: '#home' },
-  { label: 'Services', href: '#services' },
-  { label: 'Work', href: '#work' },
-  { label: 'Why Us', href: '#why-us' },
-  { label: 'Process', href: '#process' },
-  { label: 'Pricing', href: '#pricing' },
-  { label: 'FAQ', href: '#faq' },
+  { label: 'Home', href: '/' },
+  { label: 'Services & Pricing', href: '/services' },
+  { label: 'Portfolio', href: '/portfolio' },
+  { label: 'Tools & Speed Audit', href: '/tools' },
+  { label: 'Admin Panel', href: '/admin' },
 ]
 
 export const SERVICES = [

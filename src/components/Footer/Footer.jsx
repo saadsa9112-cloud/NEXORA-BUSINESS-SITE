@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { Link } from 'react-router-dom'
 import { Mail, Phone, MapPin, Globe, Server, Shield } from 'lucide-react'
 import { NAV_LINKS, SERVICES_LIST, CONTACT } from '../../data/siteData'
 import NexoraBrand from '../NexoraBrand/NexoraBrand'
@@ -17,16 +17,7 @@ const InstagramIcon = () => (
 
 const LEGAL_LINKS = ['Privacy Policy', 'Terms & Conditions', 'Refund Policy']
 
-export default function Footer({ onOpenAdmin }) {
-  const handleNavClick = (href) => {
-    const id = href.replace('#', '')
-    const el = document.getElementById(id)
-    if (el) {
-      const top = el.getBoundingClientRect().top + window.scrollY - 80
-      window.scrollTo({ top, behavior: 'smooth' })
-    }
-  }
-
+export default function Footer() {
   return (
     <footer
       role="contentinfo"
@@ -70,15 +61,14 @@ export default function Footer({ onOpenAdmin }) {
             <h3 className="text-white font-bold text-xs uppercase tracking-wider mb-4">Quick Links</h3>
             <nav aria-label="Footer quick links">
               <ul className="flex flex-col gap-2.5" role="list">
-                {[...NAV_LINKS, { label: 'Contact', href: '#contact' }].map((link) => (
+                {NAV_LINKS.map((link) => (
                   <li key={link.href}>
-                    <a
-                      href={link.href}
-                      onClick={(e) => { e.preventDefault(); handleNavClick(link.href) }}
+                    <Link
+                      to={link.href}
                       className="text-[#A7ADBB] hover:text-[#1F90FF] text-sm font-medium transition-colors duration-200"
                     >
                       {link.label}
-                    </a>
+                    </Link>
                   </li>
                 ))}
               </ul>
@@ -91,7 +81,9 @@ export default function Footer({ onOpenAdmin }) {
             <ul className="flex flex-col gap-2.5" role="list">
               {SERVICES_LIST.map((s) => (
                 <li key={s}>
-                  <span className="text-[#A7ADBB] text-sm">{s}</span>
+                  <Link to="/services" className="text-[#A7ADBB] hover:text-[#1F90FF] text-sm transition-colors">
+                    {s}
+                  </Link>
                 </li>
               ))}
             </ul>
@@ -136,13 +128,13 @@ export default function Footer({ onOpenAdmin }) {
           </p>
 
           <div className="flex items-center gap-4">
-            <button
-              onClick={onOpenAdmin}
-              className="px-3 py-1 bg-white/5 hover:bg-blue-600/20 text-gray-300 hover:text-blue-400 border border-white/10 hover:border-blue-500/30 rounded-lg text-xs font-semibold flex items-center gap-1.5 transition-all cursor-pointer"
+            <Link
+              to="/admin"
+              className="px-3 py-1 bg-white/5 hover:bg-blue-600/20 text-gray-300 hover:text-blue-400 border border-white/10 hover:border-blue-500/30 rounded-lg text-xs font-semibold flex items-center gap-1.5 transition-all"
             >
               <Server size={13} />
               <span>Admin Console</span>
-            </button>
+            </Link>
             <div className="flex flex-wrap justify-center gap-4 sm:gap-6">
               {LEGAL_LINKS.map((link) => (
                 <a

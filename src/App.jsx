@@ -1,31 +1,30 @@
 import { useState, useEffect } from 'react'
+import { BrowserRouter, Routes, Route, useLocation } from 'react-router-dom'
 import LaunchBanner from './components/LaunchBanner/LaunchBanner'
 import Navbar from './components/Navbar/Navbar'
-import Hero from './components/Hero/Hero'
-import TrustStrip from './components/TrustStrip/TrustStrip'
-import Services from './components/Services/Services'
-import Portfolio from './components/Portfolio/Portfolio'
-import TechStack from './components/TechStack/TechStack'
-import ServiceGuarantees from './components/Guarantees/ServiceGuarantees'
-import WhyChooseUs from './components/WhyChooseUs/WhyChooseUs'
-import Process from './components/Process/Process'
-import Pricing from './components/Pricing/Pricing'
-import About from './components/About/About'
-import QualitySecurity from './components/QualitySecurity/QualitySecurity'
-import FAQ from './components/FAQ/FAQ'
-import WebsiteAuditWidget from './components/WebsiteAudit/WebsiteAuditWidget'
-import QuoteForm from './components/QuoteForm/QuoteForm'
-import FinalCTA from './components/FinalCTA/FinalCTA'
-import WhatsAppButton from './components/WhatsAppButton/WhatsAppButton'
+import Footer from './components/Footer/Footer'
 import FloatingActionBar from './components/FloatingBar/FloatingActionBar'
+import WhatsAppButton from './components/WhatsAppButton/WhatsAppButton'
 import AiAssistantModal from './components/AiAssistant/AiAssistantModal'
 import ClientPortalModal from './components/ClientPortal/ClientPortalModal'
-import AdminPanelModal from './components/Admin/AdminPanelModal'
-import Footer from './components/Footer/Footer'
+
+import HomePage from './pages/HomePage'
+import ServicesPage from './pages/ServicesPage'
+import PortfolioPage from './pages/PortfolioPage'
+import ToolsPage from './pages/ToolsPage'
+import AdminDashboardPage from './pages/AdminDashboardPage'
+
+// Helper component to auto-scroll to top on route change
+function ScrollToTop() {
+  const { pathname } = useLocation()
+  useEffect(() => {
+    window.scrollTo(0, 0)
+  }, [pathname])
+  return null
+}
 
 export default function App() {
   const [currency, setCurrency] = useState('PKR')
-  const [isAdminOpen, setIsAdminOpen] = useState(false)
 
   // Auto-detect Geo-location currency (PKR for PK, USD for International)
   useEffect(() => {
@@ -48,69 +47,36 @@ export default function App() {
     detectCurrency()
   }, [])
 
-  // Scroll-reveal animation observer fallback
-  useEffect(() => {
-    const selectors = ['.reveal', '.reveal-left', '.reveal-right']
-    const allElements = selectors.flatMap((sel) =>
-      Array.from(document.querySelectorAll(sel))
-    )
-
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            entry.target.classList.add('revealed')
-            observer.unobserve(entry.target)
-          }
-        })
-      },
-      { threshold: 0.08, rootMargin: '0px 0px -40px 0px' }
-    )
-
-    allElements.forEach((el) => observer.observe(el))
-
-    return () => observer.disconnect()
-  }, [])
-
   return (
-    <div className="min-h-screen bg-[#F7F9FC] text-[#0B1020] overflow-x-hidden">
-      {/* Launch Offer Announcement Banner */}
-      <LaunchBanner />
+    <BrowserRouter>
+      <ScrollToTop />
+      <div className="min-h-screen bg-[#F7F9FC] text-[#0B1020] overflow-x-hidden flex flex-col justify-between">
+        <div>
+          {/* Global Launch Announcement Scarcity Banner */}
+          <LaunchBanner />
 
-      {/* Skip to main content — accessibility */}
-      <a
-        href="#home"
-        className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-[100] focus:px-4 focus:py-2 focus:bg-blue-500 focus:text-[#0B1020] focus:rounded-lg focus:text-sm focus:font-semibold"
-      >
-        Skip to main content
-      </a>
+          {/* Main Top Header Navbar */}
+          <Navbar />
 
-      <Navbar />
+          <main id="main-content">
+            <Routes>
+              <Route path="/" element={<HomePage currency={currency} setCurrency={setCurrency} />} />
+              <Route path="/services" element={<ServicesPage currency={currency} setCurrency={setCurrency} />} />
+              <Route path="/portfolio" element={<PortfolioPage />} />
+              <Route path="/tools" element={<ToolsPage />} />
+              <Route path="/admin" element={<AdminDashboardPage />} />
+              <Route path="*" element={<HomePage currency={currency} setCurrency={setCurrency} />} />
+            </Routes>
+          </main>
+        </div>
 
-      <main id="main-content">
-        <Hero />
-        <TrustStrip />
-        <Services />
-        <Portfolio />
-        <TechStack />
-        <ServiceGuarantees />
-        <WhyChooseUs />
-        <Process />
-        <Pricing currency={currency} setCurrency={setCurrency} />
-        <About />
-        <QualitySecurity />
-        <FAQ />
-        <WebsiteAuditWidget />
-        <QuoteForm currency={currency} setCurrency={setCurrency} />
-        <FinalCTA />
-      </main>
-
-      <Footer onOpenAdmin={() => setIsAdminOpen(true)} />
-      <FloatingActionBar />
-      <WhatsAppButton />
-      <AiAssistantModal />
-      <ClientPortalModal />
-      <AdminPanelModal isOpen={isAdminOpen} onClose={() => setIsAdminOpen(false)} />
-    </div>
+        {/* Global Footer & Floating Tools */}
+        <Footer />
+        <FloatingActionBar />
+        <WhatsAppButton />
+        <AiAssistantModal />
+        <ClientPortalModal />
+      </div>
+    </BrowserRouter>
   )
 }

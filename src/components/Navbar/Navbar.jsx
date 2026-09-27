@@ -1,80 +1,34 @@
 import { useState, useEffect } from 'react'
-import { Menu, X } from 'lucide-react'
+import { Link, useLocation } from 'react-router-dom'
+import { Menu, X, ArrowRight } from 'lucide-react'
 import { NAV_LINKS, CONTACT } from '../../data/siteData'
 import NexoraBrand from '../NexoraBrand/NexoraBrand'
 
 export default function Navbar() {
   const [scrolled, setScrolled] = useState(false)
   const [mobileOpen, setMobileOpen] = useState(false)
-  const [activeSection, setActiveSection] = useState('home')
+  const location = useLocation()
 
   useEffect(() => {
     const handleScroll = () => {
       setScrolled(window.scrollY > 20)
-
-      const sectionIds = NAV_LINKS.map((link) => link.href.replace('#', ''))
-
-      // Special fallback for top of page
-      if (window.scrollY < 100) {
-        setActiveSection('home')
-        return
-      }
-
-      // Special fallback for bottom of page
-      const isAtBottom =
-        window.innerHeight + Math.ceil(window.scrollY) >=
-        document.documentElement.scrollHeight - 50
-
-      if (isAtBottom) {
-        setActiveSection(sectionIds[sectionIds.length - 1])
-        return
-      }
-
-      // Deterministic viewport bounding box check
-      let currentSection = 'home'
-      for (let i = 0; i < sectionIds.length; i++) {
-        const id = sectionIds[i]
-        const el = document.getElementById(id)
-        if (el) {
-          const rect = el.getBoundingClientRect()
-          if (rect.top <= 200 && rect.bottom >= 100) {
-            currentSection = id
-          }
-        }
-      }
-
-      setActiveSection(currentSection)
     }
-
     handleScroll()
     window.addEventListener('scroll', handleScroll, { passive: true })
     return () => window.removeEventListener('scroll', handleScroll)
   }, [])
 
-  // Close mobile menu on ESC key
+  // Close mobile menu on route change
   useEffect(() => {
-    const onKey = (e) => { if (e.key === 'Escape') setMobileOpen(false) }
-    document.addEventListener('keydown', onKey)
-    return () => document.removeEventListener('keydown', onKey)
-  }, [])
+    setMobileOpen(false)
+    window.scrollTo({ top: 0, behavior: 'smooth' })
+  }, [location.pathname])
 
   // Prevent body scroll when mobile menu is open
   useEffect(() => {
     document.body.style.overflow = mobileOpen ? 'hidden' : ''
     return () => { document.body.style.overflow = '' }
   }, [mobileOpen])
-
-  const handleNavClick = (href) => {
-    setMobileOpen(false)
-    const id = href.replace('#', '')
-    setActiveSection(id)
-    const el = document.getElementById(id)
-    if (el) {
-      const offset = 80
-      const top = el.getBoundingClientRect().top + window.scrollY - offset
-      window.scrollTo({ top, behavior: 'smooth' })
-    }
-  }
 
   return (
     <>
@@ -89,25 +43,23 @@ export default function Navbar() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16 lg:h-20">
 
-            {/* ── Official Brand (Clean Wordmark transitioning on scroll) ── */}
-            <a
-              href="#home"
-              onClick={(e) => { e.preventDefault(); handleNavClick('#home') }}
+            {/* Official Brand Logo Link */}
+            <Link
+              to="/"
               aria-label="NEXORA DIGITAL — Home"
               className="flex-shrink-0 flex items-center group py-2"
             >
               <NexoraBrand variant="navbar" isScrolled={scrolled} />
-            </a>
+            </Link>
 
             {/* Desktop Navigation */}
             <nav aria-label="Main navigation" className="hidden lg:flex items-center gap-1">
               {NAV_LINKS.map((link) => {
-                const isActive = activeSection === link.href.replace('#', '')
+                const isActive = location.pathname === link.href
                 return (
-                  <a
+                  <Link
                     key={link.href}
-                    href={link.href}
-                    onClick={(e) => { e.preventDefault(); handleNavClick(link.href) }}
+                    to={link.href}
                     className={`px-4 py-2 text-sm font-medium rounded-lg transition-all duration-200 ${
                       isActive
                         ? scrolled
@@ -119,28 +71,26 @@ export default function Navbar() {
                     }`}
                   >
                     {link.label}
-                  </a>
+                  </Link>
                 )
               })}
             </nav>
 
             {/* CTA + Mobile Toggle */}
             <div className="flex items-center gap-3">
-              <a
-                href="#contact"
-                onClick={(e) => { e.preventDefault(); handleNavClick('#contact') }}
+              <Link
+                to="/services#contact"
                 className="hidden sm:flex items-center gap-2 px-5 py-2.5 bg-[#0066FF] hover:bg-[#0052CC] text-white text-sm font-semibold rounded-xl transition-all duration-200 shadow-md shadow-blue-500/20 hover:shadow-lg hover:shadow-blue-500/30 hover:-translate-y-0.5"
               >
-                Get Free Quote
-                <span aria-hidden="true">→</span>
-              </a>
+                <span>Get Free Quote</span>
+                <ArrowRight size={14} />
+              </Link>
 
               {/* Mobile hamburger */}
               <button
                 type="button"
                 aria-label={mobileOpen ? 'Close menu' : 'Open menu'}
                 aria-expanded={mobileOpen}
-                aria-controls="mobile-menu"
                 onClick={() => setMobileOpen((v) => !v)}
                 className={`lg:hidden flex items-center justify-center w-10 h-10 rounded-lg transition-all duration-200 ${
                   scrolled ? 'text-white hover:bg-white/10' : 'text-[#0B1020] hover:bg-gray-100'
@@ -172,7 +122,6 @@ export default function Navbar() {
           mobileOpen ? 'translate-x-0' : 'translate-x-full'
         }`}
       >
-        {/* Mobile menu header */}
         <div className="flex items-center justify-between px-5 h-16 border-b border-[#E5EAF1]">
           <NexoraBrand variant="navbar" isScrolled={false} />
           <button
@@ -185,15 +134,13 @@ export default function Navbar() {
           </button>
         </div>
 
-        {/* Mobile nav links */}
         <nav aria-label="Mobile navigation" className="px-4 py-6 flex flex-col gap-1">
           {NAV_LINKS.map((link) => {
-            const isActive = activeSection === link.href.replace('#', '')
+            const isActive = location.pathname === link.href
             return (
-              <a
+              <Link
                 key={link.href}
-                href={link.href}
-                onClick={(e) => { e.preventDefault(); handleNavClick(link.href) }}
+                to={link.href}
                 className={`flex items-center px-4 py-3 text-sm font-medium rounded-lg transition-all duration-200 ${
                   isActive
                     ? 'text-[#0066FF] font-semibold bg-blue-50'
@@ -201,20 +148,18 @@ export default function Navbar() {
                 }`}
               >
                 {link.label}
-              </a>
+              </Link>
             )
           })}
         </nav>
 
-        {/* Mobile CTA */}
         <div className="absolute bottom-8 left-4 right-4 flex flex-col gap-3">
-          <a
-            href="#contact"
-            onClick={(e) => { e.preventDefault(); handleNavClick('#contact') }}
+          <Link
+            to="/services#contact"
             className="flex items-center justify-center gap-2 w-full px-5 py-3 bg-[#0066FF] hover:bg-[#0052CC] text-white text-sm font-semibold rounded-xl transition-all duration-200 shadow-md shadow-blue-500/20"
           >
             Get Free Quote →
-          </a>
+          </Link>
           <a
             href={`https://wa.me/${CONTACT.whatsapp}?text=${CONTACT.whatsappMessage}`}
             target="_blank"
