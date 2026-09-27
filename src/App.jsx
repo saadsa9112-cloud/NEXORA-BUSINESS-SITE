@@ -8,7 +8,6 @@ import TechStack from './components/TechStack/TechStack'
 import WhyChooseUs from './components/WhyChooseUs/WhyChooseUs'
 import Process from './components/Process/Process'
 import Pricing from './components/Pricing/Pricing'
-import Testimonials from './components/Testimonials/Testimonials'
 import About from './components/About/About'
 import QualitySecurity from './components/QualitySecurity/QualitySecurity'
 import FAQ from './components/FAQ/FAQ'
@@ -89,7 +88,6 @@ export default function App() {
         <WhyChooseUs />
         <Process />
         <Pricing currency={currency} setCurrency={setCurrency} />
-        <Testimonials />
         <About />
         <QualitySecurity />
         <FAQ />
