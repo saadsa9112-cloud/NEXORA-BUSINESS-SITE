@@ -5,6 +5,7 @@ import TrustStrip from './components/TrustStrip/TrustStrip'
 import Services from './components/Services/Services'
 import Portfolio from './components/Portfolio/Portfolio'
 import TechStack from './components/TechStack/TechStack'
+import ServiceGuarantees from './components/Guarantees/ServiceGuarantees'
 import WhyChooseUs from './components/WhyChooseUs/WhyChooseUs'
 import Process from './components/Process/Process'
 import Pricing from './components/Pricing/Pricing'
@@ -84,6 +85,7 @@ export default function App() {
         <Services />
         <Portfolio />
         <TechStack />
+        <ServiceGuarantees />
         <WhyChooseUs />
         <Process />
         <Pricing currency={currency} setCurrency={setCurrency} />

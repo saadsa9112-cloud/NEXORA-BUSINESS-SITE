@@ -91,8 +91,8 @@ export default function Services() {
       {/* Interactive Service Detail Drawer */}
       <ServiceDrawer
         service={selectedService}
+        isOpen={Boolean(selectedService)}
         onClose={() => setSelectedService(null)}
-        onSelectService={handleSelectServiceForQuote}
       />
     </section>
   )
