@@ -13,6 +13,7 @@ import Testimonials from './components/Testimonials/Testimonials'
 import About from './components/About/About'
 import QualitySecurity from './components/QualitySecurity/QualitySecurity'
 import FAQ from './components/FAQ/FAQ'
+import RoiCalculator from './components/RoiCalculator/RoiCalculator'
 import QuoteForm from './components/QuoteForm/QuoteForm'
 import FinalCTA from './components/FinalCTA/FinalCTA'
 import WhatsAppButton from './components/WhatsAppButton/WhatsAppButton'
@@ -94,6 +95,7 @@ export default function App() {
         <About />
         <QualitySecurity />
         <FAQ />
+        <RoiCalculator />
         <QuoteForm currency={currency} setCurrency={setCurrency} />
         <FinalCTA />
       </main>

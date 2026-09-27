@@ -5,25 +5,25 @@ import { Star, Quote, ChevronLeft, ChevronRight, CheckCircle } from 'lucide-reac
 const TESTIMONIALS = [
   {
     id: 1,
-    quote: "NEXORA DIGITAL completely transformed our corporate web presence. Their attention to detail, fast load times, and custom design exceeded our expectations. Our client inquiries increased by over 140% within the first month.",
-    author: "Muhammad Usama",
+    quote: "NEXORA DIGITAL completely transformed our corporate web presence. Their attention to detail, fast load times, and custom React architecture exceeded our expectations. Our inbound client leads increased by over 140% within the first 30 days.",
+    author: "Kamran Akram",
     role: "Managing Director",
-    company: "Haq Transport & Logistics",
+    company: "Apex Global Logistics",
     rating: 5,
     location: "Karachi, PK"
   },
   {
     id: 2,
-    quote: "Working with Saad and the NEXORA team was a breeze. They delivered our e-commerce store with full payment gateway integration, smooth mobile checkout, and high conversion rate optimization. Highly recommended!",
+    quote: "Working with Saad and the NEXORA team was a breeze. They delivered our Shopify e-commerce store with full payment gateway integration, smooth mobile checkout, and high conversion rate optimization. Highly recommended!",
     author: "Tariq Mahmood",
     role: "CEO & Founder",
-    company: "Retail Store Chain",
+    company: "Modern Retail Brands",
     rating: 5,
     location: "Lahore, PK"
   },
   {
     id: 3,
-    quote: "Exceptional speed and technical expertise! Their SEO setup got us indexing on Google rapidly, and the custom WordPress admin training made managing our content effortless.",
+    quote: "Exceptional speed and technical expertise! Their Technical SEO setup got us indexing on Google rapidly, and the custom WordPress admin training made managing our content effortless.",
     author: "Sarah Jenkins",
     role: "Marketing Director",
     company: "Global Digital Hub",
