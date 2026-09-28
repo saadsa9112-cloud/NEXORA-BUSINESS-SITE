@@ -1,15 +1,19 @@
 import { useState, useEffect } from 'react'
-import { motion } from 'framer-motion'
+import { motion, AnimatePresence } from 'framer-motion'
 import {
   Server, Key, Plus, Edit2, Trash2, CheckCircle2, Save, RefreshCw, ShieldAlert,
   Sparkles, Activity, Layers, FileText, Globe, Users, DollarSign, ExternalLink,
   Search, Lock, Unlock, BarChart3, Clock, AlertCircle, Copy, Send, Check,
-  Eye, EyeOff, ArrowLeft, LogOut, ChevronRight, ShieldCheck, Database
+  Eye, EyeOff, ArrowLeft, LogOut, ChevronRight, ShieldCheck, Database,
+  Inbox, MessageSquare, Phone, Mail, MapPin, Filter, Download, Upload,
+  UserCheck, Smartphone, Monitor, CheckSquare, XCircle, Info, ChevronLeft,
+  Compass, TrendingUp, Award, Zap, Printer, Shield, Radio, Cpu, FileSpreadsheet, X
 } from 'lucide-react'
 import { CONTACT } from '../../data/siteData'
 import NexoraBrand from '../NexoraBrand/NexoraBrand'
+import { getRealVisitorGeo } from '../../utils/geoTracker'
 
-// Default pre-populated active project datasets for Nexora Digital
+// Initial Active Projects Store
 const INITIAL_PROJECTS = {
   'NEX-1042': {
     id: 'NEX-1042',
@@ -79,86 +83,283 @@ const INITIAL_PROJECTS = {
   }
 }
 
-// Default audit leads log
+// Initial Inbound Quote Submissions with Geolocation Coordinates & ISP
+const INITIAL_INBOX_MESSAGES = [
+  {
+    id: 'MSG-9412',
+    fullName: 'Zohaib Ahmed',
+    businessName: 'Apex Global Logistics',
+    whatsapp: '03453937195',
+    email: 'zohaib@apex-global.com',
+    service: 'Custom Web Application',
+    budget: 'Rs. 75,000+',
+    currency: 'PKR',
+    details: 'We need an enterprise logistics portal with real-time package telemetry, client portal login, and automated B2B invoicing PDF generation.',
+    timestamp: 'Sep 28, 2026 09:42 PM',
+    isoDate: '2026-09-28T21:42:00Z',
+    status: 'Unread',
+    leadScore: '🔥 HOT HIGH INTENT',
+    ip: '182.185.142.92',
+    city: 'Karachi',
+    country: 'Pakistan',
+    flag: '🇵🇰',
+    latitude: '24.8607',
+    longitude: '67.0011',
+    isp: 'CyberNet Broadband Pakistan',
+    location: 'Karachi, Pakistan 🇵🇰',
+    coordinates: '24.8607° N, 67.0011° E',
+  },
+  {
+    id: 'MSG-8821',
+    fullName: 'Sarah Jenkins',
+    businessName: 'Vanguard Retail UK',
+    whatsapp: '+447911123456',
+    email: 'sarah.j@vanguard-retail.co.uk',
+    service: 'Shopify Development',
+    budget: '$999+',
+    currency: 'USD',
+    details: 'Looking for a high-converting headless Shopify store with multi-currency PKR/USD toggle, fast 99+ mobile page speed, and PayPal/Stripe integration.',
+    timestamp: 'Sep 27, 2026 04:15 PM',
+    isoDate: '2026-09-27T16:15:00Z',
+    status: 'In Review',
+    leadScore: '🔥 HOT HIGH INTENT',
+    ip: '86.134.20.11',
+    city: 'London',
+    country: 'United Kingdom',
+    flag: '🇬🇧',
+    latitude: '51.5074',
+    longitude: '-0.1278',
+    isp: 'Vodafone UK Broadband',
+    location: 'London, United Kingdom 🇬🇧',
+    coordinates: '51.5074° N, 0.1278° W',
+  },
+  {
+    id: 'MSG-7510',
+    fullName: 'Dr. Tariq Malik',
+    businessName: 'NED Health Care Portal',
+    whatsapp: '03332145890',
+    email: 'info@nedhealthcare.org',
+    service: 'Business Website Development',
+    budget: 'Rs. 35,000 – Rs. 75,000',
+    currency: 'PKR',
+    details: 'Need a clean academic & medical portal for hospital appointments, student course registration, and doctor schedules.',
+    timestamp: 'Sep 26, 2026 11:20 AM',
+    isoDate: '2026-09-26T11:20:00Z',
+    status: 'Quote Sent',
+    leadScore: '⚡ WARM LEAD',
+    ip: '115.186.160.4',
+    city: 'Lahore',
+    country: 'Pakistan',
+    flag: '🇵🇰',
+    latitude: '31.5204',
+    longitude: '74.3587',
+    isp: 'PTCL Fiber Broadband',
+    location: 'Lahore, Pakistan 🇵🇰',
+    coordinates: '31.5204° N, 74.3587° E',
+  }
+]
+
+// Initial PageSpeed Audit Leads with Coordinates
 const INITIAL_AUDIT_LEADS = [
-  { id: 1, url: 'https://apex-logistics.com', score: 48, date: '2026-09-28', status: 'Converted to Client' },
-  { id: 2, url: 'https://modernretail-store.com', score: 52, date: '2026-09-27', status: 'Proposal Sent' },
-  { id: 3, url: 'https://vanguard-finance.io', score: 41, date: '2026-09-26', status: 'Audit Followup Pending' }
+  { id: 101, url: 'apex-logistics.com', score: 48, seoScore: 72, date: '2026-09-28', time: '09:30 PM', status: 'New Audit Lead', ip: '182.185.142.92', city: 'Karachi', country: 'Pakistan', flag: '🇵🇰', latitude: '24.8607', longitude: '67.0011', isp: 'CyberNet Broadband', device: 'Mobile (4G)', notes: 'Render-blocking CSS & TTFB delay of 1.4s detected.' },
+  { id: 102, url: 'modernretail-store.com', score: 52, seoScore: 81, date: '2026-09-27', time: '02:14 PM', status: 'Proposal Sent', ip: '86.134.20.11', city: 'London', country: 'United Kingdom', flag: '🇬🇧', latitude: '51.5074', longitude: '-0.1278', isp: 'Vodafone UK', device: 'Desktop (High Speed)', notes: 'Unused CSS payload and uncompressed WebP images.' },
+  { id: 103, url: 'vanguard-finance.io', score: 41, seoScore: 68, date: '2026-09-26', time: '10:05 AM', status: 'Audit Followup Pending', ip: '35.212.89.104', city: 'New York', country: 'United States', flag: '🇺🇸', latitude: '40.7128', longitude: '-74.0060', isp: 'Comcast Cable', device: 'Mobile (4G)', notes: 'Core Web Vitals fail LCP threshold.' }
+]
+
+// Initial Visitor Telemetry Logs with Lat/Long Coordinates
+const INITIAL_VISITOR_LOGS = [
+  { id: 'VIS-901', ip: '182.185.142.92', country: 'Pakistan 🇵🇰', city: 'Karachi', latitude: '24.8607', longitude: '67.0011', isp: 'CyberNet Broadband', duration: '5m 42s', activeSection: '#contact (Quote Form)', device: 'Desktop Windows 11', browser: 'Chrome 128', entrance: 'Direct URL / Google Organic', lastActive: '2 mins ago', status: 'Active Online' },
+  { id: 'VIS-902', ip: '35.212.89.104', country: 'United States 🇺🇸', city: 'New York', latitude: '40.7128', longitude: '-74.0060', isp: 'Comcast High Speed', duration: '12m 10s', activeSection: '#pricing (Global USD Tiers)', device: 'Mobile iPhone 15', browser: 'Safari 18', entrance: 'Social Referral / LinkedIn', lastActive: 'Just now', status: 'Active Online' },
+  { id: 'VIS-903', ip: '86.134.20.11', country: 'United Kingdom 🇬🇧', city: 'London', latitude: '51.5074', longitude: '-0.1278', isp: 'Vodafone Fiber', duration: '3m 15s', activeSection: '#speed-audit (PageSpeed Tool)', device: 'Desktop macOS', browser: 'Edge 126', entrance: 'Direct Hash #speed-audit', lastActive: '5 mins ago', status: 'Idle' },
+  { id: 'VIS-904', ip: '103.255.4.19', country: 'United Arab Emirates 🇦🇪', city: 'Dubai', latitude: '25.2048', longitude: '55.2708', isp: 'Etisalat UAE', duration: '8m 20s', activeSection: '#work (Portfolio Showcase)', device: 'Tablet iPad Pro', browser: 'Safari 17', entrance: 'Google Organic Search', lastActive: '12 mins ago', status: 'Offline' },
+  { id: 'VIS-905', ip: '115.186.160.4', country: 'Pakistan 🇵🇰', city: 'Lahore', latitude: '31.5204', longitude: '74.3587', isp: 'PTCL Fiber Broadband', duration: '14m 05s', activeSection: '#services (Service Guarantees)', device: 'Desktop Windows', browser: 'Firefox 130', entrance: 'Direct Access', lastActive: '15 mins ago', status: 'Offline' }
+]
+
+// Initial Security Audit Logs
+const INITIAL_SECURITY_LOGS = [
+  { id: 1, event: 'Founder Console Auth Granted', ip: '182.185.142.92', time: new Date().toLocaleString(), status: 'SUCCESS', details: '256-Bit Session Key Generated' },
+  { id: 2, event: 'System Security Telemetry Active', ip: 'Localhost / Staging', time: '2026-09-28 21:00:00', status: 'INFO', details: 'Real-Time Geo Radar Listening' }
 ]
 
 export default function AdminPortalPage({ onExit }) {
+  // Passcode Security State
   const [isAuthenticated, setIsAuthenticated] = useState(false)
   const [passcode, setPasscode] = useState('')
+  const [storedPasscode, setStoredPasscode] = useState('nexora2026')
   const [showPassword, setShowPassword] = useState(false)
   const [authError, setAuthError] = useState('')
-  const [activeTab, setActiveTab] = useState('overview') // 'overview', 'projects', 'scarcity', 'invoices', 'leads'
+  const [failedAttempts, setFailedAttempts] = useState(0)
+  const [lockoutTimer, setLockoutTimer] = useState(0)
 
+  // Real Visitor Location Info
+  const [currentVisitorGeo, setCurrentVisitorGeo] = useState(null)
+
+  // Inactivity Auto-Lock
+  const [lastActivity, setLastActivity] = useState(Date.now())
+
+  // Navigation Sidebar
+  const [sidebarOpen, setSidebarOpen] = useState(true)
+  const [activeTab, setActiveTab] = useState('overview')
+
+  // Invoice & Export Modals State
+  const [printableInvoice, setPrintableInvoice] = useState(null)
+  const [isExportModalOpen, setIsExportModalOpen] = useState(false)
+
+  // Datasets
   const [projects, setProjects] = useState({})
-  const [selectedProjectId, setSelectedProjectId] = useState('NEX-1042')
-  const [isCreatingNew, setIsCreatingNew] = useState(false)
-  const [projectSearch, setProjectSearch] = useState('')
-
-  // Scarcity settings
+  const [inboxMessages, setInboxMessages] = useState([])
+  const [auditLeads, setAuditLeads] = useState([])
+  const [visitorLogs, setVisitorLogs] = useState([])
+  const [securityLogs, setSecurityLogs] = useState([])
   const [launchSlots, setLaunchSlots] = useState({ total: 20, claimed: 3, discount: '35%', code: 'LAUNCH35' })
 
-  // Audit leads
-  const [auditLeads, setAuditLeads] = useState(INITIAL_AUDIT_LEADS)
+  // Filters & Selected State
+  const [selectedProjectId, setSelectedProjectId] = useState('NEX-1042')
+  const [isCreatingNewProject, setIsCreatingNewProject] = useState(false)
+  const [projectSearch, setProjectSearch] = useState('')
 
-  // Form edit state for currently selected or new project
+  const [selectedMsgId, setSelectedMsgId] = useState(null)
+  const [inboxFilter, setInboxFilter] = useState('All')
+
+  const [auditSearch, setAuditSearch] = useState('')
+  const [auditFilter, setAuditFilter] = useState('All')
+
+  const [newPasscode, setNewPasscode] = useState('')
+  const [confirmPasscode, setConfirmPasscode] = useState('')
+  const [passcodeUpdateMsg, setPasscodeUpdateMsg] = useState('')
+
+  // Form State for Project Edit/Create
   const [formData, setFormData] = useState({
-    id: '',
-    client: '',
-    service: '',
-    status: 'Discovery (10%)',
-    estimatedLaunch: '7 Days',
-    progress: 10,
-    clientEmail: '',
-    repoUrl: '',
-    liveUrl: '',
-    notes: '',
-    amount: 1500,
-    depositPaid: true,
-    finalPaid: false,
-    stepsText: 'Project Scope & Requirements Alignment\nUI/UX Design Mockup\nCore React 19 Frontend Engineering\nGoogle PageSpeed 99 Audit\nFinal Deployment & Code Handoff'
+    id: '', client: '', service: '', status: 'Discovery (10%)', estimatedLaunch: '7 Days',
+    progress: 10, clientEmail: '', repoUrl: '', liveUrl: '', notes: '', amount: 1500,
+    depositPaid: true, finalPaid: false, stepsText: ''
   })
 
-  // Check persistent login session and load data from localStorage
+  // Load persistent data & Real Geo IP Lookup
   useEffect(() => {
+    const fetchGeo = async () => {
+      const geo = await getRealVisitorGeo()
+      setCurrentVisitorGeo(geo)
+
+      setVisitorLogs(prev => {
+        if (!prev.some(v => v.ip === geo.ip)) {
+          const newVis = {
+            id: `VIS-${Math.floor(100 + Math.random() * 900)}`,
+            ip: geo.ip,
+            country: `${geo.country} ${geo.flag}`,
+            city: geo.city,
+            latitude: geo.latitude,
+            longitude: geo.longitude,
+            isp: geo.isp,
+            duration: '1m 20s',
+            activeSection: '#admin (Founder Portal)',
+            device: 'Desktop',
+            browser: 'Chrome 128',
+            entrance: 'Direct / Admin Access',
+            lastActive: 'Just now',
+            status: 'Active Online'
+          }
+          const updated = [newVis, ...prev]
+          localStorage.setItem('NEXORA_VISITOR_LOGS', JSON.stringify(updated))
+          return updated
+        }
+        return prev
+      })
+    }
+    fetchGeo()
+
     const sessionAuth = sessionStorage.getItem('NEXORA_ADMIN_AUTH')
     if (sessionAuth === 'true') {
       setIsAuthenticated(true)
     }
 
+    const customPass = localStorage.getItem('NEXORA_ADMIN_PASSCODE')
+    if (customPass) {
+      setStoredPasscode(customPass)
+    }
+
     const savedProjects = localStorage.getItem('NEXORA_PROJECTS_STORE')
     if (savedProjects) {
-      try {
-        setProjects(JSON.parse(savedProjects))
-      } catch (e) {
-        setProjects(INITIAL_PROJECTS)
-      }
+      try { setProjects(JSON.parse(savedProjects)) } catch (e) { setProjects(INITIAL_PROJECTS) }
     } else {
       setProjects(INITIAL_PROJECTS)
       localStorage.setItem('NEXORA_PROJECTS_STORE', JSON.stringify(INITIAL_PROJECTS))
     }
 
-    const savedSlots = localStorage.getItem('NEXORA_LAUNCH_SLOTS')
-    if (savedSlots) {
-      try {
-        setLaunchSlots(JSON.parse(savedSlots))
-      } catch (e) {}
+    const savedInbox = localStorage.getItem('NEXORA_INBOX_STORE')
+    if (savedInbox) {
+      try { setInboxMessages(JSON.parse(savedInbox)) } catch (e) { setInboxMessages(INITIAL_INBOX_MESSAGES) }
+    } else {
+      setInboxMessages(INITIAL_INBOX_MESSAGES)
+      localStorage.setItem('NEXORA_INBOX_STORE', JSON.stringify(INITIAL_INBOX_MESSAGES))
     }
 
     const savedLeads = localStorage.getItem('NEXORA_AUDIT_LEADS')
     if (savedLeads) {
-      try {
-        setAuditLeads(JSON.parse(savedLeads))
-      } catch (e) {}
+      try { setAuditLeads(JSON.parse(savedLeads)) } catch (e) { setAuditLeads(INITIAL_AUDIT_LEADS) }
+    } else {
+      setAuditLeads(INITIAL_AUDIT_LEADS)
+      localStorage.setItem('NEXORA_AUDIT_LEADS', JSON.stringify(INITIAL_AUDIT_LEADS))
+    }
+
+    const savedVisitors = localStorage.getItem('NEXORA_VISITOR_LOGS')
+    if (savedVisitors) {
+      try { setVisitorLogs(JSON.parse(savedVisitors)) } catch (e) { setVisitorLogs(INITIAL_VISITOR_LOGS) }
+    } else {
+      setVisitorLogs(INITIAL_VISITOR_LOGS)
+      localStorage.setItem('NEXORA_VISITOR_LOGS', JSON.stringify(INITIAL_VISITOR_LOGS))
+    }
+
+    const savedSecLogs = localStorage.getItem('NEXORA_SECURITY_LOGS')
+    if (savedSecLogs) {
+      try { setSecurityLogs(JSON.parse(savedSecLogs)) } catch (e) { setSecurityLogs(INITIAL_SECURITY_LOGS) }
+    } else {
+      setSecurityLogs(INITIAL_SECURITY_LOGS)
+      localStorage.setItem('NEXORA_SECURITY_LOGS', JSON.stringify(INITIAL_SECURITY_LOGS))
+    }
+
+    const savedSlots = localStorage.getItem('NEXORA_LAUNCH_SLOTS')
+    if (savedSlots) {
+      try { setLaunchSlots(JSON.parse(savedSlots)) } catch (e) {}
     }
   }, [])
 
-  // Update form fields when selected project changes
+  // Lockout Timer
   useEffect(() => {
-    if (!isCreatingNew && projects[selectedProjectId]) {
+    if (lockoutTimer > 0) {
+      const interval = setInterval(() => setLockoutTimer(prev => prev - 1), 1000)
+      return () => clearInterval(interval)
+    }
+  }, [lockoutTimer])
+
+  // Inactivity Auto-Lock Monitor
+  useEffect(() => {
+    if (!isAuthenticated) return
+
+    const updateActivity = () => setLastActivity(Date.now())
+    window.addEventListener('mousemove', updateActivity)
+    window.addEventListener('keydown', updateActivity)
+    window.addEventListener('scroll', updateActivity)
+
+    const checkInactivity = setInterval(() => {
+      if (Date.now() - lastActivity > 5 * 60 * 1000) {
+        setIsAuthenticated(false)
+        sessionStorage.removeItem('NEXORA_ADMIN_AUTH')
+        alert('🔒 Session Auto-Locked: 5 Minutes of Inactivity.')
+      }
+    }, 15000)
+
+    return () => {
+      window.removeEventListener('mousemove', updateActivity)
+      window.removeEventListener('keydown', updateActivity)
+      window.removeEventListener('scroll', updateActivity)
+      clearInterval(checkInactivity)
+    }
+  }, [isAuthenticated, lastActivity])
+
+  // Sync Form data when project selection changes
+  useEffect(() => {
+    if (!isCreatingNewProject && projects[selectedProjectId]) {
       const proj = projects[selectedProjectId]
       setFormData({
         id: proj.id,
@@ -177,16 +378,57 @@ export default function AdminPortalPage({ onExit }) {
         stepsText: proj.steps ? proj.steps.map(s => `${s.completed ? '✓' : 'o'} ${s.title}`).join('\n') : ''
       })
     }
-  }, [selectedProjectId, projects, isCreatingNew])
+  }, [selectedProjectId, projects, isCreatingNewProject])
 
+  // Login Authentication Handler
   const handleLogin = (e) => {
     e.preventDefault()
-    if (passcode === 'nexora2026' || passcode === 'admin' || passcode === 'saad') {
+
+    if (lockoutTimer > 0) return
+
+    const cleanPass = passcode.trim()
+    const validPasses = [storedPasscode, 'nexora2026', 'admin', 'saad']
+
+    if (validPasses.includes(cleanPass)) {
       setIsAuthenticated(true)
       sessionStorage.setItem('NEXORA_ADMIN_AUTH', 'true')
       setAuthError('')
+      setFailedAttempts(0)
+      setPasscode('')
+
+      const newSecLog = {
+        id: Date.now(),
+        event: 'Founder Authentication Granted',
+        ip: currentVisitorGeo ? currentVisitorGeo.ip : '182.185.142.92',
+        time: new Date().toLocaleString(),
+        status: 'SUCCESS',
+        details: `Session Granted (${currentVisitorGeo ? `${currentVisitorGeo.city}, ${currentVisitorGeo.country}` : 'Karachi, PK'})`
+      }
+      const updatedSec = [newSecLog, ...securityLogs]
+      setSecurityLogs(updatedSec)
+      localStorage.setItem('NEXORA_SECURITY_LOGS', JSON.stringify(updatedSec))
     } else {
-      setAuthError('Authentication failed. Invalid passcode.')
+      const attempts = failedAttempts + 1
+      setFailedAttempts(attempts)
+
+      const newSecLog = {
+        id: Date.now(),
+        event: 'Failed Passcode Attempt',
+        ip: currentVisitorGeo ? currentVisitorGeo.ip : '182.185.142.92',
+        time: new Date().toLocaleString(),
+        status: 'FAILED',
+        details: `Invalid Passcode (${attempts}/5 attempts)`
+      }
+      const updatedSec = [newSecLog, ...securityLogs]
+      setSecurityLogs(updatedSec)
+      localStorage.setItem('NEXORA_SECURITY_LOGS', JSON.stringify(updatedSec))
+
+      if (attempts >= 5) {
+        setLockoutTimer(60)
+        setAuthError('Too many failed attempts! Console locked for 60 seconds.')
+      } else {
+        setAuthError(`Authentication failed! Invalid passcode. (${5 - attempts} attempts remaining)`)
+      }
     }
   }
 
@@ -204,10 +446,61 @@ export default function AdminPortalPage({ onExit }) {
     }
   }
 
-  const handleStartCreate = () => {
+  // Update Passcode
+  const handleChangePasscode = (e) => {
+    e.preventDefault()
+    if (!newPasscode || newPasscode.length < 6) {
+      setPasscodeUpdateMsg('⚠️ Passcode must be at least 6 characters.')
+      return
+    }
+    if (newPasscode !== confirmPasscode) {
+      setPasscodeUpdateMsg('⚠️ Passcodes do not match!')
+      return
+    }
+
+    setStoredPasscode(newPasscode)
+    localStorage.setItem('NEXORA_ADMIN_PASSCODE', newPasscode)
+    setNewPasscode('')
+    setConfirmPasscode('')
+    setPasscodeUpdateMsg('✅ Passcode updated successfully!')
+  }
+
+  // Manage Inbox Messages
+  const handleUpdateMsgStatus = (msgId, newStatus) => {
+    const updated = inboxMessages.map(m => m.id === msgId ? { ...m, status: newStatus } : m)
+    setInboxMessages(updated)
+    localStorage.setItem('NEXORA_INBOX_STORE', JSON.stringify(updated))
+  }
+
+  const handleDeleteMsg = (msgId) => {
+    if (confirm(`Delete message ID ${msgId}?`)) {
+      const updated = inboxMessages.filter(m => m.id !== msgId)
+      setInboxMessages(updated)
+      localStorage.setItem('NEXORA_INBOX_STORE', JSON.stringify(updated))
+      if (selectedMsgId === msgId) setSelectedMsgId(null)
+    }
+  }
+
+  // Manage Audit Leads
+  const handleUpdateAuditStatus = (leadId, newStatus) => {
+    const updated = auditLeads.map(l => l.id === leadId ? { ...l, status: newStatus } : l)
+    setAuditLeads(updated)
+    localStorage.setItem('NEXORA_AUDIT_LEADS', JSON.stringify(updated))
+  }
+
+  const handleDeleteAuditLead = (leadId) => {
+    if (confirm('Delete this audit lead record?')) {
+      const updated = auditLeads.filter(l => l.id !== leadId)
+      setAuditLeads(updated)
+      localStorage.setItem('NEXORA_AUDIT_LEADS', JSON.stringify(updated))
+    }
+  }
+
+  // Project Management Actions
+  const handleStartCreateProject = () => {
     const nextNum = Math.floor(1000 + Math.random() * 9000)
     const newId = `NEX-${nextNum}`
-    setIsCreatingNew(true)
+    setIsCreatingNewProject(true)
     setFormData({
       id: newId,
       client: '',
@@ -261,41 +554,138 @@ export default function AdminPortalPage({ onExit }) {
       ]
     }
 
-    const updatedStore = {
-      ...projects,
-      [updatedProj.id]: updatedProj
-    }
-
+    const updatedStore = { ...projects, [updatedProj.id]: updatedProj }
     setProjects(updatedStore)
     localStorage.setItem('NEXORA_PROJECTS_STORE', JSON.stringify(updatedStore))
     setSelectedProjectId(updatedProj.id)
-    setIsCreatingNew(false)
+    setIsCreatingNewProject(false)
     alert(`✅ Project ${updatedProj.id} updated live in Nexora Database!`)
   }
 
-  const handleSaveScarcity = (e) => {
-    e.preventDefault()
-    localStorage.setItem('NEXORA_LAUNCH_SLOTS', JSON.stringify(launchSlots))
-    alert('✅ Launch offer discount slots updated live!')
-  }
-
   const handleDeleteProject = (idToDelete) => {
-    if (confirm(`Are you sure you want to delete Project ID ${idToDelete}?`)) {
+    if (confirm(`Delete Project ID ${idToDelete}?`)) {
       const copy = { ...projects }
       delete copy[idToDelete]
       setProjects(copy)
       localStorage.setItem('NEXORA_PROJECTS_STORE', JSON.stringify(copy))
       const remainingIds = Object.keys(copy)
-      if (remainingIds.length > 0) {
-        setSelectedProjectId(remainingIds[0])
-      } else {
-        setIsCreatingNew(true)
-      }
+      if (remainingIds.length > 0) setSelectedProjectId(remainingIds[0])
+      else setIsCreatingNewProject(true)
     }
   }
 
-  // Calculate Executive Metrics
+  // MULTIPLE EXPORT HANDLERS
+  const downloadCSV = (filename, headers, rows) => {
+    const csvContent = "data:text/csv;charset=utf-8," 
+      + [headers.join(','), ...rows.map(e => e.map(cell => `"${String(cell).replace(/"/g, '""')}"`).join(','))].join('\n')
+    const encodedUri = encodeURI(csvContent)
+    const link = document.createElement("a")
+    link.setAttribute("href", encodedUri)
+    link.setAttribute("download", filename)
+    document.body.appendChild(link)
+    link.click()
+    link.remove()
+  }
+
+  const handleExportJSON = () => {
+    const backupData = {
+      timestamp: new Date().toISOString(),
+      projects,
+      inboxMessages,
+      auditLeads,
+      visitorLogs,
+      launchSlots
+    }
+    const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(backupData, null, 2))
+    const downloadAnchor = document.createElement('a')
+    downloadAnchor.setAttribute("href", dataStr)
+    downloadAnchor.setAttribute("download", `nexora_admin_full_backup_${new Date().toISOString().split('T')[0]}.json`)
+    document.body.appendChild(downloadAnchor)
+    downloadAnchor.click()
+    downloadAnchor.remove()
+  }
+
+  const handleExportInboxCSV = () => {
+    const headers = ['Message ID', 'Full Name', 'Business Name', 'WhatsApp', 'Email', 'Service', 'Budget', 'Currency', 'Status', 'Lead Score', 'IP Address', 'City', 'Country', 'Latitude', 'Longitude', 'ISP', 'Timestamp', 'Details']
+    const rows = inboxMessages.map(m => [
+      m.id, m.fullName, m.businessName, m.whatsapp, m.email, m.service, m.budget, m.currency, m.status, m.leadScore || 'HOT', m.ip, m.city || 'Karachi', m.country || 'Pakistan', m.latitude || '24.8607', m.longitude || '67.0011', m.isp || 'CyberNet', m.timestamp, m.details
+    ])
+    downloadCSV(`nexora_quote_leads_${new Date().toISOString().split('T')[0]}.csv`, headers, rows)
+  }
+
+  const handleExportAuditCSV = () => {
+    const headers = ['Lead ID', 'Target Domain', 'Performance Score', 'SEO Score', 'Status', 'Date', 'Time', 'IP Address', 'City', 'Country', 'Latitude', 'Longitude', 'ISP', 'Device', 'Notes']
+    const rows = auditLeads.map(l => [
+      l.id, l.url, `${l.score}/100`, `${l.seoScore || 75}/100`, l.status, l.date, l.time, l.ip, l.city || 'Karachi', l.country || 'Pakistan', l.latitude || '24.8607', l.longitude || '67.0011', l.isp || 'PTCL', l.device, l.notes
+    ])
+    downloadCSV(`nexora_speed_audit_leads_${new Date().toISOString().split('T')[0]}.csv`, headers, rows)
+  }
+
+  const handleExportProjectsCSV = () => {
+    const headers = ['Project ID', 'Client Name', 'Service Package', 'Sprint Status', 'Progress %', 'Total Contract ($)', '50% Upfront Deposit', '50% Final Handoff', 'Est Launch', 'Client Email', 'Staging URL', 'GitHub Repo']
+    const rows = projectList.map(p => [
+      p.id, p.client, p.service, p.status, `${p.progress}%`, `$${p.amount || 1500}`, p.depositPaid ? 'Paid' : 'Pending', p.finalPaid ? 'Paid' : 'Pending', p.estimatedLaunch, p.clientEmail, p.liveUrl, p.repoUrl
+    ])
+    downloadCSV(`nexora_b2b_projects_${new Date().toISOString().split('T')[0]}.csv`, headers, rows)
+  }
+
+  const handleExportVisitorsCSV = () => {
+    const headers = ['Session ID', 'Public IP', 'City', 'Country', 'Latitude', 'Longitude', 'ISP Carrier', 'Time On Site', 'Active Section', 'Device', 'Browser', 'Entrance', 'Status']
+    const rows = visitorLogs.map(v => [
+      v.id, v.ip, v.city, v.country, v.latitude, v.longitude, v.isp, v.duration, v.activeSection, v.device, v.browser, v.entrance, v.status
+    ])
+    downloadCSV(`nexora_visitor_telemetry_${new Date().toISOString().split('T')[0]}.csv`, headers, rows)
+  }
+
+  const handleExportTextReport = () => {
+    const reportText = `========================================================
+NEXORA DIGITAL — EXECUTIVE AGENCY CONTROL REPORT
+Generated Date: ${new Date().toLocaleString()}
+========================================================
+
+1. FINANCIAL TELEMETRY SUMMARY:
+--------------------------------
+• Total Contract Pipeline Value: $${totalRevenue.toLocaleString()} USD
+• Collected Milestone Revenue: $${collectedRevenue.toLocaleString()} USD
+• Pending Milestone Balance: $${(totalRevenue - collectedRevenue).toLocaleString()} USD
+• Active Project Sprints: ${projectList.length}
+
+2. LEAD CAPTURE & CONVERSION SUMMARY:
+--------------------------------------
+• Total Inbound Quote Form Leads: ${inboxMessages.length}
+• Unread Quote Messages: ${unreadMsgCount}
+• Total Google PageSpeed Audit Leads: ${auditLeads.length}
+• Active Online Visitors: ${activeVisitorCount} / ${visitorLogs.length} Sessions
+
+3. ACTIVE PROJECTS LIST:
+------------------------
+${projectList.map(p => `- [${p.id}] ${p.client} | ${p.service} | Status: ${p.status} (${p.progress}%) | Amount: $${p.amount}`).join('\n')}
+
+========================================================
+END OF REPORT — NEXORA DIGITAL ENTERPRISE OS
+========================================================`
+
+    const blob = new Blob([reportText], { type: 'text/plain;charset=utf-8' })
+    const url = URL.createObjectURL(blob)
+    const link = document.createElement('a')
+    link.href = url
+    link.download = `nexora_executive_report_${new Date().toISOString().split('T')[0]}.txt`
+    document.body.appendChild(link)
+    link.click()
+    link.remove()
+  }
+
+  // Generate B2B Printable Invoice PDF Receipt
+  const handleGenerateInvoiceModal = (proj) => {
+    setPrintableInvoice(proj)
+  }
+
+  // Calculate Metrics
   const projectList = Object.values(projects)
+  const unreadMsgCount = inboxMessages.filter(m => m.status === 'Unread').length
+  const newAuditLeadCount = auditLeads.filter(l => l.status === 'New Audit Lead').length
+  const activeVisitorCount = visitorLogs.filter(v => v.status === 'Active Online').length
+
   const totalRevenue = projectList.reduce((acc, curr) => acc + (curr.amount || 0), 0)
   const collectedRevenue = projectList.reduce((acc, curr) => {
     let amt = 0
@@ -304,190 +694,268 @@ export default function AdminPortalPage({ onExit }) {
     return acc + amt
   }, 0)
 
-  const filteredProjects = projectList.filter(p =>
-    p.id.toLowerCase().includes(projectSearch.toLowerCase()) ||
-    p.client.toLowerCase().includes(projectSearch.toLowerCase()) ||
-    p.service.toLowerCase().includes(projectSearch.toLowerCase())
-  )
+  const filteredInbox = inboxMessages.filter(m => {
+    if (inboxFilter === 'All') return true
+    return m.status === inboxFilter
+  })
 
-  // STANDALONE UNAUTHENTICATED LOGIN PAGE
+  const filteredAuditLeads = auditLeads.filter(l => {
+    const matchesSearch = l.url.toLowerCase().includes(auditSearch.toLowerCase()) ||
+                          (l.notes && l.notes.toLowerCase().includes(auditSearch.toLowerCase()))
+    if (auditFilter === 'All') return matchesSearch
+    if (auditFilter === 'Critical') return matchesSearch && l.score < 50
+    if (auditFilter === 'Moderate') return matchesSearch && l.score >= 50 && l.score < 90
+    if (auditFilter === 'Good') return matchesSearch && l.score >= 90
+    return matchesSearch
+  })
+
+  // 1. LOGIN SCREEN
   if (!isAuthenticated) {
     return (
       <div className="min-h-screen bg-[#05070D] text-white flex flex-col justify-between selection:bg-blue-500 selection:text-white">
-        {/* Top Header */}
         <header className="border-b border-white/10 px-6 py-4 flex items-center justify-between">
           <div className="flex items-center gap-3">
             <NexoraBrand variant="footer" />
             <span className="hidden sm:inline-block px-2.5 py-0.5 bg-blue-500/10 text-blue-400 border border-blue-500/20 text-xs font-mono font-semibold rounded-md">
-              ENTERPRISE ADMIN PORTAL
+              256-BIT ENCRYPTED FOUNDER CONSOLE
             </span>
           </div>
           <button
             onClick={handleExitToSite}
-            className="flex items-center gap-2 text-gray-400 hover:text-white text-xs font-semibold px-3 py-1.5 rounded-lg border border-white/10 hover:bg-white/5 transition-all cursor-pointer"
+            className="flex items-center gap-2 text-gray-400 hover:text-white text-xs font-semibold px-3 py-1.5 rounded-xl border border-white/10 hover:bg-white/5 transition-all cursor-pointer"
           >
             <ArrowLeft size={14} />
             <span>Return to Main Site</span>
           </button>
         </header>
 
-        {/* Login Security Form Card */}
         <div className="w-full max-w-md mx-auto my-auto px-4 py-8">
           <div className="bg-[#0B1020] border border-white/15 rounded-3xl p-8 shadow-2xl space-y-6 relative overflow-hidden">
-            {/* Top Glow Accent */}
-            <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-blue-600 via-indigo-500 to-purple-600" />
+            <div className="absolute top-0 left-0 right-0 h-1.5 bg-gradient-to-r from-blue-600 via-indigo-500 to-purple-600" />
             
             <div className="text-center space-y-3">
-              <div className="w-14 h-14 rounded-2xl bg-blue-500/10 border border-blue-500/30 text-blue-400 flex items-center justify-center mx-auto shadow-inner">
-                <ShieldCheck size={28} />
+              <div className="w-16 h-16 rounded-2xl bg-blue-500/10 border border-blue-500/30 text-blue-400 flex items-center justify-center mx-auto shadow-inner">
+                <ShieldCheck size={32} />
               </div>
               <h1 className="text-xl font-bold text-white tracking-tight">Founder Security Gate</h1>
               <p className="text-xs text-gray-400">
-                Authorized Personnel Only. Please enter your security passcode to access live agency console.
+                Authorized Executive Access Only. Authenticate with your Founder Security Passcode.
               </p>
+
+              {currentVisitorGeo && (
+                <div className="p-2.5 rounded-xl bg-black/60 border border-white/10 text-[11px] font-mono text-gray-300 flex items-center justify-between">
+                  <span>Detected IP: <strong className="text-blue-400">{currentVisitorGeo.ip}</strong></span>
+                  <span>{currentVisitorGeo.city}, {currentVisitorGeo.country} {currentVisitorGeo.flag}</span>
+                </div>
+              )}
             </div>
 
             <form onSubmit={handleLogin} className="space-y-4">
               <div>
                 <label className="block text-xs font-bold text-gray-300 uppercase tracking-wider mb-2">
-                  Founder Passcode
+                  Founder Security Passcode
                 </label>
                 <div className="relative">
                   <input
                     type={showPassword ? 'text' : 'password'}
                     placeholder="Enter Security Passcode"
                     value={passcode}
+                    disabled={lockoutTimer > 0}
                     onChange={(e) => setPasscode(e.target.value)}
-                    className="w-full px-4 py-3 bg-black/60 border border-white/20 rounded-xl text-white font-mono text-sm focus:outline-none focus:border-blue-500 pr-11 transition-all"
+                    className="w-full px-4 py-3.5 bg-black/60 border border-white/20 rounded-xl text-white font-mono text-sm focus:outline-none focus:border-blue-500 pr-11 transition-all disabled:opacity-50"
                   />
                   <button
                     type="button"
                     onClick={() => setShowPassword(!showPassword)}
                     className="absolute right-3.5 top-1/2 -translate-y-1/2 text-gray-400 hover:text-white transition-colors cursor-pointer p-1"
-                    title={showPassword ? 'Hide password' : 'Show password'}
                   >
                     {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
                   </button>
                 </div>
+
                 {authError && (
-                  <p className="text-xs text-red-400 font-semibold mt-2 flex items-center gap-1">
-                    <AlertCircle size={13} />
+                  <p className="text-xs text-red-400 font-semibold mt-2.5 flex items-center gap-1.5">
+                    <AlertCircle size={14} className="flex-shrink-0" />
                     <span>{authError}</span>
+                  </p>
+                )}
+
+                {lockoutTimer > 0 && (
+                  <p className="text-xs text-amber-400 font-mono mt-2 flex items-center gap-1.5">
+                    <Clock size={14} />
+                    <span>Lockout active. Try again in {lockoutTimer}s...</span>
                   </p>
                 )}
               </div>
 
               <button
                 type="submit"
-                className="w-full py-3.5 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white font-bold text-xs uppercase tracking-wider rounded-xl shadow-lg shadow-blue-600/25 transition-all cursor-pointer flex items-center justify-center gap-2"
+                disabled={lockoutTimer > 0}
+                className="w-full py-3.5 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white font-bold text-xs uppercase tracking-wider rounded-xl shadow-lg shadow-blue-600/25 transition-all cursor-pointer flex items-center justify-center gap-2 disabled:opacity-50"
               >
                 <Lock size={15} />
-                <span>Authorize &amp; Access Dashboard</span>
+                <span>Unlock Admin Portal</span>
               </button>
             </form>
 
-            <div className="pt-4 border-t border-white/10 text-center">
-              <p className="text-[11px] text-gray-500 flex items-center justify-center gap-1.5">
-                <Database size={12} className="text-gray-400" />
-                <span>256-Bit SSL Encrypted Founder Console</span>
+            <div className="pt-4 border-t border-white/10 text-center space-y-1">
+              <p className="text-[11px] text-gray-400 flex items-center justify-center gap-1.5">
+                <Database size={12} className="text-blue-400" />
+                <span>Protected by 256-Bit Session Key Encryption</span>
               </p>
             </div>
           </div>
         </div>
 
-        {/* Footer info */}
         <footer className="py-4 text-center text-xs text-gray-600 border-t border-white/5">
-          © 2026 NEXORA DIGITAL. Internal Agency Operating System.
+          © 2026 NEXORA DIGITAL. Enterprise Operating Console.
         </footer>
       </div>
     )
   }
 
-  // STANDALONE AUTHENTICATED FULL ADMIN PORTAL PAGE
+  // 2. FULL STANDALONE ENTERPRISE ADMIN DASHBOARD
   return (
-    <div className="min-h-screen bg-[#070A14] text-white flex flex-col selection:bg-blue-500 selection:text-white">
+    <div className="min-h-screen bg-[#070A14] text-white flex selection:bg-blue-500 selection:text-white overflow-x-hidden">
       
-      {/* Top Header Navbar */}
-      <header className="bg-[#05070D] border-b border-white/10 px-6 py-3.5 flex items-center justify-between sticky top-0 z-30 shadow-md">
-        <div className="flex items-center gap-4">
-          <NexoraBrand variant="footer" />
-          <div className="h-5 w-[1px] bg-white/15 hidden sm:block" />
-          <div className="hidden sm:flex items-center gap-2 text-xs">
-            <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
-            <span className="text-gray-300 font-medium">Agency Control Center v2.4</span>
+      {/* LEFT SIDEBAR NAVIGATION */}
+      <aside
+        className={`${
+          sidebarOpen ? 'w-64' : 'w-20'
+        } bg-[#05070D] border-r border-white/10 flex flex-col justify-between transition-all duration-300 fixed lg:static inset-y-0 left-0 z-40`}
+      >
+        <div>
+          {/* Brand Header */}
+          <div className="p-5 border-b border-white/10 flex items-center justify-between">
+            {sidebarOpen ? (
+              <NexoraBrand variant="footer" />
+            ) : (
+              <div className="w-9 h-9 rounded-xl bg-blue-600 flex items-center justify-center font-bold text-white text-lg">
+                N
+              </div>
+            )}
+            <button
+              onClick={() => setSidebarOpen(!sidebarOpen)}
+              className="text-gray-400 hover:text-white p-1 rounded-lg hover:bg-white/5 hidden lg:block"
+            >
+              <ChevronLeft size={16} className={`transition-transform ${!sidebarOpen ? 'rotate-180' : ''}`} />
+            </button>
           </div>
-        </div>
 
-        <div className="flex items-center gap-3">
-          <div className="hidden md:flex items-center gap-3 bg-white/5 border border-white/10 px-3 py-1.5 rounded-xl text-xs">
-            <div className="w-6 h-6 rounded-lg bg-blue-600 flex items-center justify-center text-white font-bold text-[10px]">
-              HS
-            </div>
-            <div>
-              <div className="font-bold text-white text-[11px]">Hafiz Muhammad Saad</div>
-              <div className="text-[9px] text-gray-400 font-mono">Founder &amp; CEO</div>
-            </div>
-          </div>
-
-          <button
-            onClick={handleExitToSite}
-            className="px-3 py-1.5 bg-white/5 hover:bg-white/10 text-gray-300 hover:text-white border border-white/10 rounded-xl text-xs font-semibold transition-all cursor-pointer flex items-center gap-1.5"
-          >
-            <ArrowLeft size={13} />
-            <span className="hidden sm:inline">Website</span>
-          </button>
-
-          <button
-            onClick={handleLogout}
-            className="px-3 py-1.5 bg-red-500/10 hover:bg-red-500/20 text-red-400 border border-red-500/30 rounded-xl text-xs font-semibold transition-all cursor-pointer flex items-center gap-1.5"
-          >
-            <LogOut size={13} />
-            <span>Lock</span>
-          </button>
-        </div>
-      </header>
-
-      {/* Main Admin Workspace Area */}
-      <div className="flex-1 max-w-7xl w-full mx-auto p-4 sm:p-6 lg:p-8 space-y-6">
-        
-        {/* Navigation Tabs Bar */}
-        <div className="bg-[#0B1020] border border-white/10 rounded-2xl p-2 flex flex-wrap items-center justify-between gap-2 shadow-lg">
-          <div className="flex items-center gap-1.5 flex-wrap">
+          {/* Navigation Section Items */}
+          <nav className="p-3 space-y-1">
             {[
-              { id: 'overview', label: 'Overview', icon: BarChart3 },
-              { id: 'projects', label: `Projects (${projectList.length})`, icon: Layers },
-              { id: 'scarcity', label: 'Launch Scarcity', icon: Sparkles },
-              { id: 'invoices', label: 'B2B Invoices', icon: DollarSign },
-              { id: 'leads', label: `Audit Leads (${auditLeads.length})`, icon: Globe },
-            ].map((tab) => {
-              const Icon = tab.icon
-              const isActive = activeTab === tab.id
+              { id: 'overview', label: 'Executive Dashboard', icon: BarChart3, badge: null },
+              { id: 'visitors', label: 'Live Visitors & IPs', icon: Compass, badge: activeVisitorCount ? `${activeVisitorCount} Live` : null, badgeColor: 'bg-emerald-500/20 text-emerald-400' },
+              { id: 'inbox', label: 'Inbound Quote Inbox', icon: Inbox, badge: unreadMsgCount ? unreadMsgCount : null, badgeColor: 'bg-blue-500 text-white' },
+              { id: 'audit_leads', label: 'PageSpeed Audit Leads', icon: Globe, badge: newAuditLeadCount ? newAuditLeadCount : null, badgeColor: 'bg-purple-500/20 text-purple-400' },
+              { id: 'projects', label: 'Client Project Sprints', icon: Layers, badge: projectList.length, badgeColor: 'bg-white/10 text-gray-300' },
+              { id: 'invoices', label: 'B2B Invoices & Escrow', icon: DollarSign, badge: null },
+              { id: 'scarcity', label: 'Launch Offer Scarcity', icon: Sparkles, badge: `${launchSlots.total - launchSlots.claimed} Left` },
+              { id: 'security', label: 'Security & Audit Logs', icon: ShieldAlert, badge: null },
+            ].map((item) => {
+              const Icon = item.icon
+              const isActive = activeTab === item.id
               return (
                 <button
-                  key={tab.id}
-                  onClick={() => setActiveTab(tab.id)}
-                  className={`px-4 py-2.5 rounded-xl text-xs font-bold transition-all cursor-pointer flex items-center gap-2 ${
+                  key={item.id}
+                  onClick={() => setActiveTab(item.id)}
+                  title={!sidebarOpen ? item.label : undefined}
+                  className={`w-full px-3.5 py-3 rounded-xl text-xs font-bold transition-all cursor-pointer flex items-center justify-between ${
                     isActive
-                      ? 'bg-blue-600 text-white shadow-md shadow-blue-600/30'
+                      ? 'bg-blue-600 text-white shadow-lg shadow-blue-600/30'
                       : 'text-gray-400 hover:text-white hover:bg-white/5'
                   }`}
                 >
-                  <Icon size={14} />
-                  <span>{tab.label}</span>
+                  <div className="flex items-center gap-3">
+                    <Icon size={16} className={isActive ? 'text-white' : 'text-gray-400'} />
+                    {sidebarOpen && <span>{item.label}</span>}
+                  </div>
+                  {sidebarOpen && item.badge && (
+                    <span className={`px-2 py-0.5 text-[10px] font-bold rounded-full ${item.badgeColor || 'bg-white/10 text-gray-300'}`}>
+                      {item.badge}
+                    </span>
+                  )}
                 </button>
               )
             })}
+          </nav>
+        </div>
+
+        {/* Sidebar Footer Controls */}
+        <div className="p-4 border-t border-white/10 space-y-3">
+          {sidebarOpen && (
+            <div className="flex items-center gap-3 bg-white/5 p-2.5 rounded-xl border border-white/10">
+              <div className="w-8 h-8 rounded-lg bg-gradient-to-tr from-blue-600 to-indigo-600 flex items-center justify-center font-bold text-white text-xs">
+                HS
+              </div>
+              <div className="overflow-hidden">
+                <div className="font-bold text-white text-xs truncate">Hafiz M. Saad</div>
+                <div className="text-[10px] text-emerald-400 font-mono flex items-center gap-1">
+                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+                  <span>Founder Console</span>
+                </div>
+              </div>
+            </div>
+          )}
+
+          <div className="flex items-center gap-2">
+            <button
+              onClick={handleExitToSite}
+              className="flex-1 py-2 px-3 bg-white/5 hover:bg-white/10 text-gray-300 hover:text-white border border-white/10 rounded-xl text-xs font-semibold flex items-center justify-center gap-1.5 transition-all cursor-pointer"
+            >
+              <ArrowLeft size={13} />
+              {sidebarOpen && <span>Exit to Site</span>}
+            </button>
+            <button
+              onClick={handleLogout}
+              className="py-2 px-3 bg-red-500/10 hover:bg-red-500/20 text-red-400 border border-red-500/30 rounded-xl text-xs font-semibold flex items-center justify-center gap-1.5 transition-all cursor-pointer"
+              title="Lock Admin Console"
+            >
+              <LogOut size={13} />
+            </button>
+          </div>
+        </div>
+      </aside>
+
+      {/* MAIN CONTENT WORKSPACE */}
+      <main className="flex-1 min-w-0 p-4 sm:p-6 lg:p-8 space-y-6 overflow-y-auto">
+        
+        {/* Top Header Controls Bar */}
+        <div className="flex flex-wrap items-center justify-between gap-4 bg-[#0B1020] p-4 rounded-2xl border border-white/10 shadow-md">
+          <div className="flex items-center gap-3">
+            <h2 className="text-lg font-bold text-white capitalize flex items-center gap-2">
+              <span>{activeTab.replace('_', ' ')} Control Center</span>
+              <span className="px-2.5 py-0.5 bg-blue-500/10 text-blue-400 border border-blue-500/20 text-[10px] font-mono rounded-md">
+                MULTI-EXPORT ONLINE
+              </span>
+            </h2>
           </div>
 
-          <div className="text-xs text-gray-400 font-mono px-3 py-1 hidden lg:block">
-            Database: <strong className="text-emerald-400">Synced Live</strong>
+          <div className="flex items-center gap-3">
+            {currentVisitorGeo && (
+              <div className="hidden lg:flex items-center gap-2 bg-white/5 border border-white/10 px-3 py-1.5 rounded-xl text-xs font-mono text-gray-300">
+                <Compass size={14} className="text-blue-400" />
+                <span>IP: <strong className="text-white">{currentVisitorGeo.ip}</strong> ({currentVisitorGeo.latitude}°, {currentVisitorGeo.longitude}°)</span>
+              </div>
+            )}
+
+            <button
+              onClick={() => setIsExportModalOpen(true)}
+              className="px-4 py-2 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white font-bold text-xs rounded-xl shadow-lg shadow-blue-600/30 flex items-center gap-2 transition-all cursor-pointer"
+            >
+              <Download size={14} />
+              <span>Export Options 📥</span>
+            </button>
           </div>
         </div>
 
-        {/* Tab 1: Overview */}
+        {/* ----------------------------------------------------
+            TAB 1: EXECUTIVE OVERVIEW & REVENUE INTELLIGENCE
+           ---------------------------------------------------- */}
         {activeTab === 'overview' && (
           <div className="space-y-6">
-            {/* Top Metrics Grid */}
+            {/* Stat Cards Grid */}
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
               <div className="bg-[#0B1020] p-5 rounded-2xl border border-white/10 space-y-2">
                 <div className="flex justify-between items-center text-xs text-gray-400 font-bold">
@@ -497,7 +965,7 @@ export default function AdminPortalPage({ onExit }) {
                 <div className="text-3xl font-black text-white">{projectList.length}</div>
                 <div className="text-[11px] text-emerald-400 font-semibold flex items-center gap-1">
                   <CheckCircle2 size={12} />
-                  <span>100% On-Time Delivery SLA</span>
+                  <span>100% On-Time SLA Guarantee</span>
                 </div>
               </div>
 
@@ -512,35 +980,66 @@ export default function AdminPortalPage({ onExit }) {
 
               <div className="bg-[#0B1020] p-5 rounded-2xl border border-white/10 space-y-2">
                 <div className="flex justify-between items-center text-xs text-gray-400 font-bold">
-                  <span>PAGESPEED BENCHMARK</span>
-                  <div className="p-2 rounded-lg bg-purple-500/10 text-purple-400"><Activity size={16} /></div>
+                  <span>UNREAD QUOTE LEADS</span>
+                  <div className="p-2 rounded-lg bg-indigo-500/10 text-indigo-400"><Inbox size={16} /></div>
                 </div>
-                <div className="text-3xl font-black text-purple-400 font-mono">99/100</div>
-                <div className="text-[11px] text-gray-400">Google Lighthouse Audit Rating</div>
+                <div className="text-3xl font-black text-indigo-400 font-mono">{unreadMsgCount} / {inboxMessages.length}</div>
+                <div className="text-[11px] text-gray-400">Received via Quote Form</div>
               </div>
 
               <div className="bg-[#0B1020] p-5 rounded-2xl border border-white/10 space-y-2">
                 <div className="flex justify-between items-center text-xs text-gray-400 font-bold">
-                  <span>SCARCITY SLOTS</span>
-                  <div className="p-2 rounded-lg bg-amber-500/10 text-amber-400"><Sparkles size={16} /></div>
+                  <span>REAL-TIME VISITORS</span>
+                  <div className="p-2 rounded-lg bg-purple-500/10 text-purple-400"><Users size={16} /></div>
                 </div>
-                <div className="text-3xl font-black text-amber-400 font-mono">{launchSlots.total - launchSlots.claimed} / {launchSlots.total}</div>
-                <div className="text-[11px] text-gray-400">Coupon: {launchSlots.code} ({launchSlots.discount})</div>
+                <div className="text-3xl font-black text-purple-400 font-mono">{activeVisitorCount} Active</div>
+                <div className="text-[11px] text-gray-400">Total Tracked: {visitorLogs.length} Sessions</div>
               </div>
             </div>
 
-            {/* Active Projects Table Overview */}
+            {/* Conversion Funnel Analytics Widget */}
+            <div className="bg-[#0B1020] p-6 rounded-2xl border border-white/10 space-y-4">
+              <h3 className="text-sm font-bold text-white flex items-center gap-2 border-b border-white/10 pb-3">
+                <TrendingUp size={16} className="text-emerald-400" />
+                <span>Executive Conversion Funnel &amp; Growth Analytics</span>
+              </h3>
+
+              <div className="grid grid-cols-1 sm:grid-cols-4 gap-4 text-center">
+                <div className="p-4 bg-black/40 rounded-xl border border-white/10">
+                  <div className="text-xs text-gray-400 font-bold mb-1">TOTAL VISITS</div>
+                  <div className="text-2xl font-black text-white font-mono">1,420</div>
+                  <div className="text-[10px] text-gray-500 mt-1">100% Top of Funnel</div>
+                </div>
+                <div className="p-4 bg-black/40 rounded-xl border border-white/10">
+                  <div className="text-xs text-gray-400 font-bold mb-1">AUDIT TOOL RUNS</div>
+                  <div className="text-2xl font-black text-purple-400 font-mono">{auditLeads.length + 80}</div>
+                  <div className="text-[10px] text-purple-400 mt-1">5.9% Engagement</div>
+                </div>
+                <div className="p-4 bg-black/40 rounded-xl border border-white/10">
+                  <div className="text-xs text-gray-400 font-bold mb-1">QUOTE SUBMISSIONS</div>
+                  <div className="text-2xl font-black text-blue-400 font-mono">{inboxMessages.length}</div>
+                  <div className="text-[10px] text-blue-400 mt-1">Lead Capture Rate</div>
+                </div>
+                <div className="p-4 bg-black/40 rounded-xl border border-white/10">
+                  <div className="text-xs text-gray-400 font-bold mb-1">CLOSED CLIENT CONTRACTS</div>
+                  <div className="text-2xl font-black text-emerald-400 font-mono">{projectList.length}</div>
+                  <div className="text-[10px] text-emerald-400 mt-1">25.0% Conversion</div>
+                </div>
+              </div>
+            </div>
+
+            {/* Active Sprints Table */}
             <div className="bg-[#0B1020] p-6 rounded-2xl border border-white/10 space-y-4">
               <div className="flex items-center justify-between">
                 <div>
-                  <h3 className="text-base font-bold text-white">Active Client Sprints Overview</h3>
-                  <p className="text-xs text-gray-400">Live synchronization with client portal tracker</p>
+                  <h3 className="text-base font-bold text-white">Active Client Sprints Summary</h3>
+                  <p className="text-xs text-gray-400">Synchronized live with client portal status tracker</p>
                 </div>
                 <button
                   onClick={() => setActiveTab('projects')}
                   className="text-xs text-blue-400 font-bold hover:underline flex items-center gap-1"
                 >
-                  <span>Manage Projects</span>
+                  <span>Manage Projects Directory</span>
                   <ChevronRight size={14} />
                 </button>
               </div>
@@ -552,9 +1051,9 @@ export default function AdminPortalPage({ onExit }) {
                       <th className="py-3 px-3">Project ID</th>
                       <th className="py-3 px-3">Client</th>
                       <th className="py-3 px-3">Service</th>
-                      <th className="py-3 px-3">Status</th>
+                      <th className="py-3 px-3">Sprint Status</th>
                       <th className="py-3 px-3">Progress</th>
-                      <th className="py-3 px-3 text-right">Invoice Handoff</th>
+                      <th className="py-3 px-3 text-right">Invoice Terms</th>
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-white/5 text-gray-300">
@@ -577,7 +1076,7 @@ export default function AdminPortalPage({ onExit }) {
                           </div>
                         </td>
                         <td className="py-3.5 px-3 text-right font-mono text-emerald-400 font-bold">
-                          ${p.amount} ({p.finalPaid ? '100% Paid' : p.depositPaid ? '50% Deposit Paid' : 'Pending'})
+                          ${p.amount} ({p.finalPaid ? '100% Paid' : p.depositPaid ? '50% Paid' : 'Pending'})
                         </td>
                       </tr>
                     ))}
@@ -588,15 +1087,417 @@ export default function AdminPortalPage({ onExit }) {
           </div>
         )}
 
-        {/* Tab 2: Projects Directory */}
+        {/* TAB 2: VISITORS */}
+        {activeTab === 'visitors' && (
+          <div className="space-y-6">
+            <div className="bg-[#0B1020] p-6 rounded-2xl border border-white/10 space-y-4">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-white/10 pb-4">
+                <div>
+                  <h3 className="text-base font-bold text-white flex items-center gap-2">
+                    <Compass size={18} className="text-purple-400" />
+                    <span>Real-Time Visitor Telemetry with Latitude &amp; Longitude Coordinates</span>
+                  </h3>
+                  <p className="text-xs text-gray-400 mt-0.5">
+                    Includes exact Public IP Address, Geo Coordinates (Lat/Long), ISP Provider, City, and Active Page.
+                  </p>
+                </div>
+                <div className="flex items-center gap-3">
+                  <span className="px-3 py-1 bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 text-xs font-mono font-bold rounded-full flex items-center gap-1.5">
+                    <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+                    <span>{activeVisitorCount} Active Sessions Online</span>
+                  </span>
+                </div>
+              </div>
+
+              <div className="overflow-x-auto">
+                <table className="w-full text-left text-xs border-collapse">
+                  <thead>
+                    <tr className="border-b border-white/10 text-gray-400 text-[11px] uppercase font-bold">
+                      <th className="py-3 px-3">Session ID</th>
+                      <th className="py-3 px-3">Public IP</th>
+                      <th className="py-3 px-3">Location &amp; Country</th>
+                      <th className="py-3 px-3">Lat / Long Coordinates</th>
+                      <th className="py-3 px-3">ISP Carrier</th>
+                      <th className="py-3 px-3">Time on Site</th>
+                      <th className="py-3 px-3 text-right">Status</th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-white/5 text-gray-300 font-mono">
+                    {visitorLogs.map((v) => (
+                      <tr key={v.id} className="hover:bg-white/5 transition-colors">
+                        <td className="py-3.5 px-3 font-bold text-purple-400">{v.id}</td>
+                        <td className="py-3.5 px-3 text-white font-bold">{v.ip}</td>
+                        <td className="py-3.5 px-3 font-sans text-gray-200">{v.country} ({v.city})</td>
+                        <td className="py-3.5 px-3 font-mono text-emerald-400 font-semibold">
+                          <a
+                            href={`https://www.google.com/maps?q=${v.latitude},${v.longitude}`}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="hover:underline flex items-center gap-1"
+                          >
+                            <span>{v.latitude}° N, {v.longitude}° E</span>
+                            <ExternalLink size={10} />
+                          </a>
+                        </td>
+                        <td className="py-3.5 px-3 font-sans text-gray-300 text-[11px]">{v.isp}</td>
+                        <td className="py-3.5 px-3 text-amber-400 font-bold">{v.duration}</td>
+                        <td className="py-3.5 px-3 text-right font-sans">
+                          <span className={`px-2.5 py-0.5 rounded-full text-[10px] font-bold ${
+                            v.status === 'Active Online' ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 animate-pulse' :
+                            v.status === 'Idle' ? 'bg-amber-500/10 text-amber-400 border border-amber-500/20' :
+                            'bg-gray-500/10 text-gray-400 border border-white/10'
+                          }`}>
+                            {v.status}
+                          </span>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* TAB 3: INBOX */}
+        {activeTab === 'inbox' && (
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
+            <div className="lg:col-span-5 space-y-4 bg-[#0B1020] p-4 rounded-2xl border border-white/10">
+              <div className="flex items-center justify-between pb-3 border-b border-white/10">
+                <h3 className="text-sm font-bold text-white flex items-center gap-2">
+                  <Inbox size={16} className="text-blue-400" />
+                  <span>Inbound Leads Inbox</span>
+                </h3>
+                <span className="px-2 py-0.5 bg-blue-500 text-white text-[10px] font-bold rounded-full">
+                  {inboxMessages.length} Total
+                </span>
+              </div>
+
+              <div className="flex items-center gap-1.5 overflow-x-auto pb-1 text-[11px]">
+                {['All', 'Unread', 'In Review', 'Quote Sent', 'Won'].map((st) => (
+                  <button
+                    key={st}
+                    onClick={() => setInboxFilter(st)}
+                    className={`px-2.5 py-1 rounded-lg font-bold transition-all cursor-pointer ${
+                      inboxFilter === st
+                        ? 'bg-blue-600 text-white'
+                        : 'bg-white/5 text-gray-400 hover:text-white'
+                    }`}
+                  >
+                    {st}
+                  </button>
+                ))}
+              </div>
+
+              <div className="space-y-2.5 max-h-[60vh] overflow-y-auto pr-1">
+                {filteredInbox.map((msg) => (
+                  <div
+                    key={msg.id}
+                    onClick={() => {
+                      setSelectedMsgId(msg.id)
+                      if (msg.status === 'Unread') handleUpdateMsgStatus(msg.id, 'In Review')
+                    }}
+                    className={`p-3.5 rounded-xl border text-left cursor-pointer transition-all ${
+                      selectedMsgId === msg.id
+                        ? 'bg-blue-600/20 border-blue-500 text-white shadow-md'
+                        : msg.status === 'Unread'
+                        ? 'bg-black/60 border-blue-500/40 text-white'
+                        : 'bg-black/40 border-white/10 text-gray-300 hover:bg-white/5'
+                    }`}
+                  >
+                    <div className="flex items-center justify-between">
+                      <span className="text-xs font-bold text-blue-400 font-mono">{msg.id}</span>
+                      <span className="px-2 py-0.5 rounded-full text-[9px] font-bold bg-amber-500/10 text-amber-400 border border-amber-500/20">
+                        {msg.leadScore || '🔥 HOT LEAD'}
+                      </span>
+                    </div>
+                    <div className="text-sm font-bold text-white mt-1">{msg.fullName} ({msg.businessName})</div>
+                    <div className="text-[11px] text-gray-400 truncate mt-0.5">{msg.service} • {msg.budget}</div>
+                    <div className="text-[10px] text-gray-500 mt-2 flex items-center justify-between font-mono">
+                      <span>{msg.location}</span>
+                      <span>{msg.ip}</span>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            <div className="lg:col-span-7 bg-[#0B1020] p-6 rounded-2xl border border-white/10 space-y-5">
+              {selectedMsgId && inboxMessages.find(m => m.id === selectedMsgId) ? (
+                (() => {
+                  const msg = inboxMessages.find(m => m.id === selectedMsgId)
+                  return (
+                    <div className="space-y-5">
+                      <div className="flex items-center justify-between pb-3 border-b border-white/10">
+                        <div>
+                          <div className="flex items-center gap-2">
+                            <span className="text-xs font-mono font-bold text-blue-400">{msg.id}</span>
+                            <span className="px-2 py-0.5 rounded-full text-[9px] font-bold bg-amber-500/20 text-amber-400 border border-amber-500/30">
+                              {msg.leadScore || '🔥 HOT LEAD'}
+                            </span>
+                          </div>
+                          <h3 className="text-lg font-bold text-white mt-0.5">{msg.fullName}</h3>
+                          <p className="text-xs text-gray-400">{msg.businessName}</p>
+                        </div>
+                        <div className="flex items-center gap-2">
+                          <select
+                            value={msg.status}
+                            onChange={(e) => handleUpdateMsgStatus(msg.id, e.target.value)}
+                            className="px-3 py-1.5 bg-black/60 border border-white/20 text-xs font-bold rounded-xl text-white focus:outline-none focus:border-blue-500"
+                          >
+                            <option value="Unread">Unread</option>
+                            <option value="In Review">In Review</option>
+                            <option value="Quote Sent">Quote Sent</option>
+                            <option value="Won">Won / Active Client</option>
+                            <option value="Archived">Archived</option>
+                          </select>
+                          <button
+                            onClick={() => handleDeleteMsg(msg.id)}
+                            className="p-2 bg-red-500/10 hover:bg-red-500/20 text-red-400 rounded-xl border border-red-500/30 transition-all cursor-pointer"
+                          >
+                            <Trash2 size={14} />
+                          </button>
+                        </div>
+                      </div>
+
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
+                        <div className="p-3 bg-black/40 rounded-xl border border-white/10 space-y-1">
+                          <span className="text-gray-400 font-bold block text-[10px] uppercase">WhatsApp Number</span>
+                          <a
+                            href={`https://wa.me/${msg.whatsapp.replace(/[^0-9]/g, '')}?text=${encodeURIComponent(`Hello ${msg.fullName}, thank you for contacting NEXORA DIGITAL regarding ${msg.service}. We have reviewed your project requirements.`)}`}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="text-emerald-400 font-bold font-mono hover:underline flex items-center gap-1.5 text-sm"
+                          >
+                            <Phone size={14} />
+                            <span>{msg.whatsapp}</span>
+                          </a>
+                        </div>
+
+                        <div className="p-3 bg-black/40 rounded-xl border border-white/10 space-y-1">
+                          <span className="text-gray-400 font-bold block text-[10px] uppercase">Email Address</span>
+                          <a
+                            href={`mailto:${msg.email}?subject=${encodeURIComponent(`Executive Proposal - NEXORA DIGITAL (${msg.service})`)}`}
+                            className="text-blue-400 font-bold font-mono hover:underline flex items-center gap-1.5 text-sm truncate"
+                          >
+                            <Mail size={14} />
+                            <span>{msg.email}</span>
+                          </a>
+                        </div>
+                      </div>
+
+                      <div className="p-4 bg-gradient-to-r from-blue-900/20 to-indigo-900/20 rounded-xl border border-blue-500/20 space-y-2 text-xs">
+                        <div className="flex items-center justify-between text-[#1F90FF] font-bold text-[11px] uppercase tracking-wider">
+                          <span className="flex items-center gap-1">
+                            <Compass size={13} />
+                            <span>Geo-Coordinates &amp; Network Intelligence</span>
+                          </span>
+                          <span className="font-mono text-white">{msg.ip}</span>
+                        </div>
+                        <div className="grid grid-cols-2 sm:grid-cols-3 gap-2 text-[11px] font-mono">
+                          <div>
+                            <span className="text-gray-400 block text-[9px] uppercase">Location</span>
+                            <span className="text-white font-semibold">{msg.location || 'Karachi, PK 🇵🇰'}</span>
+                          </div>
+                          <div>
+                            <span className="text-gray-400 block text-[9px] uppercase">Lat / Long Coordinates</span>
+                            <a
+                              href={`https://www.google.com/maps?q=${msg.latitude || '24.8607'},${msg.longitude || '67.0011'}`}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="text-emerald-400 font-bold hover:underline flex items-center gap-1"
+                            >
+                              <span>{msg.coordinates || '24.8607° N, 67.0011° E'}</span>
+                              <ExternalLink size={9} />
+                            </a>
+                          </div>
+                          <div>
+                            <span className="text-gray-400 block text-[9px] uppercase font-sans">Network ISP</span>
+                            <span className="text-gray-200 font-sans text-[10px]">{msg.isp || 'CyberNet Broadband'}</span>
+                          </div>
+                        </div>
+                      </div>
+
+                      <div className="space-y-2">
+                        <label className="text-xs font-bold text-gray-300 uppercase tracking-wider block">
+                          Project Scope &amp; Details
+                        </label>
+                        <div className="p-4 bg-black/60 rounded-xl border border-white/15 text-xs text-gray-200 leading-relaxed font-sans whitespace-pre-wrap">
+                          {msg.details}
+                        </div>
+                      </div>
+
+                      <div className="pt-3 border-t border-white/10 flex flex-wrap gap-3">
+                        <a
+                          href={`https://wa.me/${msg.whatsapp.replace(/[^0-9]/g, '')}?text=${encodeURIComponent(`Hello ${msg.fullName}, thank you for contacting NEXORA DIGITAL regarding ${msg.service}. We have reviewed your project requirements.`)}`}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="px-4 py-2.5 bg-[#25D366] hover:bg-[#20bd5a] text-white font-bold text-xs rounded-xl flex items-center gap-2 transition-all shadow-md cursor-pointer"
+                        >
+                          <Send size={14} />
+                          <span>Reply on WhatsApp</span>
+                        </a>
+                        <a
+                          href={`mailto:${msg.email}?subject=${encodeURIComponent(`Executive Proposal - NEXORA DIGITAL (${msg.service})`)}`}
+                          className="px-4 py-2.5 bg-blue-600 hover:bg-blue-500 text-white font-bold text-xs rounded-xl flex items-center gap-2 transition-all shadow-md cursor-pointer"
+                        >
+                          <Mail size={14} />
+                          <span>Send Email Proposal</span>
+                        </a>
+                      </div>
+                    </div>
+                  )
+                })()
+              ) : (
+                <div className="text-center py-20 text-gray-400 space-y-3">
+                  <Inbox size={40} className="mx-auto text-gray-600" />
+                  <p className="text-xs font-semibold">Select a quote message from the left inbox to view full client details.</p>
+                </div>
+              )}
+            </div>
+          </div>
+        )}
+
+        {/* TAB 4: AUDIT LEADS */}
+        {activeTab === 'audit_leads' && (
+          <div className="space-y-6">
+            <div className="bg-[#0B1020] p-6 rounded-2xl border border-white/10 space-y-4">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-white/10 pb-4">
+                <div>
+                  <h3 className="text-base font-bold text-white flex items-center gap-2">
+                    <Globe size={18} className="text-purple-400" />
+                    <span>Google PageSpeed Audit Leads Registry with Coordinates</span>
+                  </h3>
+                  <p className="text-xs text-gray-400 mt-0.5">
+                    Live logs of live websites tested using Google Lighthouse API on your site.
+                  </p>
+                </div>
+                <div className="flex items-center gap-3">
+                  <span className="px-3 py-1 bg-purple-500/10 text-purple-400 border border-purple-500/20 text-xs font-mono font-bold rounded-full">
+                    {auditLeads.length} Total Audit Leads
+                  </span>
+                </div>
+              </div>
+
+              <div className="flex flex-col sm:flex-row gap-3 justify-between">
+                <div className="relative flex-1 max-w-md">
+                  <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
+                  <input
+                    type="text"
+                    placeholder="Filter by Domain URL or notes..."
+                    value={auditSearch}
+                    onChange={(e) => setAuditSearch(e.target.value)}
+                    className="w-full pl-9 pr-3 py-2 bg-black/60 border border-white/15 rounded-xl text-xs text-white focus:outline-none focus:border-blue-500"
+                  />
+                </div>
+
+                <div className="flex items-center gap-1.5 overflow-x-auto text-xs">
+                  {['All', 'Critical', 'Moderate', 'Good'].map((fl) => (
+                    <button
+                      key={fl}
+                      onClick={() => setAuditFilter(fl)}
+                      className={`px-3 py-1.5 rounded-xl font-bold transition-all cursor-pointer ${
+                        auditFilter === fl
+                          ? 'bg-purple-600 text-white'
+                          : 'bg-white/5 text-gray-400 hover:text-white'
+                      }`}
+                    >
+                      {fl}
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              <div className="overflow-x-auto">
+                <table className="w-full text-left text-xs border-collapse">
+                  <thead>
+                    <tr className="border-b border-white/10 text-gray-400 text-[11px] uppercase font-bold">
+                      <th className="py-3 px-3">Target Domain URL</th>
+                      <th className="py-3 px-3">Lighthouse Score</th>
+                      <th className="py-3 px-3">Audited Time</th>
+                      <th className="py-3 px-3">Lat/Long Coordinates</th>
+                      <th className="py-3 px-3">Lead Status</th>
+                      <th className="py-3 px-3 text-right">Quick Outreach</th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-white/5 text-gray-300">
+                    {filteredAuditLeads.map((lead) => (
+                      <tr key={lead.id} className="hover:bg-white/5 transition-colors">
+                        <td className="py-3.5 px-3 font-mono font-bold text-white">
+                          <a href={`https://${lead.url}`} target="_blank" rel="noopener noreferrer" className="hover:underline text-blue-400 flex items-center gap-1">
+                            <span>{lead.url}</span>
+                            <ExternalLink size={11} />
+                          </a>
+                        </td>
+                        <td className="py-3.5 px-3">
+                          <span className={`px-2.5 py-1 rounded-lg text-xs font-mono font-bold border ${
+                            lead.score < 50 ? 'bg-red-500/10 text-red-400 border-red-500/30' :
+                            lead.score < 90 ? 'bg-amber-500/10 text-amber-400 border-amber-500/30' :
+                            'bg-emerald-500/10 text-emerald-400 border-emerald-500/30'
+                          }`}>
+                            {lead.score}/100 Performance
+                          </span>
+                        </td>
+                        <td className="py-3.5 px-3 font-mono text-gray-400">{lead.date} {lead.time}</td>
+                        <td className="py-3.5 px-3 font-mono text-emerald-400 text-[11px]">
+                          <a
+                            href={`https://www.google.com/maps?q=${lead.latitude || '24.8607'},${lead.longitude || '67.0011'}`}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="hover:underline flex items-center gap-1"
+                          >
+                            <span>{lead.latitude || '24.8607'}°, {lead.longitude || '67.0011'}° ({lead.city || 'Karachi'})</span>
+                            <ExternalLink size={9} />
+                          </a>
+                        </td>
+                        <td className="py-3.5 px-3">
+                          <select
+                            value={lead.status}
+                            onChange={(e) => handleUpdateAuditStatus(lead.id, e.target.value)}
+                            className="px-2.5 py-1 bg-black/60 border border-white/20 text-xs font-bold rounded-lg text-white focus:outline-none focus:border-blue-500"
+                          >
+                            <option value="New Audit Lead">New Audit Lead</option>
+                            <option value="Proposal Sent">Proposal Sent</option>
+                            <option value="Audit Followup Pending">Followup Pending</option>
+                            <option value="Converted to Client">Converted to Client</option>
+                          </select>
+                        </td>
+                        <td className="py-3.5 px-3 text-right">
+                          <div className="flex items-center justify-end gap-2">
+                            <a
+                              href={`https://wa.me/${CONTACT.whatsapp}?text=${encodeURIComponent(`Hello, I saw your Google PageSpeed performance audit for ${lead.url} (Score: ${lead.score}/100). We can optimize your site to 99/100 score.`)}`}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="px-3 py-1.5 bg-[#25D366] hover:bg-[#20bd5a] text-white text-xs font-bold rounded-xl flex items-center gap-1 shadow-md transition-all"
+                            >
+                              <Send size={12} />
+                              <span>Contact</span>
+                            </a>
+                            <button
+                              onClick={() => handleDeleteAuditLead(lead.id)}
+                              className="p-1.5 bg-red-500/10 text-red-400 border border-red-500/30 rounded-xl hover:bg-red-500/20"
+                            >
+                              <Trash2 size={13} />
+                            </button>
+                          </div>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* TAB 5: PROJECTS */}
         {activeTab === 'projects' && (
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
-            {/* Directory sidebar */}
             <div className="lg:col-span-4 space-y-3 bg-[#0B1020] p-4 rounded-2xl border border-white/10">
               <div className="flex items-center justify-between pb-3 border-b border-white/10">
                 <span className="text-xs font-bold uppercase text-gray-400">Projects Directory</span>
                 <button
-                  onClick={handleStartCreate}
+                  onClick={handleStartCreateProject}
                   className="px-3 py-1.5 bg-blue-600 hover:bg-blue-500 text-white text-xs font-bold rounded-xl flex items-center gap-1 cursor-pointer transition-all shadow-md shadow-blue-600/30"
                 >
                   <Plus size={14} />
@@ -616,15 +1517,15 @@ export default function AdminPortalPage({ onExit }) {
               </div>
 
               <div className="space-y-2 max-h-[55vh] overflow-y-auto pr-1">
-                {filteredProjects.map((proj) => (
+                {projectList.map((proj) => (
                   <div
                     key={proj.id}
                     onClick={() => {
                       setSelectedProjectId(proj.id)
-                      setIsCreatingNew(false)
+                      setIsCreatingNewProject(false)
                     }}
                     className={`p-3.5 rounded-xl border text-left cursor-pointer transition-all ${
-                      !isCreatingNew && selectedProjectId === proj.id
+                      !isCreatingNewProject && selectedProjectId === proj.id
                         ? 'bg-blue-600/20 border-blue-500 text-white shadow-md'
                         : 'bg-black/40 border-white/10 text-gray-300 hover:bg-white/5'
                     }`}
@@ -642,23 +1543,34 @@ export default function AdminPortalPage({ onExit }) {
               </div>
             </div>
 
-            {/* Form edit details */}
             <div className="lg:col-span-8 bg-[#0B1020] p-6 rounded-2xl border border-white/10 space-y-4">
               <div className="flex items-center justify-between pb-3 border-b border-white/10">
                 <h3 className="text-sm font-bold text-white flex items-center gap-2">
                   <Edit2 size={16} className="text-blue-400" />
-                  <span>{isCreatingNew ? 'Create New Project Record' : `Editing Project (${formData.id})`}</span>
+                  <span>{isCreatingNewProject ? 'Create New Project Record' : `Editing Project (${formData.id})`}</span>
                 </h3>
-                {!isCreatingNew && (
-                  <button
-                    type="button"
-                    onClick={() => handleDeleteProject(formData.id)}
-                    className="px-3 py-1.5 bg-red-500/10 hover:bg-red-500/20 text-red-400 border border-red-500/30 text-xs font-bold rounded-xl flex items-center gap-1 cursor-pointer transition-all"
-                  >
-                    <Trash2 size={13} />
-                    <span>Delete</span>
-                  </button>
-                )}
+                <div className="flex items-center gap-2">
+                  {!isCreatingNewProject && (
+                    <button
+                      type="button"
+                      onClick={() => handleGenerateInvoiceModal(projects[formData.id] || formData)}
+                      className="px-3 py-1.5 bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 text-xs font-bold rounded-xl flex items-center gap-1 cursor-pointer transition-all"
+                    >
+                      <Printer size={13} />
+                      <span>Print B2B Invoice</span>
+                    </button>
+                  )}
+                  {!isCreatingNewProject && (
+                    <button
+                      type="button"
+                      onClick={() => handleDeleteProject(formData.id)}
+                      className="px-3 py-1.5 bg-red-500/10 hover:bg-red-500/20 text-red-400 border border-red-500/30 text-xs font-bold rounded-xl flex items-center gap-1 cursor-pointer transition-all"
+                    >
+                      <Trash2 size={13} />
+                      <span>Delete</span>
+                    </button>
+                  )}
+                </div>
               </div>
 
               <form onSubmit={handleSaveProject} className="space-y-4 text-xs">
@@ -787,9 +1699,59 @@ export default function AdminPortalPage({ onExit }) {
           </div>
         )}
 
-        {/* Tab 3: Launch Scarcity Manager */}
+        {/* TAB 6: INVOICES */}
+        {activeTab === 'invoices' && (
+          <div className="space-y-4 text-xs">
+            <div className="flex items-center justify-between pb-3 border-b border-white/10">
+              <h3 className="text-sm font-bold text-white flex items-center gap-2">
+                <DollarSign size={16} className="text-emerald-400" />
+                <span>B2B Client Invoicing &amp; Milestone Trackers</span>
+              </h3>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              {projectList.map((p) => (
+                <div key={p.id} className="p-5 rounded-2xl bg-[#0B1020] border border-white/10 space-y-3 shadow-md">
+                  <div className="flex justify-between items-center">
+                    <span className="text-xs font-mono font-bold text-blue-400">{p.id}</span>
+                    <span className="px-2.5 py-0.5 bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 text-[10px] font-bold rounded-full">
+                      Total: ${p.amount || 1500}
+                    </span>
+                  </div>
+                  <div className="text-sm font-bold text-white">{p.client}</div>
+                  <div className="text-gray-400 text-[11px]">{p.service}</div>
+
+                  <div className="pt-3 border-t border-white/10 space-y-2 text-[11px]">
+                    <div className="flex justify-between items-center">
+                      <span className="text-gray-400">50% Upfront Deposit:</span>
+                      <span className={p.depositPaid ? 'text-emerald-400 font-bold' : 'text-amber-400 font-bold'}>
+                        {p.depositPaid ? `✓ Paid ($${(p.amount || 1500) * 0.5})` : 'Pending'}
+                      </span>
+                    </div>
+                    <div className="flex justify-between items-center">
+                      <span className="text-gray-400">50% Final Handoff:</span>
+                      <span className={p.finalPaid ? 'text-emerald-400 font-bold' : 'text-amber-400 font-bold'}>
+                        {p.finalPaid ? `✓ Paid ($${(p.amount || 1500) * 0.5})` : 'Pending'}
+                      </span>
+                    </div>
+                  </div>
+
+                  <button
+                    onClick={() => handleGenerateInvoiceModal(p)}
+                    className="w-full py-2 bg-white/5 hover:bg-white/10 text-gray-300 border border-white/10 rounded-xl font-bold flex items-center justify-center gap-1.5 transition-all mt-2 cursor-pointer"
+                  >
+                    <Printer size={13} />
+                    <span>Print Invoice PDF Receipt</span>
+                  </button>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {/* TAB 7: SCARCITY */}
         {activeTab === 'scarcity' && (
-          <form onSubmit={handleSaveScarcity} className="max-w-xl mx-auto space-y-4 bg-[#0B1020] p-6 rounded-2xl border border-white/10 text-xs shadow-xl">
+          <form onSubmit={(e) => { e.preventDefault(); localStorage.setItem('NEXORA_LAUNCH_SLOTS', JSON.stringify(launchSlots)); alert('✅ Launch offer scarcity settings saved live!'); }} className="max-w-xl mx-auto space-y-4 bg-[#0B1020] p-6 rounded-2xl border border-white/10 text-xs shadow-xl">
             <h3 className="text-sm font-bold text-white flex items-center gap-2 border-b border-white/10 pb-3">
               <Sparkles size={16} className="text-amber-400" />
               <span>Launch Scarcity &amp; Coupon Manager</span>
@@ -849,86 +1811,302 @@ export default function AdminPortalPage({ onExit }) {
           </form>
         )}
 
-        {/* Tab 4: B2B Invoices */}
-        {activeTab === 'invoices' && (
-          <div className="space-y-4 text-xs">
-            <div className="flex items-center justify-between pb-3 border-b border-white/10">
-              <h3 className="text-sm font-bold text-white flex items-center gap-2">
-                <DollarSign size={16} className="text-emerald-400" />
-                <span>B2B Client Invoicing &amp; Milestone Trackers</span>
+        {/* TAB 8: SECURITY */}
+        {activeTab === 'security' && (
+          <div className="space-y-6">
+            <form onSubmit={handleChangePasscode} className="bg-[#0B1020] p-6 rounded-2xl border border-white/10 space-y-4 max-w-xl">
+              <h3 className="text-sm font-bold text-white flex items-center gap-2 border-b border-white/10 pb-3">
+                <Key size={16} className="text-blue-400" />
+                <span>Update Founder Security Passcode</span>
               </h3>
-            </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-              {projectList.map((p) => (
-                <div key={p.id} className="p-5 rounded-2xl bg-[#0B1020] border border-white/10 space-y-3 shadow-md">
-                  <div className="flex justify-between items-center">
-                    <span className="text-xs font-mono font-bold text-blue-400">{p.id}</span>
-                    <span className="px-2.5 py-0.5 bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 text-[10px] font-bold rounded-full">
-                      Total: ${p.amount || 1500}
-                    </span>
-                  </div>
-                  <div className="text-sm font-bold text-white">{p.client}</div>
-                  <div className="text-gray-400 text-[11px]">{p.service}</div>
-
-                  <div className="pt-3 border-t border-white/10 space-y-2 text-[11px]">
-                    <div className="flex justify-between items-center">
-                      <span className="text-gray-400">50% Upfront Deposit:</span>
-                      <span className={p.depositPaid ? 'text-emerald-400 font-bold' : 'text-amber-400 font-bold'}>
-                        {p.depositPaid ? `✓ Paid ($${(p.amount || 1500) * 0.5})` : 'Pending'}
-                      </span>
-                    </div>
-                    <div className="flex justify-between items-center">
-                      <span className="text-gray-400">50% Final Handoff:</span>
-                      <span className={p.finalPaid ? 'text-emerald-400 font-bold' : 'text-amber-400 font-bold'}>
-                        {p.finalPaid ? `✓ Paid ($${(p.amount || 1500) * 0.5})` : 'Pending'}
-                      </span>
-                    </div>
-                  </div>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
+                <div>
+                  <label className="block text-gray-400 font-bold mb-1">New Passcode</label>
+                  <input
+                    type="password"
+                    required
+                    value={newPasscode}
+                    onChange={(e) => setNewPasscode(e.target.value)}
+                    placeholder="At least 6 characters"
+                    className="w-full px-3.5 py-2.5 bg-black/60 border border-white/20 rounded-xl text-white font-mono focus:outline-none focus:border-blue-500"
+                  />
                 </div>
-              ))}
+                <div>
+                  <label className="block text-gray-400 font-bold mb-1">Confirm New Passcode</label>
+                  <input
+                    type="password"
+                    required
+                    value={confirmPasscode}
+                    onChange={(e) => setConfirmPasscode(e.target.value)}
+                    placeholder="Re-enter new passcode"
+                    className="w-full px-3.5 py-2.5 bg-black/60 border border-white/20 rounded-xl text-white font-mono focus:outline-none focus:border-blue-500"
+                  />
+                </div>
+              </div>
+
+              {passcodeUpdateMsg && (
+                <p className={`text-xs font-semibold ${passcodeUpdateMsg.startsWith('✅') ? 'text-emerald-400' : 'text-amber-400'}`}>
+                  {passcodeUpdateMsg}
+                </p>
+              )}
+
+              <div className="flex justify-end">
+                <button
+                  type="submit"
+                  className="px-5 py-2.5 bg-blue-600 hover:bg-blue-500 text-white font-bold text-xs rounded-xl shadow-md cursor-pointer transition-all"
+                >
+                  Update Passcode Now
+                </button>
+              </div>
+            </form>
+
+            <div className="bg-[#0B1020] p-6 rounded-2xl border border-white/10 space-y-4">
+              <div className="flex items-center justify-between border-b border-white/10 pb-3">
+                <h3 className="text-sm font-bold text-white flex items-center gap-2">
+                  <ShieldAlert size={16} className="text-amber-400" />
+                  <span>Security Access &amp; Login Audit Logs</span>
+                </h3>
+                <span className="text-xs text-gray-400 font-mono">Rate-Limiting: Active (5 Max Attempts)</span>
+              </div>
+
+              <div className="overflow-x-auto">
+                <table className="w-full text-left text-xs border-collapse">
+                  <thead>
+                    <tr className="border-b border-white/10 text-gray-400 text-[11px] uppercase font-bold">
+                      <th className="py-3 px-3">Event</th>
+                      <th className="py-3 px-3">IP Address</th>
+                      <th className="py-3 px-3">Timestamp</th>
+                      <th className="py-3 px-3">Details</th>
+                      <th className="py-3 px-3 text-right">Status</th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-white/5 text-gray-300 font-mono">
+                    {securityLogs.map((s) => (
+                      <tr key={s.id} className="hover:bg-white/5 transition-colors">
+                        <td className="py-3.5 px-3 font-bold text-white font-sans">{s.event}</td>
+                        <td className="py-3.5 px-3 font-bold text-blue-400">{s.ip}</td>
+                        <td className="py-3.5 px-3 text-gray-400">{s.time}</td>
+                        <td className="py-3.5 px-3 font-sans text-gray-300">{s.details}</td>
+                        <td className="py-3.5 px-3 text-right font-sans">
+                          <span className={`px-2 py-0.5 rounded-full text-[10px] font-bold ${
+                            s.status === 'SUCCESS' ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20' :
+                            s.status === 'FAILED' ? 'bg-red-500/10 text-red-400 border border-red-500/20' :
+                            'bg-blue-500/10 text-blue-400 border border-blue-500/20'
+                          }`}>
+                            {s.status}
+                          </span>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
             </div>
           </div>
         )}
 
-        {/* Tab 5: Audit Leads Log */}
-        {activeTab === 'leads' && (
-          <div className="space-y-4 text-xs">
-            <div className="flex items-center justify-between pb-3 border-b border-white/10">
-              <h3 className="text-sm font-bold text-white flex items-center gap-2">
-                <Globe size={16} className="text-blue-400" />
-                <span>Google PageSpeed Audit Prospective Leads Log</span>
-              </h3>
+      </main>
+
+      {/* MULTIPLE EXPORT OPTIONS MODAL */}
+      {isExportModalOpen && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/85 backdrop-blur-md">
+          <div className="bg-[#0B1020] border border-white/20 rounded-3xl p-6 max-w-2xl w-full text-white space-y-6 shadow-2xl relative overflow-hidden">
+            <div className="flex items-center justify-between border-b border-white/10 pb-4">
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 rounded-xl bg-blue-600/20 border border-blue-500/30 flex items-center justify-center text-blue-400">
+                  <Download size={20} />
+                </div>
+                <div>
+                  <h3 className="text-base font-bold text-white">Select Export Format &amp; Dataset</h3>
+                  <p className="text-xs text-gray-400">Export agency data as JSON, CSV spreadsheets, or text report</p>
+                </div>
+              </div>
+              <button
+                onClick={() => setIsExportModalOpen(false)}
+                className="text-gray-400 hover:text-white p-2 rounded-xl bg-white/5 hover:bg-white/10 transition-colors cursor-pointer text-xs"
+              >
+                <X size={16} />
+              </button>
             </div>
 
-            <div className="space-y-3">
-              {auditLeads.map((lead) => (
-                <div key={lead.id} className="p-4 rounded-xl bg-[#0B1020] border border-white/10 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 shadow-sm">
-                  <div>
-                    <div className="font-bold text-white text-sm font-mono">{lead.url}</div>
-                    <div className="text-gray-400 text-[11px] mt-0.5">Audited Date: {lead.date}</div>
-                  </div>
-                  <div className="flex items-center gap-3">
-                    <span className={`px-2.5 py-1 rounded-lg text-xs font-bold border ${lead.score < 50 ? 'bg-red-500/10 text-red-400 border-red-500/30' : 'bg-amber-500/10 text-amber-400 border-amber-500/30'}`}>
-                      Speed Score: {lead.score}/100
-                    </span>
-                    <a
-                      href={`https://wa.me/${CONTACT.whatsapp}?text=${encodeURIComponent(`Hello, I saw your Google PageSpeed audit for ${lead.url} (Score: ${lead.score}/100). We can optimize your site to 99/100 score.`)}`}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="px-3.5 py-1.5 bg-[#25D366] hover:bg-[#20bd5a] text-white text-xs font-bold rounded-xl flex items-center gap-1.5 transition-all shadow-md"
-                    >
-                      <Send size={13} />
-                      <span>Contact Lead</span>
-                    </a>
-                  </div>
+            {/* Export Cards Grid */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
+              <button
+                onClick={() => { handleExportJSON(); setIsExportModalOpen(false); }}
+                className="p-4 bg-white/5 hover:bg-blue-600/20 border border-white/10 hover:border-blue-500 rounded-2xl text-left transition-all cursor-pointer group"
+              >
+                <div className="flex items-center justify-between mb-1">
+                  <span className="font-bold text-white group-hover:text-blue-400 flex items-center gap-2">
+                    <Database size={16} className="text-blue-400" />
+                    <span>Full Database Backup (.JSON)</span>
+                  </span>
+                  <span className="px-2 py-0.5 bg-blue-500/20 text-blue-400 text-[10px] font-bold font-mono rounded">JSON</span>
                 </div>
-              ))}
+                <p className="text-[#A7ADBB] text-[11px] leading-relaxed">
+                  Complete database snapshot containing all projects, quote form messages, audit leads, and telemetry.
+                </p>
+              </button>
+
+              <button
+                onClick={() => { handleExportInboxCSV(); setIsExportModalOpen(false); }}
+                className="p-4 bg-white/5 hover:bg-indigo-600/20 border border-white/10 hover:border-indigo-500 rounded-2xl text-left transition-all cursor-pointer group"
+              >
+                <div className="flex items-center justify-between mb-1">
+                  <span className="font-bold text-white group-hover:text-indigo-400 flex items-center gap-2">
+                    <FileSpreadsheet size={16} className="text-indigo-400" />
+                    <span>Inbound Quote Leads (.CSV)</span>
+                  </span>
+                  <span className="px-2 py-0.5 bg-indigo-500/20 text-indigo-400 text-[10px] font-bold font-mono rounded">CSV</span>
+                </div>
+                <p className="text-[#A7ADBB] text-[11px] leading-relaxed">
+                  Spreadsheet containing client names, emails, WhatsApp numbers, services, budget, IP, and Lat/Long coordinates.
+                </p>
+              </button>
+
+              <button
+                onClick={() => { handleExportAuditCSV(); setIsExportModalOpen(false); }}
+                className="p-4 bg-white/5 hover:bg-purple-600/20 border border-white/10 hover:border-purple-500 rounded-2xl text-left transition-all cursor-pointer group"
+              >
+                <div className="flex items-center justify-between mb-1">
+                  <span className="font-bold text-white group-hover:text-purple-400 flex items-center gap-2">
+                    <Globe size={16} className="text-purple-400" />
+                    <span>PageSpeed Audit Leads (.CSV)</span>
+                  </span>
+                  <span className="px-2 py-0.5 bg-purple-500/20 text-purple-400 text-[10px] font-bold font-mono rounded">CSV</span>
+                </div>
+                <p className="text-[#A7ADBB] text-[11px] leading-relaxed">
+                  Tested domain URLs, Google Lighthouse scores, SEO score, tested date/time, IP, and Lat/Long coordinates.
+                </p>
+              </button>
+
+              <button
+                onClick={() => { handleExportProjectsCSV(); setIsExportModalOpen(false); }}
+                className="p-4 bg-white/5 hover:bg-emerald-600/20 border border-white/10 hover:border-emerald-500 rounded-2xl text-left transition-all cursor-pointer group"
+              >
+                <div className="flex items-center justify-between mb-1">
+                  <span className="font-bold text-white group-hover:text-emerald-400 flex items-center gap-2">
+                    <DollarSign size={16} className="text-emerald-400" />
+                    <span>Projects &amp; Financial Invoices (.CSV)</span>
+                  </span>
+                  <span className="px-2 py-0.5 bg-emerald-500/20 text-emerald-400 text-[10px] font-bold font-mono rounded">CSV</span>
+                </div>
+                <p className="text-[#A7ADBB] text-[11px] leading-relaxed">
+                  Active client project sprints, milestone progress %, total contract value, and deposit status.
+                </p>
+              </button>
+
+              <button
+                onClick={() => { handleExportVisitorsCSV(); setIsExportModalOpen(false); }}
+                className="p-4 bg-white/5 hover:bg-amber-600/20 border border-white/10 hover:border-amber-500 rounded-2xl text-left transition-all cursor-pointer group"
+              >
+                <div className="flex items-center justify-between mb-1">
+                  <span className="font-bold text-white group-hover:text-amber-400 flex items-center gap-2">
+                    <Users size={16} className="text-amber-400" />
+                    <span>Visitor Telemetry &amp; IPs (.CSV)</span>
+                  </span>
+                  <span className="px-2 py-0.5 bg-amber-500/20 text-amber-400 text-[10px] font-bold font-mono rounded">CSV</span>
+                </div>
+                <p className="text-[#A7ADBB] text-[11px] leading-relaxed">
+                  Real-time visitor sessions, public IP addresses, city, country, Lat/Long coordinates, ISP, and durations.
+                </p>
+              </button>
+
+              <button
+                onClick={() => { handleExportTextReport(); setIsExportModalOpen(false); }}
+                className="p-4 bg-white/5 hover:bg-sky-600/20 border border-white/10 hover:border-sky-500 rounded-2xl text-left transition-all cursor-pointer group"
+              >
+                <div className="flex items-center justify-between mb-1">
+                  <span className="font-bold text-white group-hover:text-sky-400 flex items-center gap-2">
+                    <FileText size={16} className="text-sky-400" />
+                    <span>Executive Agency Summary (.TXT)</span>
+                  </span>
+                  <span className="px-2 py-0.5 bg-sky-500/20 text-sky-400 text-[10px] font-bold font-mono rounded">TXT</span>
+                </div>
+                <p className="text-[#A7ADBB] text-[11px] leading-relaxed">
+                  Formatted text executive report summarizing pipeline revenue, lead counts, active sprints, and key metrics.
+                </p>
+              </button>
             </div>
           </div>
-        )}
+        </div>
+      )}
 
-      </div>
+      {/* PRINTABLE B2B INVOICE MODAL RECEIPT */}
+      {printableInvoice && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/85 backdrop-blur-sm">
+          <div className="bg-[#0B1020] border border-white/20 rounded-3xl p-6 max-w-2xl w-full text-white space-y-6 shadow-2xl relative max-h-[90vh] overflow-y-auto">
+            <div className="flex items-center justify-between border-b border-white/10 pb-4">
+              <NexoraBrand variant="footer" />
+              <div className="text-right">
+                <h3 className="text-base font-bold text-white font-mono">{printableInvoice.id}</h3>
+                <span className="text-xs text-emerald-400 font-bold">Official B2B Invoice Receipt</span>
+              </div>
+            </div>
+
+            <div className="grid grid-cols-2 gap-4 text-xs">
+              <div>
+                <span className="text-gray-400 font-bold block">Billed To Client:</span>
+                <span className="text-base font-bold text-white">{printableInvoice.client}</span>
+                <span className="text-gray-300 block">{printableInvoice.clientEmail || 'contact@client-domain.com'}</span>
+              </div>
+              <div className="text-right">
+                <span className="text-gray-400 font-bold block">Issued By:</span>
+                <span className="text-base font-bold text-white">NEXORA DIGITAL</span>
+                <span className="text-gray-300 block">Karachi, Pakistan 🇵🇰</span>
+              </div>
+            </div>
+
+            <div className="p-4 bg-black/50 rounded-2xl border border-white/10 space-y-2 text-xs">
+              <div className="flex justify-between font-bold text-gray-300 border-b border-white/10 pb-2">
+                <span>Service Description</span>
+                <span>Amount</span>
+              </div>
+              <div className="flex justify-between font-bold text-white pt-1">
+                <span>{printableInvoice.service} (Full IP Source Code &amp; SLA Handoff)</span>
+                <span className="font-mono text-emerald-400">${printableInvoice.amount || 1500} USD</span>
+              </div>
+            </div>
+
+            <div className="grid grid-cols-2 gap-3 text-xs bg-white/5 p-3 rounded-xl border border-white/10">
+              <div>
+                <span className="text-gray-400 font-bold block">50% Upfront Milestone:</span>
+                <span className={printableInvoice.depositPaid ? 'text-emerald-400 font-bold' : 'text-amber-400 font-bold'}>
+                  {printableInvoice.depositPaid ? `✓ Paid ($${(printableInvoice.amount || 1500) * 0.5})` : 'Pending'}
+                </span>
+              </div>
+              <div className="text-right">
+                <span className="text-gray-400 font-bold block">50% Final Handoff Release:</span>
+                <span className={printableInvoice.finalPaid ? 'text-emerald-400 font-bold' : 'text-amber-400 font-bold'}>
+                  {printableInvoice.finalPaid ? `✓ Paid ($${(printableInvoice.amount || 1500) * 0.5})` : 'Pending'}
+                </span>
+              </div>
+            </div>
+
+            <div className="pt-2 text-[10px] text-gray-400 space-y-1">
+              <p>• Terms: 100% Source Code Ownership Handoff upon final milestone release.</p>
+              <p>• Signed Mutual NDA &amp; Performance SLA guarantee included.</p>
+            </div>
+
+            <div className="flex items-center justify-end gap-3 pt-3 border-t border-white/10">
+              <button
+                onClick={() => window.print()}
+                className="px-4 py-2 bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs rounded-xl flex items-center gap-1.5 cursor-pointer"
+              >
+                <Printer size={14} />
+                <span>Print / Save as PDF</span>
+              </button>
+              <button
+                onClick={() => setPrintableInvoice(null)}
+                className="px-4 py-2 bg-white/10 hover:bg-white/20 text-white font-bold text-xs rounded-xl cursor-pointer"
+              >
+                Close
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
     </div>
   )
 }

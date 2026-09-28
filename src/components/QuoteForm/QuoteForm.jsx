@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Send, CheckCircle, AlertCircle, MessageCircle, Phone, Mail } from 'lucide-react'
 import { SERVICES_LIST, BUDGET_RANGES_PKR, BUDGET_RANGES_USD, CONTACT } from '../../data/siteData'
+import { getRealVisitorGeo } from '../../utils/geoTracker'
 import MagneticButton from '../Motion/MagneticButton'
 import ScrollReveal from '../Motion/ScrollReveal'
 
@@ -91,7 +92,43 @@ export default function QuoteForm({ currency = 'PKR', setCurrency }) {
         .join('&')
     }
 
+    const saveInboxMessage = async () => {
+      try {
+        const geo = await getRealVisitorGeo()
+        const existing = JSON.parse(localStorage.getItem('NEXORA_INBOX_STORE') || '[]')
+        const newMessage = {
+          id: `MSG-${Math.floor(1000 + Math.random() * 9000)}`,
+          fullName: fields.fullName.trim(),
+          businessName: fields.businessName.trim() || 'Not Specified',
+          whatsapp: fields.whatsapp.trim(),
+          email: fields.email.trim() || 'Not Specified',
+          service: fields.service,
+          budget: fields.budget || 'Not Specified',
+          currency: currency,
+          details: fields.details.trim(),
+          timestamp: new Date().toLocaleString('en-US', { dateStyle: 'medium', timeStyle: 'short' }),
+          isoDate: new Date().toISOString(),
+          status: 'Unread',
+          ip: geo.ip,
+          city: geo.city,
+          country: geo.country,
+          flag: geo.flag,
+          latitude: geo.latitude,
+          longitude: geo.longitude,
+          isp: geo.isp,
+          location: `${geo.city}, ${geo.country} ${geo.flag}`,
+          coordinates: `${geo.latitude}° N, ${geo.longitude}° E`,
+        }
+        const updated = [newMessage, ...existing]
+        localStorage.setItem('NEXORA_INBOX_STORE', JSON.stringify(updated))
+      } catch (e) {
+        console.error('Failed to save to Admin Inbox:', e)
+      }
+    }
+
     try {
+      saveInboxMessage()
+      
       const response = await fetch('/', {
         method: 'POST',
         headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
