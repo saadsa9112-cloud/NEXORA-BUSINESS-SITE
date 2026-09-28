@@ -1,10 +1,9 @@
 import { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { Send, CheckCircle, AlertCircle, MessageCircle, Phone, Mail, Globe } from 'lucide-react'
+import { Send, CheckCircle, AlertCircle, MessageCircle, Phone, Mail } from 'lucide-react'
 import { SERVICES_LIST, BUDGET_RANGES_PKR, BUDGET_RANGES_USD, CONTACT } from '../../data/siteData'
 import MagneticButton from '../Motion/MagneticButton'
 import ScrollReveal from '../Motion/ScrollReveal'
-import PaymentBadges from '../PaymentBadges/PaymentBadges'
 
 const INITIAL_FIELDS = {
   fullName: '',
@@ -173,7 +172,7 @@ export default function QuoteForm({ currency = 'PKR', setCurrency }) {
             </div>
           </ScrollReveal>
 
-          {/* Right Column — Form / Success Card */}
+          {/* Right Column — Clean Compact Form */}
           <ScrollReveal variant="slideRight">
             <div className="p-6 sm:p-8 rounded-2xl bg-white border border-[#E5EAF1] shadow-soft">
               <AnimatePresence mode="wait">
@@ -243,7 +242,7 @@ export default function QuoteForm({ currency = 'PKR', setCurrency }) {
                     />
 
                     {/* Form Input Fields Grid */}
-                    <div className="grid sm:grid-cols-2 gap-5 mb-5">
+                    <div className="grid sm:grid-cols-2 gap-5 mb-6">
                       {/* 1. Full Name * */}
                       <div className="sm:col-span-2">
                         <label htmlFor="fullName" className="block text-xs font-semibold uppercase tracking-wider text-[#0B1020] mb-1.5">
@@ -428,15 +427,12 @@ export default function QuoteForm({ currency = 'PKR', setCurrency }) {
                       </div>
                     </div>
 
-                    {/* International & Domestic Payment Trust Badges */}
-                    <PaymentBadges />
-
                     {/* Submit Button */}
                     <MagneticButton className="w-full">
                       <button
                         type="submit"
                         disabled={status === 'submitting'}
-                        className="w-full flex items-center justify-center gap-2 px-6 py-4 bg-[#0066FF] hover:bg-[#0052CC] disabled:bg-blue-300 disabled:cursor-not-allowed text-white font-semibold rounded-xl transition-all duration-200 shadow-md shadow-blue-500/20 hover:shadow-lg hover:shadow-blue-500/30"
+                        className="w-full flex items-center justify-center gap-2 px-6 py-4 bg-[#0066FF] hover:bg-[#0052CC] disabled:bg-blue-300 disabled:cursor-not-allowed text-white font-semibold rounded-xl transition-all duration-200 shadow-md shadow-blue-500/20 hover:shadow-lg hover:shadow-blue-500/30 cursor-pointer"
                       >
                         {status === 'submitting' ? (
                           <>

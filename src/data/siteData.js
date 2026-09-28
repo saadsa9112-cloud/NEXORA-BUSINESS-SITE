@@ -11,9 +11,7 @@ import dashboardImg from '../assets/portfolio/dashboard.jpg'
 export const NAV_LINKS = [
   { label: 'Home', href: '#home' },
   { label: 'Services', href: '#services' },
-  { label: 'Features', href: '#features' },
   { label: 'Work', href: '#work' },
-  { label: 'Tools & Audit', href: '#tools' },
   { label: 'Pricing', href: '#pricing' },
   { label: 'About', href: '#about' },
   { label: 'FAQ', href: '#faq' },

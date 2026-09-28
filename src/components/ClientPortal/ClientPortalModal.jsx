@@ -1,8 +1,9 @@
 import { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { FolderCheck, X, Search, CheckCircle2, Clock, ExternalLink, ShieldCheck, Code, Layers, Sparkles } from 'lucide-react'
+import { FolderCheck, X, Search, CheckCircle2, Clock, ShieldCheck, Code, AlertTriangle, Sparkles, MessageCircle, ArrowRight } from 'lucide-react'
+import { CONTACT } from '../../data/siteData'
 
-// Default fallback projects if localStorage is empty
+// Default approved projects in Nexora Database
 const DEFAULT_PROJECTS = {
   'NEX-1042': {
     id: 'NEX-1042',
@@ -55,6 +56,7 @@ export default function ClientPortalModal() {
   const [isOpen, setIsOpen] = useState(false)
   const [searchId, setSearchId] = useState('')
   const [foundProject, setFoundProject] = useState(null)
+  const [notFoundId, setNotFoundId] = useState(null)
   const [projectsStore, setProjectsStore] = useState(DEFAULT_PROJECTS)
 
   // Sync with localStorage whenever modal opens or storage changes
@@ -84,23 +86,19 @@ export default function ClientPortalModal() {
 
     if (projectsStore[cleanId]) {
       setFoundProject(projectsStore[cleanId])
+      setNotFoundId(null)
     } else {
-      // Dynamic fallback preview for unrecorded project IDs
-      setFoundProject({
-        id: cleanId,
-        client: 'Valued NEXORA Client',
-        service: 'Custom High-Performance Solution',
-        status: 'Active Development Sprint (75%)',
-        estimatedLaunch: '4 Business Days',
-        progress: 75,
-        steps: [
-          { title: 'Requirements & Architectural Design', completed: true },
-          { title: 'Interactive Figma UI/UX Handoff', completed: true },
-          { title: 'React 19 Core Component Engineering', completed: true },
-          { title: 'Google PageSpeed 99 Score Calibration', completed: false },
-          { title: 'Final Production Handoff & NDA Sign', completed: false }
-        ]
-      })
+      // ONLY approved projects in database are shown. Show funny engaging warning for unapproved/unwanted codes!
+      setFoundProject(null)
+      setNotFoundId(cleanId)
+    }
+  }
+
+  const handleSelectDemo = (id) => {
+    setSearchId(id)
+    if (projectsStore[id]) {
+      setFoundProject(projectsStore[id])
+      setNotFoundId(null)
     }
   }
 
@@ -146,9 +144,9 @@ export default function ClientPortalModal() {
                   </div>
                   <div>
                     <h3 className="text-sm font-bold flex items-center gap-2">
-                      <span>NEXORA Client Tracker</span>
+                      <span>NEXORA Verified Tracker</span>
                       <span className="px-2 py-0.5 bg-green-500/20 text-green-400 border border-green-500/30 text-[9px] font-bold rounded-full">
-                        REAL-TIME API
+                        ADMIN VERIFIED
                       </span>
                     </h3>
                     <p className="text-[11px] text-gray-400">Track real-time development milestone status</p>
@@ -167,7 +165,7 @@ export default function ClientPortalModal() {
                 {/* Search Form */}
                 <form onSubmit={handleSearch} className="mb-6">
                   <label className="block text-xs font-bold uppercase tracking-wider text-[#0B1020] mb-2">
-                    Enter Your Project ID (e.g. NEX-1042, NEX-2089, NEX-3011)
+                    Enter Official Project ID (e.g. NEX-1042)
                   </label>
                   <div className="flex gap-2">
                     <input
@@ -175,24 +173,27 @@ export default function ClientPortalModal() {
                       placeholder="e.g. NEX-1042"
                       value={searchId}
                       onChange={(e) => setSearchId(e.target.value)}
-                      className="flex-1 px-4 py-2.5 rounded-xl border border-[#E5EAF1] text-xs font-bold text-[#0B1020] focus:outline-none focus:border-[#0066FF] font-mono"
+                      className="flex-1 px-4 py-2.5 rounded-xl border border-[#E5EAF1] text-xs font-bold text-[#0B1020] focus:outline-none focus:border-[#0066FF] font-mono uppercase"
                     />
                     <button
                       type="submit"
                       className="px-4 py-2.5 bg-[#0066FF] hover:bg-[#0052CC] text-white text-xs font-bold rounded-xl shadow-md transition-colors flex items-center gap-1.5 cursor-pointer"
                     >
                       <Search size={14} />
-                      <span>Track</span>
+                      <span>Verify ID</span>
                     </button>
                   </div>
                 </form>
 
-                {/* Project Status Display */}
+                {/* Approved Project Found Display */}
                 {foundProject ? (
                   <div className="bg-[#F8FAFC] border border-[#E5EAF1] rounded-2xl p-5 space-y-4">
                     <div className="flex items-center justify-between pb-3 border-b border-[#E5EAF1]">
                       <div>
-                        <div className="text-xs font-bold text-[#0066FF] font-mono">{foundProject.id}</div>
+                        <div className="text-xs font-bold text-[#0066FF] font-mono flex items-center gap-1">
+                          <span>{foundProject.id}</span>
+                          <CheckCircle2 size={13} className="text-green-600" />
+                        </div>
                         <div className="text-sm font-bold text-[#0B1020]">{foundProject.service}</div>
                         <div className="text-[11px] text-gray-500 font-medium">Client: {foundProject.client}</div>
                       </div>
@@ -240,15 +241,83 @@ export default function ClientPortalModal() {
                         <Clock size={12} /> Est. Handoff: <strong className="text-[#0B1020]">{foundProject.estimatedLaunch}</strong>
                       </span>
                       <span className="text-green-600 font-bold flex items-center gap-1">
-                        <ShieldCheck size={14} /> Live Staging Active
+                        <ShieldCheck size={14} /> Approved by Founder
                       </span>
                     </div>
                   </div>
+                ) : notFoundId ? (
+                  /* Funny & Engaging Error Message for Unapproved/Unwanted IDs */
+                  <div className="bg-amber-50/80 border border-amber-200 rounded-2xl p-5 text-center space-y-4 shadow-sm">
+                    <div className="w-12 h-12 rounded-2xl bg-amber-100 text-amber-700 flex items-center justify-center mx-auto">
+                      <AlertTriangle size={24} />
+                    </div>
+                    <div>
+                      <span className="px-2.5 py-0.5 bg-amber-100 text-amber-800 text-[10px] font-bold uppercase tracking-wider rounded-full">
+                        Unapproved Code Warning 🕵️‍♂️
+                      </span>
+                      <h4 className="text-base font-black text-[#0B1020] mt-1">
+                        Whoops! Code Detective Mode Engaged!
+                      </h4>
+                      <p className="text-xs text-[#4B5563] mt-2 leading-relaxed">
+                        We searched the NEXORA server database for Project ID <code className="bg-amber-200/60 text-amber-900 font-mono font-bold px-1.5 py-0.5 rounded">{notFoundId}</code>, but Founder <strong>Hafiz Muhammad Saad</strong> hasn't approved this code yet!
+                      </p>
+                    </div>
+
+                    <div className="bg-white border border-amber-200 rounded-xl p-3 text-xs text-left space-y-1.5">
+                      <span className="font-bold text-[#0B1020] block">💡 Did you type a typo or secret agent code?</span>
+                      <p className="text-gray-600 text-[11px]">
+                        Try one of our active approved client projects:
+                      </p>
+                      <div className="flex flex-wrap gap-1.5 pt-1">
+                        {Object.keys(projectsStore).map((approvedId) => (
+                          <button
+                            key={approvedId}
+                            type="button"
+                            onClick={() => handleSelectDemo(approvedId)}
+                            className="px-2.5 py-1 bg-blue-50 hover:bg-blue-100 text-[#0066FF] border border-blue-200 rounded-lg text-xs font-bold font-mono transition-all cursor-pointer"
+                          >
+                            {approvedId}
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+
+                    <div className="pt-2 border-t border-amber-200/60 flex items-center justify-between">
+                      <span className="text-[11px] text-gray-500 font-medium">Want your own official NEX-ID?</span>
+                      <a
+                        href={`https://wa.me/${CONTACT.whatsapp}?text=${encodeURIComponent(`Hello Founder Saad, I would like to get a project quote and request my official NEX-ID code for tracking.`)}`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="px-3 py-1.5 bg-[#25D366] hover:bg-[#20bd5a] text-white text-xs font-bold rounded-xl flex items-center gap-1 shadow-xs cursor-pointer transition-all"
+                      >
+                        <MessageCircle size={13} />
+                        <span>WhatsApp Founder →</span>
+                      </a>
+                    </div>
+                  </div>
                 ) : (
-                  <div className="text-center py-6 text-xs text-[#6B7280] space-y-2 bg-[#F8FAFC] rounded-2xl border border-[#E5EAF1] p-4">
+                  /* Initial Search Prompt */
+                  <div className="text-center py-6 text-xs text-[#6B7280] space-y-3 bg-[#F8FAFC] rounded-2xl border border-[#E5EAF1] p-5">
                     <Code size={24} className="mx-auto text-[#0066FF]" />
-                    <p className="font-semibold text-[#0B1020]">Realtime Demo Project Search</p>
-                    <p>Try entering demo IDs: <code className="bg-white px-2 py-0.5 border rounded font-mono text-[#0066FF] font-bold">NEX-1042</code>, <code className="bg-white px-2 py-0.5 border rounded font-mono text-[#0066FF] font-bold">NEX-2089</code>, or <code className="bg-white px-2 py-0.5 border rounded font-mono text-[#0066FF] font-bold">NEX-3011</code>.</p>
+                    <div>
+                      <p className="font-bold text-[#0B1020] text-sm">Verify Admin Approved Project Status</p>
+                      <p className="text-gray-500 text-xs mt-1">Enter your assigned project ID to view live milestone completion &amp; Netlify staging links.</p>
+                    </div>
+                    <div className="pt-2 border-t border-[#E5EAF1]">
+                      <span className="text-[11px] text-gray-400 block mb-1.5 font-medium">Approved Demo Codes:</span>
+                      <div className="flex flex-wrap justify-center gap-2">
+                        {Object.keys(projectsStore).map((approvedId) => (
+                          <button
+                            key={approvedId}
+                            type="button"
+                            onClick={() => handleSelectDemo(approvedId)}
+                            className="px-2.5 py-1 bg-white hover:bg-blue-50 text-[#0066FF] border border-[#E5EAF1] rounded-lg font-mono text-xs font-bold shadow-2xs transition-all cursor-pointer"
+                          >
+                            {approvedId}
+                          </button>
+                        ))}
+                      </div>
+                    </div>
                   </div>
                 )}
               </div>

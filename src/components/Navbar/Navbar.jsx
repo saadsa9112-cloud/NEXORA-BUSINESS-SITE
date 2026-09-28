@@ -1,9 +1,9 @@
 import { useState, useEffect } from 'react'
-import { Menu, X, ArrowRight, Server } from 'lucide-react'
+import { Menu, X, ArrowRight } from 'lucide-react'
 import { NAV_LINKS, CONTACT } from '../../data/siteData'
 import NexoraBrand from '../NexoraBrand/NexoraBrand'
 
-export default function Navbar({ onOpenAdmin }) {
+export default function Navbar() {
   const [scrolled, setScrolled] = useState(false)
   const [mobileOpen, setMobileOpen] = useState(false)
   const [activeSection, setActiveSection] = useState('home')
@@ -86,7 +86,7 @@ export default function Navbar({ onOpenAdmin }) {
               <NexoraBrand variant="navbar" isScrolled={scrolled} />
             </a>
 
-            {/* Desktop Single-Page Navigation */}
+            {/* Desktop Navigation */}
             <nav aria-label="Main navigation" className="hidden lg:flex items-center gap-1">
               {NAV_LINKS.map((link) => {
                 const isActive = activeSection === link.href.replace('#', '')
@@ -111,21 +111,8 @@ export default function Navbar({ onOpenAdmin }) {
               })}
             </nav>
 
-            {/* CTA + Admin Quick Access + Mobile Toggle */}
+            {/* CTA + Mobile Toggle */}
             <div className="flex items-center gap-2.5">
-              <button
-                type="button"
-                onClick={onOpenAdmin}
-                className={`hidden md:flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-bold transition-all ${
-                  scrolled
-                    ? 'bg-white/10 hover:bg-blue-600/30 text-white border border-white/10'
-                    : 'bg-gray-100 hover:bg-blue-50 text-[#0B1020] hover:text-[#0066FF] border border-[#E5EAF1]'
-                }`}
-              >
-                <Server size={13} />
-                <span>Admin</span>
-              </button>
-
               <a
                 href="#contact"
                 onClick={(e) => { e.preventDefault(); handleNavClick('#contact') }}
@@ -201,18 +188,6 @@ export default function Navbar({ onOpenAdmin }) {
               </a>
             )
           })}
-
-          <button
-            type="button"
-            onClick={() => {
-              setMobileOpen(false)
-              onOpenAdmin()
-            }}
-            className="flex items-center gap-2 px-4 py-3 text-sm font-semibold text-blue-600 bg-blue-50/60 rounded-lg mt-2"
-          >
-            <Server size={16} />
-            <span>Admin Console</span>
-          </button>
         </nav>
 
         <div className="absolute bottom-8 left-4 right-4 flex flex-col gap-3">

@@ -1,4 +1,4 @@
-import { ArrowRight, ShieldCheck, UserCheck, Video, FileText, Play } from 'lucide-react'
+import { ArrowRight, ShieldCheck, UserCheck } from 'lucide-react'
 import ScrollReveal from '../Motion/ScrollReveal'
 
 const FLOW_STEPS = ['Strategy', 'Design', 'Development', 'Growth']
@@ -8,7 +8,7 @@ export default function About() {
     <section id="about" aria-labelledby="about-heading" className="py-20 lg:py-24 bg-white border-y border-[#E5EAF1]">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="max-w-4xl mx-auto">
-          {/* Content */}
+          {/* Main Title & Description */}
           <ScrollReveal variant="fadeUp" className="text-center mb-10">
             <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full border border-blue-500/20 bg-blue-50 text-[#0066FF] mb-4">
               <span className="text-xs font-semibold tracking-wider uppercase">About NEXORA DIGITAL</span>
@@ -36,48 +36,6 @@ export default function About() {
               <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg bg-emerald-50 text-emerald-700 border border-emerald-200 text-xs font-semibold">
                 <ShieldCheck size={14} className="text-emerald-600" />
                 <span>Dedicated Technical Support</span>
-              </div>
-            </div>
-          </ScrollReveal>
-
-          {/* Feature #15: Founder Video Intro & Poster Shooting Guide */}
-          <ScrollReveal variant="fadeUp" delay={0.25} className="mb-12">
-            <div className="bg-[#05070D] border border-white/10 rounded-3xl p-6 sm:p-8 text-white shadow-2xl relative overflow-hidden">
-              <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between pb-4 border-b border-white/10 gap-3 mb-4">
-                <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-xl bg-blue-600 flex items-center justify-center text-white font-bold">
-                    <Video size={20} />
-                  </div>
-                  <div>
-                    <h4 className="text-base font-bold text-white flex items-center gap-2">
-                      <span>Founder Video Intro Script &amp; Poster Guide</span>
-                      <span className="px-2 py-0.5 bg-amber-500/20 text-amber-400 border border-amber-500/30 text-[9px] font-bold rounded-md">
-                        FEATURE #15
-                      </span>
-                    </h4>
-                    <p className="text-xs text-gray-400">Executive Video Shooting Script &amp; Teleprompter Lines for Hafiz Muhammad Saad</p>
-                  </div>
-                </div>
-                <span className="px-3 py-1 rounded-full bg-blue-500/20 text-blue-400 border border-blue-500/30 text-xs font-bold flex items-center gap-1.5">
-                  <FileText size={14} />
-                  <span>Script Ready</span>
-                </span>
-              </div>
-
-              {/* Script Teleprompter Card */}
-              <div className="bg-[#0B1020] p-4 sm:p-5 rounded-2xl border border-white/10 space-y-3 font-mono text-xs text-gray-300">
-                <div className="text-amber-400 font-bold uppercase tracking-wider flex items-center gap-2">
-                  <Play size={12} fill="currentColor" />
-                  <span>30-Sec Script Teleprompter Lines:</span>
-                </div>
-                <p className="leading-relaxed italic border-l-2 border-blue-500 pl-3">
-                  "Assalam-o-Alaikum, I'm Hafiz Muhammad Saad, Founder &amp; Lead Architect at NEXORA DIGITAL. If your site is slowing down sales, we engineer high-speed React 19 &amp; Shopify platforms with a guaranteed 99/100 Google PageSpeed score, 100% source code ownership, and signed NDA."
-                </p>
-                <div className="flex flex-wrap gap-2 pt-2 text-[11px] text-gray-400 font-sans">
-                  <span className="bg-white/5 px-2 py-1 rounded border border-white/10">📷 Camera: 4K Center Framing</span>
-                  <span className="bg-white/5 px-2 py-1 rounded border border-white/10">🎬 Lighting: 3-Point Studio Softbox</span>
-                  <span className="bg-white/5 px-2 py-1 rounded border border-white/10">📜 Artifact: founder_video_script.md</span>
-                </div>
               </div>
             </div>
           </ScrollReveal>

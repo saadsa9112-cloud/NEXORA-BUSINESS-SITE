@@ -4,18 +4,15 @@ import Navbar from './components/Navbar/Navbar'
 import Hero from './components/Hero/Hero'
 import TrustStrip from './components/TrustStrip/TrustStrip'
 import Services from './components/Services/Services'
-import FeaturesSuite from './components/FeaturesSuite/FeaturesSuite'
 import Portfolio from './components/Portfolio/Portfolio'
 import TechStack from './components/TechStack/TechStack'
 import ServiceGuarantees from './components/Guarantees/ServiceGuarantees'
 import WhyChooseUs from './components/WhyChooseUs/WhyChooseUs'
 import Process from './components/Process/Process'
 import Pricing from './components/Pricing/Pricing'
-import CostEstimator from './components/Estimator/CostEstimator'
 import PaymentBadges from './components/PaymentBadges/PaymentBadges'
-import WebsiteAuditWidget from './components/WebsiteAudit/WebsiteAuditWidget'
-import RoiCalculator from './components/RoiCalculator/RoiCalculator'
-import Testimonials from './components/Testimonials/Testimonials'
+import WebsiteAuditModal from './components/WebsiteAudit/WebsiteAuditModal'
+import RoiCalculatorModal from './components/RoiCalculator/RoiCalculatorModal'
 import About from './components/About/About'
 import QualitySecurity from './components/QualitySecurity/QualitySecurity'
 import FAQ from './components/FAQ/FAQ'
@@ -31,6 +28,30 @@ import Footer from './components/Footer/Footer'
 export default function App() {
   const [currency, setCurrency] = useState('PKR')
   const [isAdminOpen, setIsAdminOpen] = useState(false)
+  const [isSpeedAuditOpen, setIsSpeedAuditOpen] = useState(false)
+  const [isRoiOpen, setIsRoiOpen] = useState(false)
+
+  // URL Hash Triggers for Modals (#admin, #speed-audit, #roi-calculator)
+  useEffect(() => {
+    const checkUrlHashes = () => {
+      const hash = window.location.hash
+      const search = window.location.search
+
+      if (hash === '#admin' || search.includes('admin')) {
+        setIsAdminOpen(true)
+      }
+      if (hash === '#speed-audit' || hash === '#audit') {
+        setIsSpeedAuditOpen(true)
+      }
+      if (hash === '#roi-calculator' || hash === '#roi') {
+        setIsRoiOpen(true)
+      }
+    }
+
+    checkUrlHashes()
+    window.addEventListener('hashchange', checkUrlHashes)
+    return () => window.removeEventListener('hashchange', checkUrlHashes)
+  }, [])
 
   // Auto-detect Geo-location currency (PKR for PK, USD for International)
   useEffect(() => {
@@ -77,6 +98,27 @@ export default function App() {
     return () => observer.disconnect()
   }, [])
 
+  const handleCloseAdmin = () => {
+    setIsAdminOpen(false)
+    if (window.location.hash === '#admin') {
+      history.replaceState(null, '', window.location.pathname)
+    }
+  }
+
+  const handleCloseSpeedAudit = () => {
+    setIsSpeedAuditOpen(false)
+    if (window.location.hash === '#speed-audit' || window.location.hash === '#audit') {
+      history.replaceState(null, '', window.location.pathname)
+    }
+  }
+
+  const handleCloseRoi = () => {
+    setIsRoiOpen(false)
+    if (window.location.hash === '#roi-calculator' || window.location.hash === '#roi') {
+      history.replaceState(null, '', window.location.pathname)
+    }
+  }
+
   return (
     <div className="min-h-screen bg-[#F7F9FC] text-[#0B1020] overflow-x-hidden">
       {/* Launch Offer Scarcity Announcement Banner */}
@@ -91,9 +133,9 @@ export default function App() {
       </a>
 
       {/* Main Single Page Header Navbar */}
-      <Navbar onOpenAdmin={() => setIsAdminOpen(true)} />
+      <Navbar />
 
-      {/* Unified Single Page Application Body */}
+      {/* Clean Single Page Body without clutter */}
       <main id="main-content">
         <section id="home">
           <Hero />
@@ -103,11 +145,6 @@ export default function App() {
 
         <section id="services">
           <Services />
-          <CostEstimator />
-        </section>
-
-        <section id="features">
-          <FeaturesSuite />
         </section>
 
         <section id="work">
@@ -123,14 +160,6 @@ export default function App() {
           <Pricing currency={currency} setCurrency={setCurrency} />
           <PaymentBadges />
         </section>
-
-        {/* Tools Section: 100% Real Google PageSpeed Insights API + ROI Calculator */}
-        <section id="tools">
-          <WebsiteAuditWidget />
-          <RoiCalculator />
-        </section>
-
-        <Testimonials />
 
         <section id="about">
           <About />
@@ -149,13 +178,24 @@ export default function App() {
         <FinalCTA />
       </main>
 
-      {/* Global Footer & Interactive Overlays */}
-      <Footer onOpenAdmin={() => setIsAdminOpen(true)} />
+      {/* Global Footer */}
+      <Footer
+        onOpenSpeedAudit={() => setIsSpeedAuditOpen(true)}
+        onOpenRoi={() => setIsRoiOpen(true)}
+      />
+
+      {/* Interactive Floating Tools & Modals */}
       <FloatingActionBar />
       <WhatsAppButton />
       <AiAssistantModal />
       <ClientPortalModal />
-      <AdminPanelModal isOpen={isAdminOpen} onClose={() => setIsAdminOpen(false)} />
+
+      {/* Dedicated Standalone Tool Modals */}
+      <WebsiteAuditModal isOpen={isSpeedAuditOpen} onClose={handleCloseSpeedAudit} />
+      <RoiCalculatorModal isOpen={isRoiOpen} onClose={handleCloseRoi} />
+
+      {/* URL-Only Admin Control Portal (#admin) */}
+      <AdminPanelModal isOpen={isAdminOpen} onClose={handleCloseAdmin} />
     </div>
   )
 }

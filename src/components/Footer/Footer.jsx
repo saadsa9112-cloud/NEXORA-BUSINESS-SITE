@@ -1,4 +1,4 @@
-import { Mail, Phone, MapPin, Server } from 'lucide-react'
+import { Mail, Phone, MapPin, Gauge, Calculator } from 'lucide-react'
 import { NAV_LINKS, SERVICES_LIST, CONTACT } from '../../data/siteData'
 import NexoraBrand from '../NexoraBrand/NexoraBrand'
 
@@ -16,7 +16,7 @@ const InstagramIcon = () => (
 
 const LEGAL_LINKS = ['Privacy Policy', 'Terms & Conditions', 'Refund Policy']
 
-export default function Footer({ onOpenAdmin }) {
+export default function Footer({ onOpenSpeedAudit, onOpenRoi }) {
   const handleNavClick = (href) => {
     const id = href.replace('#', '')
     const el = document.getElementById(id)
@@ -84,16 +84,40 @@ export default function Footer({ onOpenAdmin }) {
             </nav>
           </div>
 
-          {/* Services */}
+          {/* Free Interactive Tools (Opens Standalone Tool Modals) */}
           <div>
-            <h3 className="text-white font-bold text-xs uppercase tracking-wider mb-4">Services</h3>
-            <ul className="flex flex-col gap-2.5" role="list">
-              {SERVICES_LIST.map((s) => (
+            <h3 className="text-white font-bold text-xs uppercase tracking-wider mb-4">Free Business Tools</h3>
+            <ul className="flex flex-col gap-3" role="list">
+              <li>
+                <button
+                  type="button"
+                  onClick={onOpenSpeedAudit}
+                  className="inline-flex items-center gap-2 text-[#A7ADBB] hover:text-blue-400 text-sm font-medium transition-colors cursor-pointer"
+                >
+                  <Gauge size={14} className="text-blue-400" />
+                  <span>Free Speed &amp; SEO Audit</span>
+                </button>
+              </li>
+              <li>
+                <button
+                  type="button"
+                  onClick={onOpenRoi}
+                  className="inline-flex items-center gap-2 text-[#A7ADBB] hover:text-green-400 text-sm font-medium transition-colors cursor-pointer"
+                >
+                  <Calculator size={14} className="text-green-400" />
+                  <span>ROI Growth Estimator</span>
+                </button>
+              </li>
+            </ul>
+
+            <h3 className="text-white font-bold text-xs uppercase tracking-wider mt-6 mb-3">Core Services</h3>
+            <ul className="flex flex-col gap-2" role="list">
+              {SERVICES_LIST.slice(0, 4).map((s) => (
                 <li key={s}>
                   <a
                     href="#services"
-                    onClick={(e) => { e.preventDefault(); handleNavClick('#services') }}
-                    className="text-[#A7ADBB] hover:text-[#1F90FF] text-sm transition-colors"
+                    onClick={(e) => { e.preventDefault(); handleNavClick('services') }}
+                    className="text-[#A7ADBB] hover:text-[#1F90FF] text-xs transition-colors"
                   >
                     {s}
                   </a>
@@ -140,26 +164,17 @@ export default function Footer({ onOpenAdmin }) {
             © 2026 NEXORA DIGITAL. All Rights Reserved.
           </p>
 
-          <div className="flex items-center gap-4">
-            <button
-              onClick={onOpenAdmin}
-              className="px-3 py-1 bg-white/5 hover:bg-blue-600/20 text-gray-300 hover:text-blue-400 border border-white/10 hover:border-blue-500/30 rounded-lg text-xs font-semibold flex items-center gap-1.5 transition-all cursor-pointer"
-            >
-              <Server size={13} />
-              <span>Admin Console</span>
-            </button>
-            <div className="flex flex-wrap justify-center gap-4 sm:gap-6">
-              {LEGAL_LINKS.map((link) => (
-                <a
-                  key={link}
-                  href="#"
-                  onClick={(e) => e.preventDefault()}
-                  className="text-[#A7ADBB] hover:text-white text-xs transition-colors duration-200"
-                >
-                  {link}
-                </a>
-              ))}
-            </div>
+          <div className="flex flex-wrap justify-center gap-4 sm:gap-6">
+            {LEGAL_LINKS.map((link) => (
+              <a
+                key={link}
+                href="#"
+                onClick={(e) => e.preventDefault()}
+                className="text-[#A7ADBB] hover:text-white text-xs transition-colors duration-200"
+              >
+                {link}
+              </a>
+            ))}
           </div>
         </div>
       </div>
