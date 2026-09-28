@@ -7,11 +7,13 @@ import {
   Eye, EyeOff, ArrowLeft, LogOut, ChevronRight, ShieldCheck, Database,
   Inbox, MessageSquare, Phone, Mail, MapPin, Filter, Download, Upload,
   UserCheck, Smartphone, Monitor, CheckSquare, XCircle, Info, ChevronLeft,
-  Compass, TrendingUp, Award, Zap, Printer, Shield, Radio, Cpu, FileSpreadsheet, X
+  Compass, TrendingUp, Award, Zap, Printer, Shield, Radio, Cpu, FileSpreadsheet, X,
+  Menu, Bot, FileCheck
 } from 'lucide-react'
 import { CONTACT } from '../../data/siteData'
 import NexoraBrand from '../NexoraBrand/NexoraBrand'
 import { getRealVisitorGeo } from '../../utils/geoTracker'
+import { generateB2BInvoicePDF, generateExecutiveProposalPDF } from '../../utils/pdfGenerator'
 
 // Initial Active Projects Store
 const INITIAL_PROJECTS = {
@@ -194,14 +196,19 @@ export default function AdminPortalPage({ onExit }) {
   // Real Visitor Location Info
   const [currentVisitorGeo, setCurrentVisitorGeo] = useState(null)
 
+  // Financial Currency Mode ('USD' | 'PKR')
+  const [currencyMode, setCurrencyMode] = useState('USD')
+  const USD_TO_PKR = 278.5
+
   // Inactivity Auto-Lock
   const [lastActivity, setLastActivity] = useState(Date.now())
 
-  // Navigation Sidebar
+  // Navigation Sidebar & Mobile Drawer State
   const [sidebarOpen, setSidebarOpen] = useState(true)
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
   const [activeTab, setActiveTab] = useState('overview')
 
-  // Invoice & Export Modals State
+  // Export Modals & PDF State
   const [printableInvoice, setPrintableInvoice] = useState(null)
   const [isExportModalOpen, setIsExportModalOpen] = useState(false)
 
@@ -253,7 +260,7 @@ export default function AdminPortalPage({ onExit }) {
             isp: geo.isp,
             duration: '1m 20s',
             activeSection: '#admin (Founder Portal)',
-            device: 'Desktop',
+            device: window.innerWidth < 768 ? 'Mobile Phone' : 'Desktop',
             browser: 'Chrome 128',
             entrance: 'Direct / Admin Access',
             lastActive: 'Just now',
@@ -645,8 +652,8 @@ Generated Date: ${new Date().toLocaleString()}
 
 1. FINANCIAL TELEMETRY SUMMARY:
 --------------------------------
-• Total Contract Pipeline Value: $${totalRevenue.toLocaleString()} USD
-• Collected Milestone Revenue: $${collectedRevenue.toLocaleString()} USD
+• Total Contract Pipeline Value: $${totalRevenue.toLocaleString()} USD (Rs. ${(totalRevenue * USD_TO_PKR).toLocaleString()} PKR)
+• Collected Milestone Revenue: $${collectedRevenue.toLocaleString()} USD (Rs. ${(collectedRevenue * USD_TO_PKR).toLocaleString()} PKR)
 • Pending Milestone Balance: $${(totalRevenue - collectedRevenue).toLocaleString()} USD
 • Active Project Sprints: ${projectList.length}
 
@@ -675,9 +682,21 @@ END OF REPORT — NEXORA DIGITAL ENTERPRISE OS
     link.remove()
   }
 
-  // Generate B2B Printable Invoice PDF Receipt
-  const handleGenerateInvoiceModal = (proj) => {
-    setPrintableInvoice(proj)
+  // PDF Generator Callers
+  const handleGenerateInvoicePDF = (proj) => {
+    generateB2BInvoicePDF(proj)
+  }
+
+  const handleGenerateAIProposalPDF = (msg) => {
+    generateExecutiveProposalPDF(msg)
+  }
+
+  // Currency Converter Helpers
+  const formatMoney = (usdAmount) => {
+    if (currencyMode === 'PKR') {
+      return `Rs. ${Math.round(usdAmount * USD_TO_PKR).toLocaleString()}`
+    }
+    return `$${usdAmount.toLocaleString()}`
   }
 
   // Calculate Metrics
@@ -708,6 +727,18 @@ END OF REPORT — NEXORA DIGITAL ENTERPRISE OS
     if (auditFilter === 'Good') return matchesSearch && l.score >= 90
     return matchesSearch
   })
+
+  // Nav Items Definition
+  const NAV_ITEMS = [
+    { id: 'overview', label: 'Executive Dashboard', icon: BarChart3, badge: null },
+    { id: 'visitors', label: 'Live Visitors & IPs', icon: Compass, badge: activeVisitorCount ? `${activeVisitorCount} Live` : null, badgeColor: 'bg-emerald-500/20 text-emerald-400' },
+    { id: 'inbox', label: 'Inbound Quote Inbox', icon: Inbox, badge: unreadMsgCount ? unreadMsgCount : null, badgeColor: 'bg-blue-500 text-white' },
+    { id: 'audit_leads', label: 'PageSpeed Audit Leads', icon: Globe, badge: newAuditLeadCount ? newAuditLeadCount : null, badgeColor: 'bg-purple-500/20 text-purple-400' },
+    { id: 'projects', label: 'Client Project Sprints', icon: Layers, badge: projectList.length, badgeColor: 'bg-white/10 text-gray-300' },
+    { id: 'invoices', label: 'B2B Invoices & Escrow', icon: DollarSign, badge: null },
+    { id: 'scarcity', label: 'Launch Offer Scarcity', icon: Sparkles, badge: `${launchSlots.total - launchSlots.claimed} Left` },
+    { id: 'security', label: 'Security & Audit Logs', icon: ShieldAlert, badge: null },
+  ]
 
   // 1. LOGIN SCREEN
   if (!isAuthenticated) {
@@ -814,18 +845,98 @@ END OF REPORT — NEXORA DIGITAL ENTERPRISE OS
     )
   }
 
-  // 2. FULL STANDALONE ENTERPRISE ADMIN DASHBOARD
+  // 2. FULL STANDALONE ENTERPRISE ADMIN DASHBOARD WITH MOBILE RESPONSIVENESS
   return (
-    <div className="min-h-screen bg-[#070A14] text-white flex selection:bg-blue-500 selection:text-white overflow-x-hidden">
+    <div className="min-h-screen bg-[#070A14] text-white flex flex-col lg:flex-row selection:bg-blue-500 selection:text-white overflow-x-hidden">
       
-      {/* LEFT SIDEBAR NAVIGATION */}
+      {/* MOBILE TOP NAVBAR BAR */}
+      <header className="lg:hidden bg-[#05070D] border-b border-white/10 px-4 py-3 flex items-center justify-between sticky top-0 z-40">
+        <NexoraBrand variant="footer" />
+        <div className="flex items-center gap-2">
+          <button
+            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+            className="p-2 bg-white/5 hover:bg-white/10 border border-white/10 rounded-xl text-gray-300 hover:text-white transition-colors"
+          >
+            {mobileMenuOpen ? <X size={20} /> : <Menu size={20} />}
+          </button>
+        </div>
+      </header>
+
+      {/* MOBILE DRAWER SIDEBAR */}
+      <AnimatePresence>
+        {mobileMenuOpen && (
+          <motion.div
+            initial={{ opacity: 0, x: -280 }}
+            animate={{ opacity: 1, x: 0 }}
+            exit={{ opacity: 0, x: -280 }}
+            className="fixed inset-y-0 left-0 z-50 w-72 bg-[#05070D] border-r border-white/10 flex flex-col justify-between p-4 shadow-2xl lg:hidden"
+          >
+            <div className="space-y-4">
+              <div className="flex items-center justify-between pb-3 border-b border-white/10">
+                <NexoraBrand variant="footer" />
+                <button onClick={() => setMobileMenuOpen(false)} className="text-gray-400 p-1">
+                  <X size={18} />
+                </button>
+              </div>
+
+              <nav className="space-y-1">
+                {NAV_ITEMS.map((item) => {
+                  const Icon = item.icon
+                  const isActive = activeTab === item.id
+                  return (
+                    <button
+                      key={item.id}
+                      onClick={() => {
+                        setActiveTab(item.id)
+                        setMobileMenuOpen(false)
+                      }}
+                      className={`w-full px-3.5 py-3 rounded-xl text-xs font-bold transition-all cursor-pointer flex items-center justify-between ${
+                        isActive
+                          ? 'bg-blue-600 text-white shadow-lg shadow-blue-600/30'
+                          : 'text-gray-400 hover:text-white hover:bg-white/5'
+                      }`}
+                    >
+                      <div className="flex items-center gap-3">
+                        <Icon size={16} />
+                        <span>{item.label}</span>
+                      </div>
+                      {item.badge && (
+                        <span className={`px-2 py-0.5 text-[10px] font-bold rounded-full ${item.badgeColor || 'bg-white/10 text-gray-300'}`}>
+                          {item.badge}
+                        </span>
+                      )}
+                    </button>
+                  )
+                })}
+              </nav>
+            </div>
+
+            <div className="pt-4 border-t border-white/10 flex items-center gap-2">
+              <button
+                onClick={handleExitToSite}
+                className="flex-1 py-2 px-3 bg-white/5 text-gray-300 border border-white/10 rounded-xl text-xs font-bold flex items-center justify-center gap-1.5"
+              >
+                <ArrowLeft size={13} />
+                <span>Exit</span>
+              </button>
+              <button
+                onClick={handleLogout}
+                className="py-2 px-3 bg-red-500/10 text-red-400 border border-red-500/30 rounded-xl text-xs font-bold"
+              >
+                <LogOut size={13} />
+              </button>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* DESKTOP LEFT SIDEBAR NAVIGATION */}
       <aside
-        className={`${
+        className={`hidden lg:flex ${
           sidebarOpen ? 'w-64' : 'w-20'
-        } bg-[#05070D] border-r border-white/10 flex flex-col justify-between transition-all duration-300 fixed lg:static inset-y-0 left-0 z-40`}
+        } bg-[#05070D] border-r border-white/10 flex-col justify-between transition-all duration-300 sticky top-0 h-screen z-30`}
       >
         <div>
-          {/* Brand Header */}
           <div className="p-5 border-b border-white/10 flex items-center justify-between">
             {sidebarOpen ? (
               <NexoraBrand variant="footer" />
@@ -842,18 +953,8 @@ END OF REPORT — NEXORA DIGITAL ENTERPRISE OS
             </button>
           </div>
 
-          {/* Navigation Section Items */}
           <nav className="p-3 space-y-1">
-            {[
-              { id: 'overview', label: 'Executive Dashboard', icon: BarChart3, badge: null },
-              { id: 'visitors', label: 'Live Visitors & IPs', icon: Compass, badge: activeVisitorCount ? `${activeVisitorCount} Live` : null, badgeColor: 'bg-emerald-500/20 text-emerald-400' },
-              { id: 'inbox', label: 'Inbound Quote Inbox', icon: Inbox, badge: unreadMsgCount ? unreadMsgCount : null, badgeColor: 'bg-blue-500 text-white' },
-              { id: 'audit_leads', label: 'PageSpeed Audit Leads', icon: Globe, badge: newAuditLeadCount ? newAuditLeadCount : null, badgeColor: 'bg-purple-500/20 text-purple-400' },
-              { id: 'projects', label: 'Client Project Sprints', icon: Layers, badge: projectList.length, badgeColor: 'bg-white/10 text-gray-300' },
-              { id: 'invoices', label: 'B2B Invoices & Escrow', icon: DollarSign, badge: null },
-              { id: 'scarcity', label: 'Launch Offer Scarcity', icon: Sparkles, badge: `${launchSlots.total - launchSlots.claimed} Left` },
-              { id: 'security', label: 'Security & Audit Logs', icon: ShieldAlert, badge: null },
-            ].map((item) => {
+            {NAV_ITEMS.map((item) => {
               const Icon = item.icon
               const isActive = activeTab === item.id
               return (
@@ -882,7 +983,6 @@ END OF REPORT — NEXORA DIGITAL ENTERPRISE OS
           </nav>
         </div>
 
-        {/* Sidebar Footer Controls */}
         <div className="p-4 border-t border-white/10 space-y-3">
           {sidebarOpen && (
             <div className="flex items-center gap-3 bg-white/5 p-2.5 rounded-xl border border-white/10">
@@ -921,20 +1021,42 @@ END OF REPORT — NEXORA DIGITAL ENTERPRISE OS
       {/* MAIN CONTENT WORKSPACE */}
       <main className="flex-1 min-w-0 p-4 sm:p-6 lg:p-8 space-y-6 overflow-y-auto">
         
-        {/* Top Header Controls Bar */}
+        {/* Top Header Controls Bar with Currency Mode Switcher */}
         <div className="flex flex-wrap items-center justify-between gap-4 bg-[#0B1020] p-4 rounded-2xl border border-white/10 shadow-md">
           <div className="flex items-center gap-3">
             <h2 className="text-lg font-bold text-white capitalize flex items-center gap-2">
               <span>{activeTab.replace('_', ' ')} Control Center</span>
               <span className="px-2.5 py-0.5 bg-blue-500/10 text-blue-400 border border-blue-500/20 text-[10px] font-mono rounded-md">
-                MULTI-EXPORT ONLINE
+                ENTERPRISE v3.2
               </span>
             </h2>
           </div>
 
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-3 flex-wrap">
+            {/* Currency Mode Switcher ($ USD / Rs. PKR) */}
+            <div className="flex items-center bg-black/60 border border-white/15 p-1 rounded-xl text-xs font-bold font-mono">
+              <button
+                type="button"
+                onClick={() => setCurrencyMode('USD')}
+                className={`px-3 py-1 rounded-lg transition-all cursor-pointer ${
+                  currencyMode === 'USD' ? 'bg-blue-600 text-white shadow-sm' : 'text-gray-400 hover:text-white'
+                }`}
+              >
+                $ USD
+              </button>
+              <button
+                type="button"
+                onClick={() => setCurrencyMode('PKR')}
+                className={`px-3 py-1 rounded-lg transition-all cursor-pointer ${
+                  currencyMode === 'PKR' ? 'bg-emerald-600 text-white shadow-sm' : 'text-gray-400 hover:text-white'
+                }`}
+              >
+                Rs. PKR
+              </button>
+            </div>
+
             {currentVisitorGeo && (
-              <div className="hidden lg:flex items-center gap-2 bg-white/5 border border-white/10 px-3 py-1.5 rounded-xl text-xs font-mono text-gray-300">
+              <div className="hidden xl:flex items-center gap-2 bg-white/5 border border-white/10 px-3 py-1.5 rounded-xl text-xs font-mono text-gray-300">
                 <Compass size={14} className="text-blue-400" />
                 <span>IP: <strong className="text-white">{currentVisitorGeo.ip}</strong> ({currentVisitorGeo.latitude}°, {currentVisitorGeo.longitude}°)</span>
               </div>
@@ -955,7 +1077,6 @@ END OF REPORT — NEXORA DIGITAL ENTERPRISE OS
            ---------------------------------------------------- */}
         {activeTab === 'overview' && (
           <div className="space-y-6">
-            {/* Stat Cards Grid */}
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
               <div className="bg-[#0B1020] p-5 rounded-2xl border border-white/10 space-y-2">
                 <div className="flex justify-between items-center text-xs text-gray-400 font-bold">
@@ -974,8 +1095,8 @@ END OF REPORT — NEXORA DIGITAL ENTERPRISE OS
                   <span>COLLECTED REVENUE</span>
                   <div className="p-2 rounded-lg bg-emerald-500/10 text-emerald-400"><DollarSign size={16} /></div>
                 </div>
-                <div className="text-3xl font-black text-emerald-400 font-mono">${collectedRevenue.toLocaleString()}</div>
-                <div className="text-[11px] text-gray-400">Total Pipeline: ${totalRevenue.toLocaleString()}</div>
+                <div className="text-3xl font-black text-emerald-400 font-mono">{formatMoney(collectedRevenue)}</div>
+                <div className="text-[11px] text-gray-400">Total Pipeline: {formatMoney(totalRevenue)}</div>
               </div>
 
               <div className="bg-[#0B1020] p-5 rounded-2xl border border-white/10 space-y-2">
@@ -1001,7 +1122,7 @@ END OF REPORT — NEXORA DIGITAL ENTERPRISE OS
             <div className="bg-[#0B1020] p-6 rounded-2xl border border-white/10 space-y-4">
               <h3 className="text-sm font-bold text-white flex items-center gap-2 border-b border-white/10 pb-3">
                 <TrendingUp size={16} className="text-emerald-400" />
-                <span>Executive Conversion Funnel &amp; Growth Analytics</span>
+                <span>Executive Conversion Funnel &amp; Growth Analytics ({currencyMode})</span>
               </h3>
 
               <div className="grid grid-cols-1 sm:grid-cols-4 gap-4 text-center">
@@ -1045,7 +1166,7 @@ END OF REPORT — NEXORA DIGITAL ENTERPRISE OS
               </div>
 
               <div className="overflow-x-auto">
-                <table className="w-full text-left text-xs border-collapse">
+                <table className="w-full text-left text-xs border-collapse min-w-[600px]">
                   <thead>
                     <tr className="border-b border-white/10 text-gray-400 text-[11px] uppercase font-bold">
                       <th className="py-3 px-3">Project ID</th>
@@ -1076,7 +1197,7 @@ END OF REPORT — NEXORA DIGITAL ENTERPRISE OS
                           </div>
                         </td>
                         <td className="py-3.5 px-3 text-right font-mono text-emerald-400 font-bold">
-                          ${p.amount} ({p.finalPaid ? '100% Paid' : p.depositPaid ? '50% Paid' : 'Pending'})
+                          {formatMoney(p.amount || 1500)} ({p.finalPaid ? '100% Paid' : p.depositPaid ? '50% Paid' : 'Pending'})
                         </td>
                       </tr>
                     ))}
@@ -1110,7 +1231,7 @@ END OF REPORT — NEXORA DIGITAL ENTERPRISE OS
               </div>
 
               <div className="overflow-x-auto">
-                <table className="w-full text-left text-xs border-collapse">
+                <table className="w-full text-left text-xs border-collapse min-w-[700px]">
                   <thead>
                     <tr className="border-b border-white/10 text-gray-400 text-[11px] uppercase font-bold">
                       <th className="py-3 px-3">Session ID</th>
@@ -1159,7 +1280,7 @@ END OF REPORT — NEXORA DIGITAL ENTERPRISE OS
           </div>
         )}
 
-        {/* TAB 3: INBOX */}
+        {/* TAB 3: INBOX WITH AI PROPOSAL PDF GENERATOR */}
         {activeTab === 'inbox' && (
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
             <div className="lg:col-span-5 space-y-4 bg-[#0B1020] p-4 rounded-2xl border border-white/10">
@@ -1228,7 +1349,7 @@ END OF REPORT — NEXORA DIGITAL ENTERPRISE OS
                   const msg = inboxMessages.find(m => m.id === selectedMsgId)
                   return (
                     <div className="space-y-5">
-                      <div className="flex items-center justify-between pb-3 border-b border-white/10">
+                      <div className="flex items-center justify-between pb-3 border-b border-white/10 flex-wrap gap-2">
                         <div>
                           <div className="flex items-center gap-2">
                             <span className="text-xs font-mono font-bold text-blue-400">{msg.id}</span>
@@ -1327,7 +1448,15 @@ END OF REPORT — NEXORA DIGITAL ENTERPRISE OS
                         </div>
                       </div>
 
+                      {/* PDF AI Proposal & Quick Action Buttons */}
                       <div className="pt-3 border-t border-white/10 flex flex-wrap gap-3">
+                        <button
+                          onClick={() => handleGenerateAIProposalPDF(msg)}
+                          className="px-4 py-2.5 bg-purple-600 hover:bg-purple-500 text-white font-bold text-xs rounded-xl flex items-center gap-2 transition-all shadow-md cursor-pointer"
+                        >
+                          <Bot size={14} />
+                          <span>🤖 Generate AI Proposal PDF</span>
+                        </button>
                         <a
                           href={`https://wa.me/${msg.whatsapp.replace(/[^0-9]/g, '')}?text=${encodeURIComponent(`Hello ${msg.fullName}, thank you for contacting NEXORA DIGITAL regarding ${msg.service}. We have reviewed your project requirements.`)}`}
                           target="_blank"
@@ -1409,7 +1538,7 @@ END OF REPORT — NEXORA DIGITAL ENTERPRISE OS
               </div>
 
               <div className="overflow-x-auto">
-                <table className="w-full text-left text-xs border-collapse">
+                <table className="w-full text-left text-xs border-collapse min-w-[650px]">
                   <thead>
                     <tr className="border-b border-white/10 text-gray-400 text-[11px] uppercase font-bold">
                       <th className="py-3 px-3">Target Domain URL</th>
@@ -1490,7 +1619,7 @@ END OF REPORT — NEXORA DIGITAL ENTERPRISE OS
           </div>
         )}
 
-        {/* TAB 5: PROJECTS */}
+        {/* TAB 5: PROJECTS WITH PDF INVOICE GENERATION */}
         {activeTab === 'projects' && (
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
             <div className="lg:col-span-4 space-y-3 bg-[#0B1020] p-4 rounded-2xl border border-white/10">
@@ -1544,7 +1673,7 @@ END OF REPORT — NEXORA DIGITAL ENTERPRISE OS
             </div>
 
             <div className="lg:col-span-8 bg-[#0B1020] p-6 rounded-2xl border border-white/10 space-y-4">
-              <div className="flex items-center justify-between pb-3 border-b border-white/10">
+              <div className="flex items-center justify-between pb-3 border-b border-white/10 flex-wrap gap-2">
                 <h3 className="text-sm font-bold text-white flex items-center gap-2">
                   <Edit2 size={16} className="text-blue-400" />
                   <span>{isCreatingNewProject ? 'Create New Project Record' : `Editing Project (${formData.id})`}</span>
@@ -1553,11 +1682,11 @@ END OF REPORT — NEXORA DIGITAL ENTERPRISE OS
                   {!isCreatingNewProject && (
                     <button
                       type="button"
-                      onClick={() => handleGenerateInvoiceModal(projects[formData.id] || formData)}
-                      className="px-3 py-1.5 bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 text-xs font-bold rounded-xl flex items-center gap-1 cursor-pointer transition-all"
+                      onClick={() => handleGenerateInvoicePDF(projects[formData.id] || formData)}
+                      className="px-3.5 py-1.5 bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold rounded-xl flex items-center gap-1.5 cursor-pointer shadow-md transition-all"
                     >
-                      <Printer size={13} />
-                      <span>Print B2B Invoice</span>
+                      <Printer size={14} />
+                      <span>Download B2B Invoice PDF</span>
                     </button>
                   )}
                   {!isCreatingNewProject && (
@@ -1715,7 +1844,7 @@ END OF REPORT — NEXORA DIGITAL ENTERPRISE OS
                   <div className="flex justify-between items-center">
                     <span className="text-xs font-mono font-bold text-blue-400">{p.id}</span>
                     <span className="px-2.5 py-0.5 bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 text-[10px] font-bold rounded-full">
-                      Total: ${p.amount || 1500}
+                      Total: {formatMoney(p.amount || 1500)}
                     </span>
                   </div>
                   <div className="text-sm font-bold text-white">{p.client}</div>
@@ -1725,23 +1854,23 @@ END OF REPORT — NEXORA DIGITAL ENTERPRISE OS
                     <div className="flex justify-between items-center">
                       <span className="text-gray-400">50% Upfront Deposit:</span>
                       <span className={p.depositPaid ? 'text-emerald-400 font-bold' : 'text-amber-400 font-bold'}>
-                        {p.depositPaid ? `✓ Paid ($${(p.amount || 1500) * 0.5})` : 'Pending'}
+                        {p.depositPaid ? `✓ Paid (${formatMoney((p.amount || 1500) * 0.5)})` : 'Pending'}
                       </span>
                     </div>
                     <div className="flex justify-between items-center">
                       <span className="text-gray-400">50% Final Handoff:</span>
                       <span className={p.finalPaid ? 'text-emerald-400 font-bold' : 'text-amber-400 font-bold'}>
-                        {p.finalPaid ? `✓ Paid ($${(p.amount || 1500) * 0.5})` : 'Pending'}
+                        {p.finalPaid ? `✓ Paid (${formatMoney((p.amount || 1500) * 0.5)})` : 'Pending'}
                       </span>
                     </div>
                   </div>
 
                   <button
-                    onClick={() => handleGenerateInvoiceModal(p)}
-                    className="w-full py-2 bg-white/5 hover:bg-white/10 text-gray-300 border border-white/10 rounded-xl font-bold flex items-center justify-center gap-1.5 transition-all mt-2 cursor-pointer"
+                    onClick={() => handleGenerateInvoicePDF(p)}
+                    className="w-full py-2.5 bg-emerald-600 hover:bg-emerald-500 text-white font-bold rounded-xl flex items-center justify-center gap-1.5 transition-all mt-2 cursor-pointer shadow-md"
                   >
                     <Printer size={13} />
-                    <span>Print Invoice PDF Receipt</span>
+                    <span>Download B2B Invoice PDF</span>
                   </button>
                 </div>
               ))}
@@ -1871,7 +2000,7 @@ END OF REPORT — NEXORA DIGITAL ENTERPRISE OS
               </div>
 
               <div className="overflow-x-auto">
-                <table className="w-full text-left text-xs border-collapse">
+                <table className="w-full text-left text-xs border-collapse min-w-[600px]">
                   <thead>
                     <tr className="border-b border-white/10 text-gray-400 text-[11px] uppercase font-bold">
                       <th className="py-3 px-3">Event</th>
@@ -1919,7 +2048,7 @@ END OF REPORT — NEXORA DIGITAL ENTERPRISE OS
                 </div>
                 <div>
                   <h3 className="text-base font-bold text-white">Select Export Format &amp; Dataset</h3>
-                  <p className="text-xs text-gray-400">Export agency data as JSON, CSV spreadsheets, or text report</p>
+                  <p className="text-xs text-gray-400">Export agency data as JSON, CSV spreadsheets, or PDF reports</p>
                 </div>
               </div>
               <button
@@ -1930,7 +2059,6 @@ END OF REPORT — NEXORA DIGITAL ENTERPRISE OS
               </button>
             </div>
 
-            {/* Export Cards Grid */}
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
               <button
                 onClick={() => { handleExportJSON(); setIsExportModalOpen(false); }}
@@ -2026,81 +2154,6 @@ END OF REPORT — NEXORA DIGITAL ENTERPRISE OS
                 <p className="text-[#A7ADBB] text-[11px] leading-relaxed">
                   Formatted text executive report summarizing pipeline revenue, lead counts, active sprints, and key metrics.
                 </p>
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* PRINTABLE B2B INVOICE MODAL RECEIPT */}
-      {printableInvoice && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/85 backdrop-blur-sm">
-          <div className="bg-[#0B1020] border border-white/20 rounded-3xl p-6 max-w-2xl w-full text-white space-y-6 shadow-2xl relative max-h-[90vh] overflow-y-auto">
-            <div className="flex items-center justify-between border-b border-white/10 pb-4">
-              <NexoraBrand variant="footer" />
-              <div className="text-right">
-                <h3 className="text-base font-bold text-white font-mono">{printableInvoice.id}</h3>
-                <span className="text-xs text-emerald-400 font-bold">Official B2B Invoice Receipt</span>
-              </div>
-            </div>
-
-            <div className="grid grid-cols-2 gap-4 text-xs">
-              <div>
-                <span className="text-gray-400 font-bold block">Billed To Client:</span>
-                <span className="text-base font-bold text-white">{printableInvoice.client}</span>
-                <span className="text-gray-300 block">{printableInvoice.clientEmail || 'contact@client-domain.com'}</span>
-              </div>
-              <div className="text-right">
-                <span className="text-gray-400 font-bold block">Issued By:</span>
-                <span className="text-base font-bold text-white">NEXORA DIGITAL</span>
-                <span className="text-gray-300 block">Karachi, Pakistan 🇵🇰</span>
-              </div>
-            </div>
-
-            <div className="p-4 bg-black/50 rounded-2xl border border-white/10 space-y-2 text-xs">
-              <div className="flex justify-between font-bold text-gray-300 border-b border-white/10 pb-2">
-                <span>Service Description</span>
-                <span>Amount</span>
-              </div>
-              <div className="flex justify-between font-bold text-white pt-1">
-                <span>{printableInvoice.service} (Full IP Source Code &amp; SLA Handoff)</span>
-                <span className="font-mono text-emerald-400">${printableInvoice.amount || 1500} USD</span>
-              </div>
-            </div>
-
-            <div className="grid grid-cols-2 gap-3 text-xs bg-white/5 p-3 rounded-xl border border-white/10">
-              <div>
-                <span className="text-gray-400 font-bold block">50% Upfront Milestone:</span>
-                <span className={printableInvoice.depositPaid ? 'text-emerald-400 font-bold' : 'text-amber-400 font-bold'}>
-                  {printableInvoice.depositPaid ? `✓ Paid ($${(printableInvoice.amount || 1500) * 0.5})` : 'Pending'}
-                </span>
-              </div>
-              <div className="text-right">
-                <span className="text-gray-400 font-bold block">50% Final Handoff Release:</span>
-                <span className={printableInvoice.finalPaid ? 'text-emerald-400 font-bold' : 'text-amber-400 font-bold'}>
-                  {printableInvoice.finalPaid ? `✓ Paid ($${(printableInvoice.amount || 1500) * 0.5})` : 'Pending'}
-                </span>
-              </div>
-            </div>
-
-            <div className="pt-2 text-[10px] text-gray-400 space-y-1">
-              <p>• Terms: 100% Source Code Ownership Handoff upon final milestone release.</p>
-              <p>• Signed Mutual NDA &amp; Performance SLA guarantee included.</p>
-            </div>
-
-            <div className="flex items-center justify-end gap-3 pt-3 border-t border-white/10">
-              <button
-                onClick={() => window.print()}
-                className="px-4 py-2 bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs rounded-xl flex items-center gap-1.5 cursor-pointer"
-              >
-                <Printer size={14} />
-                <span>Print / Save as PDF</span>
-              </button>
-              <button
-                onClick={() => setPrintableInvoice(null)}
-                className="px-4 py-2 bg-white/10 hover:bg-white/20 text-white font-bold text-xs rounded-xl cursor-pointer"
-              >
-                Close
               </button>
             </div>
           </div>
