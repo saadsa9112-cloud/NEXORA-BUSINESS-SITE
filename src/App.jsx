@@ -24,6 +24,8 @@ import AiAssistantModal from './components/AiAssistant/AiAssistantModal'
 import ClientPortalModal from './components/ClientPortal/ClientPortalModal'
 import AdminPortalPage from './components/Admin/AdminPortalPage'
 import Footer from './components/Footer/Footer'
+import DiscountRoastFlyer from './components/DiscountFlyer/DiscountRoastFlyer'
+
 
 export default function App() {
   const [currency, setCurrency] = useState('PKR')
@@ -213,6 +215,9 @@ export default function App() {
       {/* Dedicated Standalone Tool Modals */}
       <WebsiteAuditModal isOpen={isSpeedAuditOpen} onClose={handleCloseSpeedAudit} />
       <RoiCalculatorModal isOpen={isRoiOpen} onClose={handleCloseRoi} />
+
+      {/* Roasting & Funny 25% OFF B2B Discount Flyer Widget */}
+      <DiscountRoastFlyer />
     </div>
   )
 }
