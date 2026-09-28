@@ -1,34 +1,67 @@
 import { useState, useEffect } from 'react'
-import { Link, useLocation } from 'react-router-dom'
-import { Menu, X, ArrowRight } from 'lucide-react'
+import { Menu, X, ArrowRight, Server } from 'lucide-react'
 import { NAV_LINKS, CONTACT } from '../../data/siteData'
 import NexoraBrand from '../NexoraBrand/NexoraBrand'
 
-export default function Navbar() {
+export default function Navbar({ onOpenAdmin }) {
   const [scrolled, setScrolled] = useState(false)
   const [mobileOpen, setMobileOpen] = useState(false)
-  const location = useLocation()
+  const [activeSection, setActiveSection] = useState('home')
 
   useEffect(() => {
     const handleScroll = () => {
       setScrolled(window.scrollY > 20)
+
+      const sectionIds = ['home', 'services', 'features', 'work', 'tools', 'pricing', 'about', 'faq', 'contact']
+
+      if (window.scrollY < 100) {
+        setActiveSection('home')
+        return
+      }
+
+      let currentSection = 'home'
+      for (let i = 0; i < sectionIds.length; i++) {
+        const id = sectionIds[i]
+        const el = document.getElementById(id)
+        if (el) {
+          const rect = el.getBoundingClientRect()
+          if (rect.top <= 200 && rect.bottom >= 100) {
+            currentSection = id
+          }
+        }
+      }
+      setActiveSection(currentSection)
     }
+
     handleScroll()
     window.addEventListener('scroll', handleScroll, { passive: true })
     return () => window.removeEventListener('scroll', handleScroll)
   }, [])
 
-  // Close mobile menu on route change
+  // Close mobile menu on ESC key
   useEffect(() => {
-    setMobileOpen(false)
-    window.scrollTo({ top: 0, behavior: 'smooth' })
-  }, [location.pathname])
+    const onKey = (e) => { if (e.key === 'Escape') setMobileOpen(false) }
+    document.addEventListener('keydown', onKey)
+    return () => document.removeEventListener('keydown', onKey)
+  }, [])
 
   // Prevent body scroll when mobile menu is open
   useEffect(() => {
     document.body.style.overflow = mobileOpen ? 'hidden' : ''
     return () => { document.body.style.overflow = '' }
   }, [mobileOpen])
+
+  const handleNavClick = (href) => {
+    setMobileOpen(false)
+    const id = href.replace('#', '')
+    setActiveSection(id)
+    const el = document.getElementById(id)
+    if (el) {
+      const offset = 80
+      const top = el.getBoundingClientRect().top + window.scrollY - offset
+      window.scrollTo({ top, behavior: 'smooth' })
+    }
+  }
 
   return (
     <>
@@ -43,24 +76,26 @@ export default function Navbar() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16 lg:h-20">
 
-            {/* Official Brand Logo Link */}
-            <Link
-              to="/"
+            {/* Official Brand Logo */}
+            <a
+              href="#home"
+              onClick={(e) => { e.preventDefault(); handleNavClick('#home') }}
               aria-label="NEXORA DIGITAL — Home"
               className="flex-shrink-0 flex items-center group py-2"
             >
               <NexoraBrand variant="navbar" isScrolled={scrolled} />
-            </Link>
+            </a>
 
-            {/* Desktop Navigation */}
+            {/* Desktop Single-Page Navigation */}
             <nav aria-label="Main navigation" className="hidden lg:flex items-center gap-1">
               {NAV_LINKS.map((link) => {
-                const isActive = location.pathname === link.href
+                const isActive = activeSection === link.href.replace('#', '')
                 return (
-                  <Link
+                  <a
                     key={link.href}
-                    to={link.href}
-                    className={`px-4 py-2 text-sm font-medium rounded-lg transition-all duration-200 ${
+                    href={link.href}
+                    onClick={(e) => { e.preventDefault(); handleNavClick(link.href) }}
+                    className={`px-3.5 py-2 text-sm font-medium rounded-lg transition-all duration-200 ${
                       isActive
                         ? scrolled
                           ? 'text-[#3B82F6] font-bold bg-white/10 ring-1 ring-[#3B82F6]/30'
@@ -71,20 +106,34 @@ export default function Navbar() {
                     }`}
                   >
                     {link.label}
-                  </Link>
+                  </a>
                 )
               })}
             </nav>
 
-            {/* CTA + Mobile Toggle */}
-            <div className="flex items-center gap-3">
-              <Link
-                to="/services#contact"
+            {/* CTA + Admin Quick Access + Mobile Toggle */}
+            <div className="flex items-center gap-2.5">
+              <button
+                type="button"
+                onClick={onOpenAdmin}
+                className={`hidden md:flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-bold transition-all ${
+                  scrolled
+                    ? 'bg-white/10 hover:bg-blue-600/30 text-white border border-white/10'
+                    : 'bg-gray-100 hover:bg-blue-50 text-[#0B1020] hover:text-[#0066FF] border border-[#E5EAF1]'
+                }`}
+              >
+                <Server size={13} />
+                <span>Admin</span>
+              </button>
+
+              <a
+                href="#contact"
+                onClick={(e) => { e.preventDefault(); handleNavClick('#contact') }}
                 className="hidden sm:flex items-center gap-2 px-5 py-2.5 bg-[#0066FF] hover:bg-[#0052CC] text-white text-sm font-semibold rounded-xl transition-all duration-200 shadow-md shadow-blue-500/20 hover:shadow-lg hover:shadow-blue-500/30 hover:-translate-y-0.5"
               >
                 <span>Get Free Quote</span>
                 <ArrowRight size={14} />
-              </Link>
+              </a>
 
               {/* Mobile hamburger */}
               <button
@@ -136,11 +185,12 @@ export default function Navbar() {
 
         <nav aria-label="Mobile navigation" className="px-4 py-6 flex flex-col gap-1">
           {NAV_LINKS.map((link) => {
-            const isActive = location.pathname === link.href
+            const isActive = activeSection === link.href.replace('#', '')
             return (
-              <Link
+              <a
                 key={link.href}
-                to={link.href}
+                href={link.href}
+                onClick={(e) => { e.preventDefault(); handleNavClick(link.href) }}
                 className={`flex items-center px-4 py-3 text-sm font-medium rounded-lg transition-all duration-200 ${
                   isActive
                     ? 'text-[#0066FF] font-semibold bg-blue-50'
@@ -148,18 +198,31 @@ export default function Navbar() {
                 }`}
               >
                 {link.label}
-              </Link>
+              </a>
             )
           })}
+
+          <button
+            type="button"
+            onClick={() => {
+              setMobileOpen(false)
+              onOpenAdmin()
+            }}
+            className="flex items-center gap-2 px-4 py-3 text-sm font-semibold text-blue-600 bg-blue-50/60 rounded-lg mt-2"
+          >
+            <Server size={16} />
+            <span>Admin Console</span>
+          </button>
         </nav>
 
         <div className="absolute bottom-8 left-4 right-4 flex flex-col gap-3">
-          <Link
-            to="/services#contact"
+          <a
+            href="#contact"
+            onClick={(e) => { e.preventDefault(); handleNavClick('#contact') }}
             className="flex items-center justify-center gap-2 w-full px-5 py-3 bg-[#0066FF] hover:bg-[#0052CC] text-white text-sm font-semibold rounded-xl transition-all duration-200 shadow-md shadow-blue-500/20"
           >
             Get Free Quote →
-          </Link>
+          </a>
           <a
             href={`https://wa.me/${CONTACT.whatsapp}?text=${CONTACT.whatsappMessage}`}
             target="_blank"
