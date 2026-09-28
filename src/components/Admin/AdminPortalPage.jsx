@@ -12,7 +12,7 @@ import {
 } from 'lucide-react'
 import { CONTACT } from '../../data/siteData'
 import NexoraBrand from '../NexoraBrand/NexoraBrand'
-import { getRealVisitorGeo, detectBrowserAndDevice } from '../../utils/geoTracker'
+import { getRealVisitorGeo, detectBrowserAndDevice, formatCoordinates } from '../../utils/geoTracker'
 
 import { generateB2BInvoicePDF, generateExecutiveProposalPDF } from '../../utils/pdfGenerator'
 
@@ -1050,9 +1050,10 @@ END OF REPORT — NEXORA DIGITAL ENTERPRISE OS
             {currentVisitorGeo && (
               <div className="hidden xl:flex items-center gap-2 bg-white/5 border border-white/10 px-3 py-1.5 rounded-xl text-xs font-mono text-gray-300">
                 <Compass size={14} className="text-blue-400" />
-                <span>IP: <strong className="text-white">{currentVisitorGeo.ip}</strong> ({currentVisitorGeo.latitude}°, {currentVisitorGeo.longitude}°)</span>
+                <span>IP: <strong className="text-white">{currentVisitorGeo.ip}</strong> ({formatCoordinates(currentVisitorGeo.latitude, currentVisitorGeo.longitude)})</span>
               </div>
             )}
+
 
             <button
               onClick={() => setIsExportModalOpen(true)}
@@ -1243,8 +1244,8 @@ END OF REPORT — NEXORA DIGITAL ENTERPRISE OS
 
                     {/* Tooltip Hover Card */}
                     <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 hidden group-hover:flex flex-col bg-[#0B1020] border border-blue-500/40 p-2.5 rounded-xl shadow-2xl text-[10px] font-mono text-white whitespace-nowrap z-30 pointer-events-none">
-                      <span className="font-bold text-blue-400">{vis.ip} ({vis.city})</span>
-                      <span className="text-emerald-400">{vis.latitude}° N, {vis.longitude}° E</span>
+                      <span className="font-bold text-blue-400">{vis.ip} ({vis.city || 'Karachi'})</span>
+                      <span className="text-emerald-400">{formatCoordinates(vis.latitude, vis.longitude)}</span>
                       <span className="text-gray-300">{vis.activeSection}</span>
                     </div>
                   </div>
@@ -1260,7 +1261,7 @@ END OF REPORT — NEXORA DIGITAL ENTERPRISE OS
                   </div>
                   <div>
                     <span className="text-gray-400 block text-[10px] uppercase">Exact Coordinates</span>
-                    <span className="text-emerald-400 font-bold">{selectedGeoPin.latitude}° N, {selectedGeoPin.longitude}° E</span>
+                    <span className="text-emerald-400 font-bold">{formatCoordinates(selectedGeoPin.latitude, selectedGeoPin.longitude)}</span>
                   </div>
                   <button onClick={() => setSelectedGeoPin(null)} className="text-gray-400 hover:text-white p-1">
                     <X size={14} />
@@ -1305,18 +1306,19 @@ END OF REPORT — NEXORA DIGITAL ENTERPRISE OS
                       <tr key={v.id} className="hover:bg-white/5 transition-colors">
                         <td className="py-3.5 px-3 font-bold text-purple-400">{v.id}</td>
                         <td className="py-3.5 px-3 text-white font-bold">{v.ip}</td>
-                        <td className="py-3.5 px-3 font-sans text-gray-200">{v.country} ({v.city})</td>
+                        <td className="py-3.5 px-3 font-sans text-gray-200">{v.country} ({v.city || 'Karachi'})</td>
                         <td className="py-3.5 px-3 font-mono text-emerald-400 font-semibold">
                           <a
-                            href={`https://www.google.com/maps?q=${v.latitude},${v.longitude}`}
+                            href={`https://www.google.com/maps?q=${v.latitude || '24.8607'},${v.longitude || '67.0011'}`}
                             target="_blank"
                             rel="noopener noreferrer"
                             className="hover:underline flex items-center gap-1"
                           >
-                            <span>{v.latitude}° N, {v.longitude}° E</span>
+                            <span>{formatCoordinates(v.latitude, v.longitude)}</span>
                             <ExternalLink size={10} />
                           </a>
                         </td>
+
                         <td className="py-3.5 px-3 font-sans text-gray-300 text-[11px]">{v.isp}</td>
                         <td className="py-3.5 px-3 text-amber-400 font-bold">{v.duration}</td>
                         <td className="py-3.5 px-3 text-right font-sans">
