@@ -8,7 +8,7 @@ import {
   Inbox, MessageSquare, Phone, Mail, MapPin, Filter, Download, Upload,
   UserCheck, Smartphone, Monitor, CheckSquare, XCircle, Info, ChevronLeft,
   Compass, TrendingUp, Award, Zap, Printer, Shield, Radio, Cpu, FileSpreadsheet, X,
-  Menu, Bot, FileCheck
+  Menu, Bot, FileCheck, Power
 } from 'lucide-react'
 import { CONTACT } from '../../data/siteData'
 import NexoraBrand from '../NexoraBrand/NexoraBrand'
@@ -85,7 +85,7 @@ const INITIAL_PROJECTS = {
   }
 }
 
-// Initial Inbound Quote Submissions with Geolocation Coordinates & ISP
+// Initial Inbound Quote Submissions
 const INITIAL_INBOX_MESSAGES = [
   {
     id: 'MSG-9412',
@@ -161,26 +161,33 @@ const INITIAL_INBOX_MESSAGES = [
   }
 ]
 
-// Initial PageSpeed Audit Leads with Coordinates
+// Initial PageSpeed Audit Leads
 const INITIAL_AUDIT_LEADS = [
   { id: 101, url: 'apex-logistics.com', score: 48, seoScore: 72, date: '2026-09-28', time: '09:30 PM', status: 'New Audit Lead', ip: '182.185.142.92', city: 'Karachi', country: 'Pakistan', flag: '🇵🇰', latitude: '24.8607', longitude: '67.0011', isp: 'CyberNet Broadband', device: 'Mobile (4G)', notes: 'Render-blocking CSS & TTFB delay of 1.4s detected.' },
   { id: 102, url: 'modernretail-store.com', score: 52, seoScore: 81, date: '2026-09-27', time: '02:14 PM', status: 'Proposal Sent', ip: '86.134.20.11', city: 'London', country: 'United Kingdom', flag: '🇬🇧', latitude: '51.5074', longitude: '-0.1278', isp: 'Vodafone UK', device: 'Desktop (High Speed)', notes: 'Unused CSS payload and uncompressed WebP images.' },
   { id: 103, url: 'vanguard-finance.io', score: 41, seoScore: 68, date: '2026-09-26', time: '10:05 AM', status: 'Audit Followup Pending', ip: '35.212.89.104', city: 'New York', country: 'United States', flag: '🇺🇸', latitude: '40.7128', longitude: '-74.0060', isp: 'Comcast Cable', device: 'Mobile (4G)', notes: 'Core Web Vitals fail LCP threshold.' }
 ]
 
-// Initial Visitor Telemetry Logs with Lat/Long Coordinates
+// Initial Visitor Telemetry Logs with Radar Map Coordinates
 const INITIAL_VISITOR_LOGS = [
-  { id: 'VIS-901', ip: '182.185.142.92', country: 'Pakistan 🇵🇰', city: 'Karachi', latitude: '24.8607', longitude: '67.0011', isp: 'CyberNet Broadband', duration: '5m 42s', activeSection: '#contact (Quote Form)', device: 'Desktop Windows 11', browser: 'Chrome 128', entrance: 'Direct URL / Google Organic', lastActive: '2 mins ago', status: 'Active Online' },
-  { id: 'VIS-902', ip: '35.212.89.104', country: 'United States 🇺🇸', city: 'New York', latitude: '40.7128', longitude: '-74.0060', isp: 'Comcast High Speed', duration: '12m 10s', activeSection: '#pricing (Global USD Tiers)', device: 'Mobile iPhone 15', browser: 'Safari 18', entrance: 'Social Referral / LinkedIn', lastActive: 'Just now', status: 'Active Online' },
-  { id: 'VIS-903', ip: '86.134.20.11', country: 'United Kingdom 🇬🇧', city: 'London', latitude: '51.5074', longitude: '-0.1278', isp: 'Vodafone Fiber', duration: '3m 15s', activeSection: '#speed-audit (PageSpeed Tool)', device: 'Desktop macOS', browser: 'Edge 126', entrance: 'Direct Hash #speed-audit', lastActive: '5 mins ago', status: 'Idle' },
-  { id: 'VIS-904', ip: '103.255.4.19', country: 'United Arab Emirates 🇦🇪', city: 'Dubai', latitude: '25.2048', longitude: '55.2708', isp: 'Etisalat UAE', duration: '8m 20s', activeSection: '#work (Portfolio Showcase)', device: 'Tablet iPad Pro', browser: 'Safari 17', entrance: 'Google Organic Search', lastActive: '12 mins ago', status: 'Offline' },
-  { id: 'VIS-905', ip: '115.186.160.4', country: 'Pakistan 🇵🇰', city: 'Lahore', latitude: '31.5204', longitude: '74.3587', isp: 'PTCL Fiber Broadband', duration: '14m 05s', activeSection: '#services (Service Guarantees)', device: 'Desktop Windows', browser: 'Firefox 130', entrance: 'Direct Access', lastActive: '15 mins ago', status: 'Offline' }
+  { id: 'VIS-901', ip: '182.185.142.92', country: 'Pakistan 🇵🇰', city: 'Karachi', latitude: '24.8607', longitude: '67.0011', isp: 'CyberNet Broadband', duration: '5m 42s', activeSection: '#contact (Quote Form)', device: 'Desktop Windows 11', browser: 'Chrome 128', entrance: 'Direct URL / Google Organic', lastActive: '2 mins ago', status: 'Active Online', radarX: 72, radarY: 48 },
+  { id: 'VIS-902', ip: '35.212.89.104', country: 'United States 🇺🇸', city: 'New York', latitude: '40.7128', longitude: '-74.0060', isp: 'Comcast High Speed', duration: '12m 10s', activeSection: '#pricing (Global USD Tiers)', device: 'Mobile iPhone 15', browser: 'Safari 18', entrance: 'Social Referral / LinkedIn', lastActive: 'Just now', status: 'Active Online', radarX: 25, radarY: 38 },
+  { id: 'VIS-903', ip: '86.134.20.11', country: 'United Kingdom 🇬🇧', city: 'London', latitude: '51.5074', longitude: '-0.1278', isp: 'Vodafone Fiber', duration: '3m 15s', activeSection: '#speed-audit (PageSpeed Tool)', device: 'Desktop macOS', browser: 'Edge 126', entrance: 'Direct Hash #speed-audit', lastActive: '5 mins ago', status: 'Idle', radarX: 48, radarY: 30 },
+  { id: 'VIS-904', ip: '103.255.4.19', country: 'United Arab Emirates 🇦🇪', city: 'Dubai', latitude: '25.2048', longitude: '55.2708', isp: 'Etisalat UAE', duration: '8m 20s', activeSection: '#work (Portfolio Showcase)', device: 'Tablet iPad Pro', browser: 'Safari 17', entrance: 'Google Organic Search', lastActive: '12 mins ago', status: 'Offline', radarX: 64, radarY: 46 },
+  { id: 'VIS-905', ip: '115.186.160.4', country: 'Pakistan 🇵🇰', city: 'Lahore', latitude: '31.5204', longitude: '74.3587', isp: 'PTCL Fiber Broadband', duration: '14m 05s', activeSection: '#services (Service Guarantees)', device: 'Desktop Windows', browser: 'Firefox 130', entrance: 'Direct Access', lastActive: '15 mins ago', status: 'Offline', radarX: 74, radarY: 44 }
+]
+
+// Initial Active Founder Sessions
+const INITIAL_ACTIVE_SESSIONS = [
+  { id: 'SES-FOUNDER-01', device: 'Desktop Windows 11', browser: 'Chrome 128', ip: '182.185.142.92', location: 'Karachi, Pakistan 🇵🇰', loginTime: 'Sep 28, 2026 09:00 PM', status: 'CURRENT SESSION', active: true },
+  { id: 'SES-ADMIN-02', device: 'Apple MacBook Pro', browser: 'Safari 18', ip: '86.134.20.11', location: 'London, UK 🇬🇧', loginTime: 'Sep 28, 2026 04:30 PM', status: 'Authorized Staging Console', active: true },
+  { id: 'SES-MOBILE-03', device: 'iPhone 15 Pro', browser: 'Mobile Safari', ip: '182.185.142.92', location: 'Karachi, Pakistan 🇵🇰', loginTime: 'Sep 27, 2026 11:15 AM', status: 'Authorized Mobile Session', active: true }
 ]
 
 // Initial Security Audit Logs
 const INITIAL_SECURITY_LOGS = [
-  { id: 1, event: 'Founder Console Auth Granted', ip: '182.185.142.92', time: new Date().toLocaleString(), status: 'SUCCESS', details: '256-Bit Session Key Generated' },
-  { id: 2, event: 'System Security Telemetry Active', ip: 'Localhost / Staging', time: '2026-09-28 21:00:00', status: 'INFO', details: 'Real-Time Geo Radar Listening' }
+  { id: 1, event: 'Founder Authentication Granted', ip: '182.185.142.92', time: new Date().toLocaleString(), status: 'SUCCESS', details: '256-Bit Session Key Generated' },
+  { id: 2, event: 'Real-Time Geo Radar Initialized', ip: 'Localhost / Staging', time: '2026-09-28 21:00:00', status: 'INFO', details: 'Geo Coordinates Listening' }
 ]
 
 export default function AdminPortalPage({ onExit }) {
@@ -208,15 +215,19 @@ export default function AdminPortalPage({ onExit }) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
   const [activeTab, setActiveTab] = useState('overview')
 
-  // Export Modals & PDF State
+  // Modals & AI Proposal Drawer
   const [printableInvoice, setPrintableInvoice] = useState(null)
   const [isExportModalOpen, setIsExportModalOpen] = useState(false)
+  const [aiProposalModalMsg, setAiProposalModalMsg] = useState(null)
+  const [selectedGeoPin, setSelectedGeoPin] = useState(null)
+  const [copiedPitchText, setCopiedPitchText] = useState(false)
 
   // Datasets
   const [projects, setProjects] = useState({})
   const [inboxMessages, setInboxMessages] = useState([])
   const [auditLeads, setAuditLeads] = useState([])
   const [visitorLogs, setVisitorLogs] = useState([])
+  const [activeSessions, setActiveSessions] = useState(INITIAL_ACTIVE_SESSIONS)
   const [securityLogs, setSecurityLogs] = useState([])
   const [launchSlots, setLaunchSlots] = useState({ total: 20, claimed: 3, discount: '35%', code: 'LAUNCH35' })
 
@@ -264,7 +275,9 @@ export default function AdminPortalPage({ onExit }) {
             browser: 'Chrome 128',
             entrance: 'Direct / Admin Access',
             lastActive: 'Just now',
-            status: 'Active Online'
+            status: 'Active Online',
+            radarX: 72,
+            radarY: 48
           }
           const updated = [newVis, ...prev]
           localStorage.setItem('NEXORA_VISITOR_LOGS', JSON.stringify(updated))
@@ -387,7 +400,7 @@ export default function AdminPortalPage({ onExit }) {
     }
   }, [selectedProjectId, projects, isCreatingNewProject])
 
-  // Login Authentication Handler
+  // Login Handler
   const handleLogin = (e) => {
     e.preventDefault()
 
@@ -453,6 +466,24 @@ export default function AdminPortalPage({ onExit }) {
     }
   }
 
+  // Session Revoke
+  const handleRevokeSession = (sessionId) => {
+    if (confirm(`Revoke session token ${sessionId}?`)) {
+      setActiveSessions(prev => prev.filter(s => s.id !== sessionId))
+      const newSecLog = {
+        id: Date.now(),
+        event: 'Remote Session Revoked',
+        ip: '182.185.142.92',
+        time: new Date().toLocaleString(),
+        status: 'REVOKED',
+        details: `Session token ${sessionId} invalidated by Founder`
+      }
+      const updatedSec = [newSecLog, ...securityLogs]
+      setSecurityLogs(updatedSec)
+      localStorage.setItem('NEXORA_SECURITY_LOGS', JSON.stringify(updatedSec))
+    }
+  }
+
   // Update Passcode
   const handleChangePasscode = (e) => {
     e.preventDefault()
@@ -472,7 +503,7 @@ export default function AdminPortalPage({ onExit }) {
     setPasscodeUpdateMsg('✅ Passcode updated successfully!')
   }
 
-  // Manage Inbox Messages
+  // Inbox & Lead Management
   const handleUpdateMsgStatus = (msgId, newStatus) => {
     const updated = inboxMessages.map(m => m.id === msgId ? { ...m, status: newStatus } : m)
     setInboxMessages(updated)
@@ -488,7 +519,7 @@ export default function AdminPortalPage({ onExit }) {
     }
   }
 
-  // Manage Audit Leads
+  // Audit Leads
   const handleUpdateAuditStatus = (leadId, newStatus) => {
     const updated = auditLeads.map(l => l.id === leadId ? { ...l, status: newStatus } : l)
     setAuditLeads(updated)
@@ -555,9 +586,11 @@ export default function AdminPortalPage({ onExit }) {
       depositPaid: Boolean(formData.depositPaid),
       finalPaid: Boolean(formData.finalPaid),
       steps: parsedSteps.length > 0 ? parsedSteps : [
-        { title: 'Project Discovery & Architecture', completed: true },
-        { title: 'Core Development Sprint', completed: formData.progress > 40 },
-        { title: 'Final Deployment & Code Handoff', completed: formData.progress >= 100 }
+        { title: 'Project Discovery & Architecture Alignment', completed: true },
+        { title: 'Interactive Figma 3D UI/UX Prototype', completed: true },
+        { title: 'Core React 19 Frontend Engineering', completed: formData.progress > 40 },
+        { title: 'Google PageSpeed 99+ Telemetry Audit', completed: formData.progress > 80 },
+        { title: 'Final Deployment & GitHub Code Handoff', completed: formData.progress >= 100 }
       ]
     }
 
@@ -581,7 +614,7 @@ export default function AdminPortalPage({ onExit }) {
     }
   }
 
-  // MULTIPLE EXPORT HANDLERS
+  // EXPORT HANDLERS
   const downloadCSV = (filename, headers, rows) => {
     const csvContent = "data:text/csv;charset=utf-8," 
       + [headers.join(','), ...rows.map(e => e.map(cell => `"${String(cell).replace(/"/g, '""')}"`).join(','))].join('\n')
@@ -595,14 +628,7 @@ export default function AdminPortalPage({ onExit }) {
   }
 
   const handleExportJSON = () => {
-    const backupData = {
-      timestamp: new Date().toISOString(),
-      projects,
-      inboxMessages,
-      auditLeads,
-      visitorLogs,
-      launchSlots
-    }
+    const backupData = { timestamp: new Date().toISOString(), projects, inboxMessages, auditLeads, visitorLogs, launchSlots }
     const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(backupData, null, 2))
     const downloadAnchor = document.createElement('a')
     downloadAnchor.setAttribute("href", dataStr)
@@ -683,20 +709,22 @@ END OF REPORT — NEXORA DIGITAL ENTERPRISE OS
   }
 
   // PDF Generator Callers
-  const handleGenerateInvoicePDF = (proj) => {
-    generateB2BInvoicePDF(proj)
-  }
+  const handleGenerateInvoicePDF = (proj) => generateB2BInvoicePDF(proj)
+  const handleGenerateAIProposalPDF = (msg) => generateExecutiveProposalPDF(msg)
 
-  const handleGenerateAIProposalPDF = (msg) => {
-    generateExecutiveProposalPDF(msg)
-  }
-
-  // Currency Converter Helpers
+  // Currency Converter Helper
   const formatMoney = (usdAmount) => {
     if (currencyMode === 'PKR') {
       return `Rs. ${Math.round(usdAmount * USD_TO_PKR).toLocaleString()}`
     }
     return `$${usdAmount.toLocaleString()}`
+  }
+
+  // Copy AI Pitch Text
+  const copyPitchTextToClipboard = (text) => {
+    navigator.clipboard.writeText(text)
+    setCopiedPitchText(true)
+    setTimeout(() => setCopiedPitchText(false), 2000)
   }
 
   // Calculate Metrics
@@ -728,16 +756,16 @@ END OF REPORT — NEXORA DIGITAL ENTERPRISE OS
     return matchesSearch
   })
 
-  // Nav Items Definition
+  // Nav Items
   const NAV_ITEMS = [
     { id: 'overview', label: 'Executive Dashboard', icon: BarChart3, badge: null },
-    { id: 'visitors', label: 'Live Visitors & IPs', icon: Compass, badge: activeVisitorCount ? `${activeVisitorCount} Live` : null, badgeColor: 'bg-emerald-500/20 text-emerald-400' },
+    { id: 'visitors', label: 'Live Visitors & Geo Radar', icon: Compass, badge: activeVisitorCount ? `${activeVisitorCount} Live` : null, badgeColor: 'bg-emerald-500/20 text-emerald-400' },
     { id: 'inbox', label: 'Inbound Quote Inbox', icon: Inbox, badge: unreadMsgCount ? unreadMsgCount : null, badgeColor: 'bg-blue-500 text-white' },
     { id: 'audit_leads', label: 'PageSpeed Audit Leads', icon: Globe, badge: newAuditLeadCount ? newAuditLeadCount : null, badgeColor: 'bg-purple-500/20 text-purple-400' },
     { id: 'projects', label: 'Client Project Sprints', icon: Layers, badge: projectList.length, badgeColor: 'bg-white/10 text-gray-300' },
     { id: 'invoices', label: 'B2B Invoices & Escrow', icon: DollarSign, badge: null },
     { id: 'scarcity', label: 'Launch Offer Scarcity', icon: Sparkles, badge: `${launchSlots.total - launchSlots.claimed} Left` },
-    { id: 'security', label: 'Security & Audit Logs', icon: ShieldAlert, badge: null },
+    { id: 'security', label: 'Security & Active Sessions', icon: ShieldAlert, badge: '98% SECURE', badgeColor: 'bg-emerald-500/20 text-emerald-400' },
   ]
 
   // 1. LOGIN SCREEN
@@ -845,7 +873,7 @@ END OF REPORT — NEXORA DIGITAL ENTERPRISE OS
     )
   }
 
-  // 2. FULL STANDALONE ENTERPRISE ADMIN DASHBOARD WITH MOBILE RESPONSIVENESS
+  // 2. FULL STANDALONE ENTERPRISE ADMIN DASHBOARD
   return (
     <div className="min-h-screen bg-[#070A14] text-white flex flex-col lg:flex-row selection:bg-blue-500 selection:text-white overflow-x-hidden">
       
@@ -1021,13 +1049,13 @@ END OF REPORT — NEXORA DIGITAL ENTERPRISE OS
       {/* MAIN CONTENT WORKSPACE */}
       <main className="flex-1 min-w-0 p-4 sm:p-6 lg:p-8 space-y-6 overflow-y-auto">
         
-        {/* Top Header Controls Bar with Currency Mode Switcher */}
+        {/* Top Header Controls Bar */}
         <div className="flex flex-wrap items-center justify-between gap-4 bg-[#0B1020] p-4 rounded-2xl border border-white/10 shadow-md">
           <div className="flex items-center gap-3">
             <h2 className="text-lg font-bold text-white capitalize flex items-center gap-2">
               <span>{activeTab.replace('_', ' ')} Control Center</span>
               <span className="px-2.5 py-0.5 bg-blue-500/10 text-blue-400 border border-blue-500/20 text-[10px] font-mono rounded-md">
-                ENTERPRISE v3.2
+                ENTERPRISE OS v3.4
               </span>
             </h2>
           </div>
@@ -1208,26 +1236,91 @@ END OF REPORT — NEXORA DIGITAL ENTERPRISE OS
           </div>
         )}
 
-        {/* TAB 2: VISITORS */}
+        {/* ----------------------------------------------------
+            TAB 2: INTERACTIVE GEO RADAR WORLD MAP & VISITORS
+           ---------------------------------------------------- */}
         {activeTab === 'visitors' && (
           <div className="space-y-6">
+            {/* Interactive Geo Radar World Map Widget */}
+            <div className="bg-[#0B1020] p-6 rounded-2xl border border-white/10 space-y-4 relative overflow-hidden">
+              <div className="flex items-center justify-between border-b border-white/10 pb-3">
+                <div>
+                  <h3 className="text-base font-bold text-white flex items-center gap-2">
+                    <Radio size={18} className="text-emerald-400 animate-pulse" />
+                    <span>Live Interactive Geo-Coordinates Radar World Map</span>
+                  </h3>
+                  <p className="text-xs text-gray-400">Pulsating live visitor coordinate hubs across Global Telemetry Nodes</p>
+                </div>
+                <span className="px-2.5 py-1 bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 text-xs font-mono font-bold rounded-lg flex items-center gap-1.5">
+                  <span className="w-2 h-2 rounded-full bg-emerald-400 animate-ping" />
+                  <span>5 Active Radar Hubs</span>
+                </span>
+              </div>
+
+              {/* Visual Radar Map Canvas */}
+              <div className="relative h-64 sm:h-80 w-full bg-[#030509] rounded-2xl border border-white/10 overflow-hidden flex items-center justify-center">
+                {/* Background Radar Grid Overlay */}
+                <div className="absolute inset-0 opacity-15 bg-[radial-gradient(#0066FF_1px,transparent_1px)] [background-size:24px_24px]" />
+                <div className="absolute w-64 h-64 sm:w-96 sm:h-96 rounded-full border border-blue-500/20 animate-spin [animation-duration:10s]" />
+                <div className="absolute w-32 h-32 sm:w-48 sm:h-48 rounded-full border border-indigo-500/30" />
+
+                {/* Pulsating Radar Pins */}
+                {visitorLogs.map((vis) => (
+                  <div
+                    key={vis.id}
+                    onClick={() => setSelectedGeoPin(vis)}
+                    style={{ left: `${vis.radarX || 50}%`, top: `${vis.radarY || 50}%` }}
+                    className="absolute -translate-x-1/2 -translate-y-1/2 cursor-pointer group z-20"
+                  >
+                    <div className="relative flex items-center justify-center">
+                      <span className="absolute w-6 h-6 rounded-full bg-emerald-400/40 animate-ping" />
+                      <span className="w-3.5 h-3.5 rounded-full bg-emerald-400 border-2 border-black shadow-lg" />
+                    </div>
+
+                    {/* Tooltip Hover Card */}
+                    <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 hidden group-hover:flex flex-col bg-[#0B1020] border border-blue-500/40 p-2.5 rounded-xl shadow-2xl text-[10px] font-mono text-white whitespace-nowrap z-30 pointer-events-none">
+                      <span className="font-bold text-blue-400">{vis.ip} ({vis.city})</span>
+                      <span className="text-emerald-400">{vis.latitude}° N, {vis.longitude}° E</span>
+                      <span className="text-gray-300">{vis.activeSection}</span>
+                    </div>
+                  </div>
+                ))}
+              </div>
+
+              {/* Selected Pin Geo Details Card */}
+              {selectedGeoPin && (
+                <div className="p-4 bg-gradient-to-r from-blue-900/30 to-indigo-900/30 rounded-xl border border-blue-500/30 flex items-center justify-between text-xs font-mono">
+                  <div>
+                    <span className="text-gray-400 block text-[10px] uppercase">Selected Radar Session</span>
+                    <strong className="text-white text-sm">{selectedGeoPin.ip}</strong> • <span className="text-blue-400">{selectedGeoPin.country}</span>
+                  </div>
+                  <div>
+                    <span className="text-gray-400 block text-[10px] uppercase">Exact Coordinates</span>
+                    <span className="text-emerald-400 font-bold">{selectedGeoPin.latitude}° N, {selectedGeoPin.longitude}° E</span>
+                  </div>
+                  <button onClick={() => setSelectedGeoPin(null)} className="text-gray-400 hover:text-white p-1">
+                    <X size={14} />
+                  </button>
+                </div>
+              )}
+            </div>
+
+            {/* Table */}
             <div className="bg-[#0B1020] p-6 rounded-2xl border border-white/10 space-y-4">
               <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-white/10 pb-4">
                 <div>
                   <h3 className="text-base font-bold text-white flex items-center gap-2">
-                    <Compass size={18} className="text-purple-400" />
-                    <span>Real-Time Visitor Telemetry with Latitude &amp; Longitude Coordinates</span>
+                    <Users size={18} className="text-purple-400" />
+                    <span>Real-Time Visitor Telemetry &amp; IP Logs</span>
                   </h3>
                   <p className="text-xs text-gray-400 mt-0.5">
                     Includes exact Public IP Address, Geo Coordinates (Lat/Long), ISP Provider, City, and Active Page.
                   </p>
                 </div>
-                <div className="flex items-center gap-3">
-                  <span className="px-3 py-1 bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 text-xs font-mono font-bold rounded-full flex items-center gap-1.5">
-                    <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
-                    <span>{activeVisitorCount} Active Sessions Online</span>
-                  </span>
-                </div>
+                <span className="px-3 py-1 bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 text-xs font-mono font-bold rounded-full flex items-center gap-1.5">
+                  <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+                  <span>{activeVisitorCount} Active Sessions Online</span>
+                </span>
               </div>
 
               <div className="overflow-x-auto">
@@ -1280,7 +1373,7 @@ END OF REPORT — NEXORA DIGITAL ENTERPRISE OS
           </div>
         )}
 
-        {/* TAB 3: INBOX WITH AI PROPOSAL PDF GENERATOR */}
+        {/* TAB 3: INBOX WITH AI PROPOSAL PITCH GENERATOR */}
         {activeTab === 'inbox' && (
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
             <div className="lg:col-span-5 space-y-4 bg-[#0B1020] p-4 rounded-2xl border border-white/10">
@@ -1451,11 +1544,11 @@ END OF REPORT — NEXORA DIGITAL ENTERPRISE OS
                       {/* PDF AI Proposal & Quick Action Buttons */}
                       <div className="pt-3 border-t border-white/10 flex flex-wrap gap-3">
                         <button
-                          onClick={() => handleGenerateAIProposalPDF(msg)}
-                          className="px-4 py-2.5 bg-purple-600 hover:bg-purple-500 text-white font-bold text-xs rounded-xl flex items-center gap-2 transition-all shadow-md cursor-pointer"
+                          onClick={() => setAiProposalModalMsg(msg)}
+                          className="px-4 py-2.5 bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 text-white font-bold text-xs rounded-xl flex items-center gap-2 transition-all shadow-md cursor-pointer"
                         >
-                          <Bot size={14} />
-                          <span>🤖 Generate AI Proposal PDF</span>
+                          <Bot size={15} />
+                          <span>🤖 Generate AI Proposal Pitch</span>
                         </button>
                         <a
                           href={`https://wa.me/${msg.whatsapp.replace(/[^0-9]/g, '')}?text=${encodeURIComponent(`Hello ${msg.fullName}, thank you for contacting NEXORA DIGITAL regarding ${msg.service}. We have reviewed your project requirements.`)}`}
@@ -1465,13 +1558,6 @@ END OF REPORT — NEXORA DIGITAL ENTERPRISE OS
                         >
                           <Send size={14} />
                           <span>Reply on WhatsApp</span>
-                        </a>
-                        <a
-                          href={`mailto:${msg.email}?subject=${encodeURIComponent(`Executive Proposal - NEXORA DIGITAL (${msg.service})`)}`}
-                          className="px-4 py-2.5 bg-blue-600 hover:bg-blue-500 text-white font-bold text-xs rounded-xl flex items-center gap-2 transition-all shadow-md cursor-pointer"
-                        >
-                          <Mail size={14} />
-                          <span>Send Email Proposal</span>
                         </a>
                       </div>
                     </div>
@@ -1619,7 +1705,7 @@ END OF REPORT — NEXORA DIGITAL ENTERPRISE OS
           </div>
         )}
 
-        {/* TAB 5: PROJECTS WITH PDF INVOICE GENERATION */}
+        {/* TAB 5: PROJECTS WITH GANTT TIMELINE VISUALIZER */}
         {activeTab === 'projects' && (
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
             <div className="lg:col-span-4 space-y-3 bg-[#0B1020] p-4 rounded-2xl border border-white/10">
@@ -1672,158 +1758,202 @@ END OF REPORT — NEXORA DIGITAL ENTERPRISE OS
               </div>
             </div>
 
-            <div className="lg:col-span-8 bg-[#0B1020] p-6 rounded-2xl border border-white/10 space-y-4">
-              <div className="flex items-center justify-between pb-3 border-b border-white/10 flex-wrap gap-2">
-                <h3 className="text-sm font-bold text-white flex items-center gap-2">
-                  <Edit2 size={16} className="text-blue-400" />
-                  <span>{isCreatingNewProject ? 'Create New Project Record' : `Editing Project (${formData.id})`}</span>
-                </h3>
-                <div className="flex items-center gap-2">
-                  {!isCreatingNewProject && (
-                    <button
-                      type="button"
-                      onClick={() => handleGenerateInvoicePDF(projects[formData.id] || formData)}
-                      className="px-3.5 py-1.5 bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold rounded-xl flex items-center gap-1.5 cursor-pointer shadow-md transition-all"
-                    >
-                      <Printer size={14} />
-                      <span>Download B2B Invoice PDF</span>
-                    </button>
-                  )}
-                  {!isCreatingNewProject && (
-                    <button
-                      type="button"
-                      onClick={() => handleDeleteProject(formData.id)}
-                      className="px-3 py-1.5 bg-red-500/10 hover:bg-red-500/20 text-red-400 border border-red-500/30 text-xs font-bold rounded-xl flex items-center gap-1 cursor-pointer transition-all"
-                    >
-                      <Trash2 size={13} />
-                      <span>Delete</span>
-                    </button>
-                  )}
+            <div className="lg:col-span-8 bg-[#0B1020] p-6 rounded-2xl border border-white/10 space-y-6">
+              
+              {/* INTERACTIVE GANTT TIMELINE VISUALIZER */}
+              {!isCreatingNewProject && projects[selectedProjectId] && (
+                <div className="bg-black/50 p-5 rounded-2xl border border-white/10 space-y-3">
+                  <div className="flex items-center justify-between border-b border-white/10 pb-2">
+                    <h4 className="text-xs font-bold text-white flex items-center gap-2 uppercase tracking-wider">
+                      <Activity size={14} className="text-blue-400" />
+                      <span>Sprint Gantt Milestone Chart ({formData.id})</span>
+                    </h4>
+                    <span className="text-xs font-mono font-bold text-emerald-400">{formData.progress}% Complete</span>
+                  </div>
+
+                  <div className="space-y-2.5 text-xs font-sans pt-1">
+                    {[
+                      { name: 'Phase 1: Architecture Alignment & Scope', done: true, pct: 100 },
+                      { name: 'Phase 2: 3D UI/UX Figma Prototype', done: true, pct: 100 },
+                      { name: 'Phase 3: Core React 19 Frontend Engineering', done: formData.progress >= 70, pct: Math.min(100, Math.max(20, formData.progress)) },
+                      { name: 'Phase 4: Google PageSpeed 99+ Telemetry Audit', done: formData.progress >= 90, pct: formData.progress >= 90 ? 100 : 0 },
+                      { name: 'Phase 5: Final Netlify DNS & GitHub Handoff', done: formData.progress >= 100, pct: formData.progress >= 100 ? 100 : 0 },
+                    ].map((phase, idx) => (
+                      <div key={idx} className="space-y-1">
+                        <div className="flex justify-between text-[11px]">
+                          <span className="font-semibold text-gray-300">{phase.name}</span>
+                          <span className={phase.done ? 'text-emerald-400 font-bold' : phase.pct > 0 ? 'text-blue-400 font-bold' : 'text-gray-500'}>
+                            {phase.done ? 'Done ✓' : phase.pct > 0 ? 'In Progress ⚡' : 'Pending o'}
+                          </span>
+                        </div>
+                        <div className="w-full bg-gray-800 h-2 rounded-full overflow-hidden">
+                          <div
+                            className={`h-full rounded-full transition-all duration-500 ${
+                              phase.done ? 'bg-emerald-500' : phase.pct > 0 ? 'bg-blue-500 animate-pulse' : 'bg-gray-700'
+                            }`}
+                            style={{ width: `${phase.pct}%` }}
+                          />
+                        </div>
+                      </div>
+                    ))}
+                  </div>
                 </div>
+              )}
+
+              {/* Edit Form */}
+              <div className="space-y-4">
+                <div className="flex items-center justify-between pb-3 border-b border-white/10 flex-wrap gap-2">
+                  <h3 className="text-sm font-bold text-white flex items-center gap-2">
+                    <Edit2 size={16} className="text-blue-400" />
+                    <span>{isCreatingNewProject ? 'Create New Project Record' : `Editing Project (${formData.id})`}</span>
+                  </h3>
+                  <div className="flex items-center gap-2">
+                    {!isCreatingNewProject && (
+                      <button
+                        type="button"
+                        onClick={() => handleGenerateInvoicePDF(projects[formData.id] || formData)}
+                        className="px-3.5 py-1.5 bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold rounded-xl flex items-center gap-1.5 cursor-pointer shadow-md transition-all"
+                      >
+                        <Printer size={14} />
+                        <span>Download B2B Invoice PDF</span>
+                      </button>
+                    )}
+                    {!isCreatingNewProject && (
+                      <button
+                        type="button"
+                        onClick={() => handleDeleteProject(formData.id)}
+                        className="px-3 py-1.5 bg-red-500/10 hover:bg-red-500/20 text-red-400 border border-red-500/30 text-xs font-bold rounded-xl flex items-center gap-1 cursor-pointer transition-all"
+                      >
+                        <Trash2 size={13} />
+                        <span>Delete</span>
+                      </button>
+                    )}
+                  </div>
+                </div>
+
+                <form onSubmit={handleSaveProject} className="space-y-4 text-xs">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    <div>
+                      <label className="block text-gray-400 font-bold mb-1">Project ID</label>
+                      <input
+                        type="text"
+                        required
+                        value={formData.id}
+                        onChange={(e) => setFormData({ ...formData, id: e.target.value })}
+                        className="w-full px-3.5 py-2.5 bg-black/60 border border-white/20 rounded-xl text-white font-mono uppercase focus:outline-none focus:border-blue-500"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-gray-400 font-bold mb-1">Client Business Name</label>
+                      <input
+                        type="text"
+                        required
+                        value={formData.client}
+                        onChange={(e) => setFormData({ ...formData, client: e.target.value })}
+                        className="w-full px-3.5 py-2.5 bg-black/60 border border-white/20 rounded-xl text-white font-semibold focus:outline-none focus:border-blue-500"
+                      />
+                    </div>
+                  </div>
+
+                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                    <div>
+                      <label className="block text-gray-400 font-bold mb-1">Service Package</label>
+                      <input
+                        type="text"
+                        required
+                        value={formData.service}
+                        onChange={(e) => setFormData({ ...formData, service: e.target.value })}
+                        className="w-full px-3.5 py-2.5 bg-black/60 border border-white/20 rounded-xl text-white focus:outline-none focus:border-blue-500"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-gray-400 font-bold mb-1">Sprint Status Label</label>
+                      <input
+                        type="text"
+                        required
+                        value={formData.status}
+                        onChange={(e) => setFormData({ ...formData, status: e.target.value })}
+                        className="w-full px-3.5 py-2.5 bg-black/60 border border-white/20 rounded-xl text-white font-semibold focus:outline-none focus:border-blue-500"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-gray-400 font-bold mb-1">Progress % ({formData.progress}%)</label>
+                      <input
+                        type="range"
+                        min="0"
+                        max="100"
+                        value={formData.progress}
+                        onChange={(e) => setFormData({ ...formData, progress: e.target.value })}
+                        className="w-full accent-blue-500 cursor-pointer mt-2"
+                      />
+                    </div>
+                  </div>
+
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    <div>
+                      <label className="block text-gray-400 font-bold mb-1">Est. Handoff Time</label>
+                      <input
+                        type="text"
+                        value={formData.estimatedLaunch}
+                        onChange={(e) => setFormData({ ...formData, estimatedLaunch: e.target.value })}
+                        className="w-full px-3.5 py-2.5 bg-black/60 border border-white/20 rounded-xl text-white focus:outline-none focus:border-blue-500"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-gray-400 font-bold mb-1">Client Email</label>
+                      <input
+                        type="email"
+                        value={formData.clientEmail}
+                        onChange={(e) => setFormData({ ...formData, clientEmail: e.target.value })}
+                        className="w-full px-3.5 py-2.5 bg-black/60 border border-white/20 rounded-xl text-white focus:outline-none focus:border-blue-500"
+                      />
+                    </div>
+                  </div>
+
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    <div>
+                      <label className="block text-gray-400 font-bold mb-1">Netlify Live Staging URL</label>
+                      <input
+                        type="url"
+                        value={formData.liveUrl}
+                        onChange={(e) => setFormData({ ...formData, liveUrl: e.target.value })}
+                        className="w-full px-3.5 py-2.5 bg-black/60 border border-white/20 rounded-xl text-white font-mono text-[11px] focus:outline-none focus:border-blue-500"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-gray-400 font-bold mb-1">GitHub Repository Link</label>
+                      <input
+                        type="url"
+                        value={formData.repoUrl}
+                        onChange={(e) => setFormData({ ...formData, repoUrl: e.target.value })}
+                        className="w-full px-3.5 py-2.5 bg-black/60 border border-white/20 rounded-xl text-white font-mono text-[11px] focus:outline-none focus:border-blue-500"
+                      />
+                    </div>
+                  </div>
+
+                  <div>
+                    <label className="block text-gray-400 font-bold mb-1">
+                      Milestone Tasks (Prefix line with ✓ for completed)
+                    </label>
+                    <textarea
+                      rows={4}
+                      value={formData.stepsText}
+                      onChange={(e) => setFormData({ ...formData, stepsText: e.target.value })}
+                      className="w-full px-3.5 py-2.5 bg-black/60 border border-white/20 rounded-xl text-white font-mono text-[11px] focus:outline-none focus:border-blue-500"
+                    />
+                  </div>
+
+                  <div className="pt-3 border-t border-white/10 flex items-center justify-end gap-3">
+                    <button
+                      type="submit"
+                      className="px-6 py-3 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white font-bold rounded-xl shadow-lg shadow-blue-600/30 flex items-center gap-2 cursor-pointer transition-all"
+                    >
+                      <Save size={15} />
+                      <span>Save &amp; Sync Client Portal</span>
+                    </button>
+                  </div>
+                </form>
               </div>
-
-              <form onSubmit={handleSaveProject} className="space-y-4 text-xs">
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                  <div>
-                    <label className="block text-gray-400 font-bold mb-1">Project ID</label>
-                    <input
-                      type="text"
-                      required
-                      value={formData.id}
-                      onChange={(e) => setFormData({ ...formData, id: e.target.value })}
-                      className="w-full px-3.5 py-2.5 bg-black/60 border border-white/20 rounded-xl text-white font-mono uppercase focus:outline-none focus:border-blue-500"
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-gray-400 font-bold mb-1">Client Business Name</label>
-                    <input
-                      type="text"
-                      required
-                      value={formData.client}
-                      onChange={(e) => setFormData({ ...formData, client: e.target.value })}
-                      className="w-full px-3.5 py-2.5 bg-black/60 border border-white/20 rounded-xl text-white font-semibold focus:outline-none focus:border-blue-500"
-                    />
-                  </div>
-                </div>
-
-                <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-                  <div>
-                    <label className="block text-gray-400 font-bold mb-1">Service Package</label>
-                    <input
-                      type="text"
-                      required
-                      value={formData.service}
-                      onChange={(e) => setFormData({ ...formData, service: e.target.value })}
-                      className="w-full px-3.5 py-2.5 bg-black/60 border border-white/20 rounded-xl text-white focus:outline-none focus:border-blue-500"
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-gray-400 font-bold mb-1">Sprint Status Label</label>
-                    <input
-                      type="text"
-                      required
-                      value={formData.status}
-                      onChange={(e) => setFormData({ ...formData, status: e.target.value })}
-                      className="w-full px-3.5 py-2.5 bg-black/60 border border-white/20 rounded-xl text-white font-semibold focus:outline-none focus:border-blue-500"
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-gray-400 font-bold mb-1">Progress % ({formData.progress}%)</label>
-                    <input
-                      type="range"
-                      min="0"
-                      max="100"
-                      value={formData.progress}
-                      onChange={(e) => setFormData({ ...formData, progress: e.target.value })}
-                      className="w-full accent-blue-500 cursor-pointer mt-2"
-                    />
-                  </div>
-                </div>
-
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                  <div>
-                    <label className="block text-gray-400 font-bold mb-1">Est. Handoff Time</label>
-                    <input
-                      type="text"
-                      value={formData.estimatedLaunch}
-                      onChange={(e) => setFormData({ ...formData, estimatedLaunch: e.target.value })}
-                      className="w-full px-3.5 py-2.5 bg-black/60 border border-white/20 rounded-xl text-white focus:outline-none focus:border-blue-500"
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-gray-400 font-bold mb-1">Client Email</label>
-                    <input
-                      type="email"
-                      value={formData.clientEmail}
-                      onChange={(e) => setFormData({ ...formData, clientEmail: e.target.value })}
-                      className="w-full px-3.5 py-2.5 bg-black/60 border border-white/20 rounded-xl text-white focus:outline-none focus:border-blue-500"
-                    />
-                  </div>
-                </div>
-
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                  <div>
-                    <label className="block text-gray-400 font-bold mb-1">Netlify Live Staging URL</label>
-                    <input
-                      type="url"
-                      value={formData.liveUrl}
-                      onChange={(e) => setFormData({ ...formData, liveUrl: e.target.value })}
-                      className="w-full px-3.5 py-2.5 bg-black/60 border border-white/20 rounded-xl text-white font-mono text-[11px] focus:outline-none focus:border-blue-500"
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-gray-400 font-bold mb-1">GitHub Repository Link</label>
-                    <input
-                      type="url"
-                      value={formData.repoUrl}
-                      onChange={(e) => setFormData({ ...formData, repoUrl: e.target.value })}
-                      className="w-full px-3.5 py-2.5 bg-black/60 border border-white/20 rounded-xl text-white font-mono text-[11px] focus:outline-none focus:border-blue-500"
-                    />
-                  </div>
-                </div>
-
-                <div>
-                  <label className="block text-gray-400 font-bold mb-1">
-                    Milestone Tasks (Prefix line with ✓ for completed)
-                  </label>
-                  <textarea
-                    rows={4}
-                    value={formData.stepsText}
-                    onChange={(e) => setFormData({ ...formData, stepsText: e.target.value })}
-                    className="w-full px-3.5 py-2.5 bg-black/60 border border-white/20 rounded-xl text-white font-mono text-[11px] focus:outline-none focus:border-blue-500"
-                  />
-                </div>
-
-                <div className="pt-3 border-t border-white/10 flex items-center justify-end gap-3">
-                  <button
-                    type="submit"
-                    className="px-6 py-3 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white font-bold rounded-xl shadow-lg shadow-blue-600/30 flex items-center gap-2 cursor-pointer transition-all"
-                  >
-                    <Save size={15} />
-                    <span>Save &amp; Sync Client Portal</span>
-                  </button>
-                </div>
-              </form>
             </div>
           </div>
         )}
@@ -1834,7 +1964,7 @@ END OF REPORT — NEXORA DIGITAL ENTERPRISE OS
             <div className="flex items-center justify-between pb-3 border-b border-white/10">
               <h3 className="text-sm font-bold text-white flex items-center gap-2">
                 <DollarSign size={16} className="text-emerald-400" />
-                <span>B2B Client Invoicing &amp; Milestone Trackers</span>
+                <span>B2B Client Invoicing &amp; Milestone Trackers ({currencyMode})</span>
               </h3>
             </div>
 
@@ -1940,9 +2070,84 @@ END OF REPORT — NEXORA DIGITAL ENTERPRISE OS
           </form>
         )}
 
-        {/* TAB 8: SECURITY */}
+        {/* TAB 8: FOUNDER SECURITY CENTER & ACTIVE SESSIONS */}
         {activeTab === 'security' && (
           <div className="space-y-6">
+            
+            {/* Security Health Index Gauge Card */}
+            <div className="bg-[#0B1020] p-6 rounded-2xl border border-white/10 space-y-4">
+              <div className="flex items-center justify-between border-b border-white/10 pb-3">
+                <h3 className="text-sm font-bold text-white flex items-center gap-2">
+                  <ShieldCheck size={18} className="text-emerald-400" />
+                  <span>Founder Security Health Index</span>
+                </h3>
+                <span className="px-3 py-1 bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 text-xs font-mono font-bold rounded-full">
+                  98% SECURE
+                </span>
+              </div>
+
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 text-xs">
+                <div className="p-4 bg-black/40 rounded-xl border border-white/10 space-y-1">
+                  <span className="text-gray-400 block font-bold text-[10px] uppercase">Session Encryption</span>
+                  <span className="text-white font-bold font-mono text-sm">256-Bit Cryptographic Tokens</span>
+                </div>
+                <div className="p-4 bg-black/40 rounded-xl border border-white/10 space-y-1">
+                  <span className="text-gray-400 block font-bold text-[10px] uppercase">Inactivity Auto-Lock</span>
+                  <span className="text-emerald-400 font-bold font-mono text-sm">5-Minute Inactivity Timer</span>
+                </div>
+                <div className="p-4 bg-black/40 rounded-xl border border-white/10 space-y-1">
+                  <span className="text-gray-400 block font-bold text-[10px] uppercase">Rate Limiter Protection</span>
+                  <span className="text-blue-400 font-bold font-mono text-sm">5 Max Attempts (60s Lockout)</span>
+                </div>
+              </div>
+            </div>
+
+            {/* Active Sessions Revoker List */}
+            <div className="bg-[#0B1020] p-6 rounded-2xl border border-white/10 space-y-4">
+              <div className="flex items-center justify-between border-b border-white/10 pb-3">
+                <h3 className="text-sm font-bold text-white flex items-center gap-2">
+                  <Power size={16} className="text-blue-400" />
+                  <span>Active Founder Sessions &amp; Remote Token Revoker</span>
+                </h3>
+                <span className="text-xs text-gray-400 font-mono">{activeSessions.length} Authorized Sessions</span>
+              </div>
+
+              <div className="space-y-3">
+                {activeSessions.map((session) => (
+                  <div key={session.id} className="p-4 bg-black/40 rounded-xl border border-white/10 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 text-xs">
+                    <div>
+                      <div className="flex items-center gap-2 font-bold text-white text-sm">
+                        <span>{session.device}</span>
+                        <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-blue-500/20 text-blue-400 border border-blue-500/30">
+                          {session.status}
+                        </span>
+                      </div>
+                      <div className="text-gray-400 font-mono text-[11px] mt-1">
+                        IP: <strong className="text-white">{session.ip}</strong> ({session.location}) • Login: {session.loginTime}
+                      </div>
+                    </div>
+
+                    <div className="flex items-center gap-2">
+                      {session.status.includes('CURRENT') ? (
+                        <span className="px-3 py-1 bg-emerald-500/10 text-emerald-400 text-xs font-bold rounded-lg border border-emerald-500/20">
+                          Active Now
+                        </span>
+                      ) : (
+                        <button
+                          onClick={() => handleRevokeSession(session.id)}
+                          className="px-3 py-1.5 bg-red-500/10 hover:bg-red-500/20 text-red-400 border border-red-500/30 text-xs font-bold rounded-xl flex items-center gap-1 cursor-pointer transition-all"
+                        >
+                          <Power size={13} />
+                          <span>Revoke Token</span>
+                        </button>
+                      )}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Passcode Modifier Form */}
             <form onSubmit={handleChangePasscode} className="bg-[#0B1020] p-6 rounded-2xl border border-white/10 space-y-4 max-w-xl">
               <h3 className="text-sm font-bold text-white flex items-center gap-2 border-b border-white/10 pb-3">
                 <Key size={16} className="text-blue-400" />
@@ -1990,6 +2195,7 @@ END OF REPORT — NEXORA DIGITAL ENTERPRISE OS
               </div>
             </form>
 
+            {/* Security Audit Logs */}
             <div className="bg-[#0B1020] p-6 rounded-2xl border border-white/10 space-y-4">
               <div className="flex items-center justify-between border-b border-white/10 pb-3">
                 <h3 className="text-sm font-bold text-white flex items-center gap-2">
@@ -2036,6 +2242,82 @@ END OF REPORT — NEXORA DIGITAL ENTERPRISE OS
         )}
 
       </main>
+
+      {/* AI PROPOSAL PITCH DRAWER / MODAL */}
+      {aiProposalModalMsg && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/85 backdrop-blur-md">
+          <div className="bg-[#0B1020] border border-white/20 rounded-3xl p-6 max-w-2xl w-full text-white space-y-5 shadow-2xl relative max-h-[90vh] overflow-y-auto">
+            <div className="flex items-center justify-between border-b border-white/10 pb-4">
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 rounded-xl bg-purple-600/20 border border-purple-500/30 flex items-center justify-center text-purple-400">
+                  <Bot size={22} />
+                </div>
+                <div>
+                  <h3 className="text-base font-bold text-white">AI Executive Proposal Generator</h3>
+                  <p className="text-xs text-gray-400">Target Client: {aiProposalModalMsg.fullName} ({aiProposalModalMsg.businessName})</p>
+                </div>
+              </div>
+              <button
+                onClick={() => setAiProposalModalMsg(null)}
+                className="text-gray-400 hover:text-white p-2 rounded-xl bg-white/5 hover:bg-white/10 transition-colors"
+              >
+                <X size={16} />
+              </button>
+            </div>
+
+            {/* AI Generated Proposal Card */}
+            <div className="p-4 bg-black/50 rounded-2xl border border-white/10 space-y-3 text-xs">
+              <div className="flex items-center justify-between border-b border-white/10 pb-2">
+                <span className="font-bold text-purple-400 uppercase tracking-wider text-[11px]">Recommended Technical Architecture</span>
+                <span className="font-mono text-emerald-400 font-bold">{aiProposalModalMsg.budget}</span>
+              </div>
+              <p className="text-gray-300 leading-relaxed font-sans">
+                "Engineered Single Page Application (SPA) utilizing <strong>React 19 Core</strong>, <strong>Tailwind CSS 4</strong>, <strong>Framer Motion WebGL</strong>, and <strong>Google Lighthouse 99+ Telemetry</strong>. Includes 100% full IP source code handoff and signed mutual NDA."
+              </p>
+            </div>
+
+            {/* Ready-to-Send WhatsApp Pitch Text */}
+            <div className="space-y-2 text-xs">
+              <div className="flex items-center justify-between">
+                <label className="font-bold text-gray-300 uppercase tracking-wider">
+                  Ready-To-Send WhatsApp Pitch Message
+                </label>
+                <button
+                  type="button"
+                  onClick={() => copyPitchTextToClipboard(`Hello ${aiProposalModalMsg.fullName}! Thank you for contacting NEXORA DIGITAL regarding ${aiProposalModalMsg.service}. We have analyzed your requirements for ${aiProposalModalMsg.businessName} and prepared an Executive Proposal with 99+ PageSpeed guarantee & 100% IP Code Handoff. Let's schedule a 10-minute technical discovery call!`)}
+                  className="text-blue-400 hover:underline flex items-center gap-1 font-bold"
+                >
+                  <Copy size={13} />
+                  <span>{copiedPitchText ? '✓ Copied to Clipboard!' : 'Copy Text'}</span>
+                </button>
+              </div>
+              <div className="p-3.5 bg-black/60 rounded-xl border border-white/15 text-gray-300 font-mono text-[11px] leading-relaxed">
+                {`Hello ${aiProposalModalMsg.fullName}! Thank you for contacting NEXORA DIGITAL regarding ${aiProposalModalMsg.service}. We have analyzed your requirements for ${aiProposalModalMsg.businessName} and prepared an Executive Proposal with 99+ PageSpeed guarantee & 100% IP Code Handoff. Let's schedule a 10-minute technical discovery call!`}
+              </div>
+            </div>
+
+            <div className="pt-3 border-t border-white/10 flex flex-wrap items-center justify-between gap-3">
+              <button
+                onClick={() => handleGenerateAIProposalPDF(aiProposalModalMsg)}
+                className="px-4 py-2.5 bg-purple-600 hover:bg-purple-500 text-white font-bold text-xs rounded-xl flex items-center gap-2 shadow-md cursor-pointer"
+              >
+                <Download size={14} />
+                <span>Download Official PDF Proposal</span>
+              </button>
+
+              <a
+                href={`https://wa.me/${aiProposalModalMsg.whatsapp.replace(/[^0-9]/g, '')}?text=${encodeURIComponent(`Hello ${aiProposalModalMsg.fullName}! Thank you for contacting NEXORA DIGITAL regarding ${aiProposalModalMsg.service}. We have analyzed your requirements for ${aiProposalModalMsg.businessName} and prepared an Executive Proposal with 99+ PageSpeed guarantee & 100% IP Code Handoff.`)}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="px-4 py-2.5 bg-[#25D366] hover:bg-[#20bd5a] text-white font-bold text-xs rounded-xl flex items-center gap-2 shadow-md cursor-pointer"
+              >
+                <Send size={14} />
+                <span>Send Pitch via WhatsApp</span>
+              </a>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* MULTIPLE EXPORT OPTIONS MODAL */}
       {isExportModalOpen && (
@@ -2154,6 +2436,81 @@ END OF REPORT — NEXORA DIGITAL ENTERPRISE OS
                 <p className="text-[#A7ADBB] text-[11px] leading-relaxed">
                   Formatted text executive report summarizing pipeline revenue, lead counts, active sprints, and key metrics.
                 </p>
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* PRINTABLE B2B INVOICE MODAL RECEIPT */}
+      {printableInvoice && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/85 backdrop-blur-sm">
+          <div className="bg-[#0B1020] border border-white/20 rounded-3xl p-6 max-w-2xl w-full text-white space-y-6 shadow-2xl relative max-h-[90vh] overflow-y-auto">
+            <div className="flex items-center justify-between border-b border-white/10 pb-4">
+              <NexoraBrand variant="footer" />
+              <div className="text-right">
+                <h3 className="text-base font-bold text-white font-mono">{printableInvoice.id}</h3>
+                <span className="text-xs text-emerald-400 font-bold">Official B2B Invoice Receipt</span>
+              </div>
+            </div>
+
+            <div className="grid grid-cols-2 gap-4 text-xs">
+              <div>
+                <span className="text-gray-400 font-bold block">Billed To Client:</span>
+                <span className="text-base font-bold text-white">{printableInvoice.client}</span>
+                <span className="text-gray-300 block">{printableInvoice.clientEmail || 'contact@client-domain.com'}</span>
+              </div>
+              <div className="text-right">
+                <span className="text-gray-400 font-bold block">Issued By:</span>
+                <span className="text-base font-bold text-white">NEXORA DIGITAL</span>
+                <span className="text-gray-300 block">Karachi, Pakistan 🇵🇰</span>
+              </div>
+            </div>
+
+            <div className="p-4 bg-black/50 rounded-2xl border border-white/10 space-y-2 text-xs">
+              <div className="flex justify-between font-bold text-gray-300 border-b border-white/10 pb-2">
+                <span>Service Description</span>
+                <span>Amount</span>
+              </div>
+              <div className="flex justify-between font-bold text-white pt-1">
+                <span>{printableInvoice.service} (Full IP Source Code &amp; SLA Handoff)</span>
+                <span className="font-mono text-emerald-400">${printableInvoice.amount || 1500} USD</span>
+              </div>
+            </div>
+
+            <div className="grid grid-cols-2 gap-3 text-xs bg-white/5 p-3 rounded-xl border border-white/10">
+              <div>
+                <span className="text-gray-400 font-bold block">50% Upfront Milestone:</span>
+                <span className={printableInvoice.depositPaid ? 'text-emerald-400 font-bold' : 'text-amber-400 font-bold'}>
+                  {printableInvoice.depositPaid ? `✓ Paid ($${(printableInvoice.amount || 1500) * 0.5})` : 'Pending'}
+                </span>
+              </div>
+              <div className="text-right">
+                <span className="text-gray-400 font-bold block">50% Final Handoff Release:</span>
+                <span className="printableInvoice.finalPaid ? 'text-emerald-400 font-bold' : 'text-amber-400 font-bold'">
+                  {printableInvoice.finalPaid ? `✓ Paid ($${(printableInvoice.amount || 1500) * 0.5})` : 'Pending'}
+                </span>
+              </div>
+            </div>
+
+            <div className="pt-2 text-[10px] text-gray-400 space-y-1">
+              <p>• Terms: 100% Source Code Ownership Handoff upon final milestone release.</p>
+              <p>• Signed Mutual NDA &amp; Performance SLA guarantee included.</p>
+            </div>
+
+            <div className="flex items-center justify-end gap-3 pt-3 border-t border-white/10">
+              <button
+                onClick={() => window.print()}
+                className="px-4 py-2 bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs rounded-xl flex items-center gap-1.5 cursor-pointer"
+              >
+                <Printer size={14} />
+                <span>Print / Save as PDF</span>
+              </button>
+              <button
+                onClick={() => setPrintableInvoice(null)}
+                className="px-4 py-2 bg-white/10 hover:bg-white/20 text-white font-bold text-xs rounded-xl cursor-pointer"
+              >
+                Close
               </button>
             </div>
           </div>
