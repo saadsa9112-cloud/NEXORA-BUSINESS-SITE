@@ -12,7 +12,8 @@ import {
 } from 'lucide-react'
 import { CONTACT } from '../../data/siteData'
 import NexoraBrand from '../NexoraBrand/NexoraBrand'
-import { getRealVisitorGeo } from '../../utils/geoTracker'
+import { getRealVisitorGeo, detectBrowserAndDevice } from '../../utils/geoTracker'
+
 import { generateB2BInvoicePDF, generateExecutiveProposalPDF } from '../../utils/pdfGenerator'
 
 // Initial Active Projects Store
@@ -85,110 +86,23 @@ const INITIAL_PROJECTS = {
   }
 }
 
-// Initial Inbound Quote Submissions
-const INITIAL_INBOX_MESSAGES = [
-  {
-    id: 'MSG-9412',
-    fullName: 'Zohaib Ahmed',
-    businessName: 'Apex Global Logistics',
-    whatsapp: '03453937195',
-    email: 'zohaib@apex-global.com',
-    service: 'Custom Web Application',
-    budget: 'Rs. 75,000+',
-    currency: 'PKR',
-    details: 'We need an enterprise logistics portal with real-time package telemetry, client portal login, and automated B2B invoicing PDF generation.',
-    timestamp: 'Sep 28, 2026 09:42 PM',
-    isoDate: '2026-09-28T21:42:00Z',
-    status: 'Unread',
-    leadScore: '🔥 HOT HIGH INTENT',
-    ip: '182.185.142.92',
-    city: 'Karachi',
-    country: 'Pakistan',
-    flag: '🇵🇰',
-    latitude: '24.8607',
-    longitude: '67.0011',
-    isp: 'CyberNet Broadband Pakistan',
-    location: 'Karachi, Pakistan 🇵🇰',
-    coordinates: '24.8607° N, 67.0011° E',
-  },
-  {
-    id: 'MSG-8821',
-    fullName: 'Sarah Jenkins',
-    businessName: 'Vanguard Retail UK',
-    whatsapp: '+447911123456',
-    email: 'sarah.j@vanguard-retail.co.uk',
-    service: 'Shopify Development',
-    budget: '$999+',
-    currency: 'USD',
-    details: 'Looking for a high-converting headless Shopify store with multi-currency PKR/USD toggle, fast 99+ mobile page speed, and PayPal/Stripe integration.',
-    timestamp: 'Sep 27, 2026 04:15 PM',
-    isoDate: '2026-09-27T16:15:00Z',
-    status: 'In Review',
-    leadScore: '🔥 HOT HIGH INTENT',
-    ip: '86.134.20.11',
-    city: 'London',
-    country: 'United Kingdom',
-    flag: '🇬🇧',
-    latitude: '51.5074',
-    longitude: '-0.1278',
-    isp: 'Vodafone UK Broadband',
-    location: 'London, United Kingdom 🇬🇧',
-    coordinates: '51.5074° N, 0.1278° W',
-  },
-  {
-    id: 'MSG-7510',
-    fullName: 'Dr. Tariq Malik',
-    businessName: 'NED Health Care Portal',
-    whatsapp: '03332145890',
-    email: 'info@nedhealthcare.org',
-    service: 'Business Website Development',
-    budget: 'Rs. 35,000 – Rs. 75,000',
-    currency: 'PKR',
-    details: 'Need a clean academic & medical portal for hospital appointments, student course registration, and doctor schedules.',
-    timestamp: 'Sep 26, 2026 11:20 AM',
-    isoDate: '2026-09-26T11:20:00Z',
-    status: 'Quote Sent',
-    leadScore: '⚡ WARM LEAD',
-    ip: '115.186.160.4',
-    city: 'Lahore',
-    country: 'Pakistan',
-    flag: '🇵🇰',
-    latitude: '31.5204',
-    longitude: '74.3587',
-    isp: 'PTCL Fiber Broadband',
-    location: 'Lahore, Pakistan 🇵🇰',
-    coordinates: '31.5204° N, 74.3587° E',
-  }
-]
+// Initial Inbound Quote Submissions (Real submissions saved to localStorage)
+const INITIAL_INBOX_MESSAGES = []
 
-// Initial PageSpeed Audit Leads
-const INITIAL_AUDIT_LEADS = [
-  { id: 101, url: 'apex-logistics.com', score: 48, seoScore: 72, date: '2026-09-28', time: '09:30 PM', status: 'New Audit Lead', ip: '182.185.142.92', city: 'Karachi', country: 'Pakistan', flag: '🇵🇰', latitude: '24.8607', longitude: '67.0011', isp: 'CyberNet Broadband', device: 'Mobile (4G)', notes: 'Render-blocking CSS & TTFB delay of 1.4s detected.' },
-  { id: 102, url: 'modernretail-store.com', score: 52, seoScore: 81, date: '2026-09-27', time: '02:14 PM', status: 'Proposal Sent', ip: '86.134.20.11', city: 'London', country: 'United Kingdom', flag: '🇬🇧', latitude: '51.5074', longitude: '-0.1278', isp: 'Vodafone UK', device: 'Desktop (High Speed)', notes: 'Unused CSS payload and uncompressed WebP images.' },
-  { id: 103, url: 'vanguard-finance.io', score: 41, seoScore: 68, date: '2026-09-26', time: '10:05 AM', status: 'Audit Followup Pending', ip: '35.212.89.104', city: 'New York', country: 'United States', flag: '🇺🇸', latitude: '40.7128', longitude: '-74.0060', isp: 'Comcast Cable', device: 'Mobile (4G)', notes: 'Core Web Vitals fail LCP threshold.' }
-]
+// Initial PageSpeed Audit Leads (Real audits saved to localStorage)
+const INITIAL_AUDIT_LEADS = []
 
 // Initial Visitor Telemetry Logs with Radar Map Coordinates
-const INITIAL_VISITOR_LOGS = [
-  { id: 'VIS-901', ip: '182.185.142.92', country: 'Pakistan 🇵🇰', city: 'Karachi', latitude: '24.8607', longitude: '67.0011', isp: 'CyberNet Broadband', duration: '5m 42s', activeSection: '#contact (Quote Form)', device: 'Desktop Windows 11', browser: 'Chrome 128', entrance: 'Direct URL / Google Organic', lastActive: '2 mins ago', status: 'Active Online', radarX: 72, radarY: 48 },
-  { id: 'VIS-902', ip: '35.212.89.104', country: 'United States 🇺🇸', city: 'New York', latitude: '40.7128', longitude: '-74.0060', isp: 'Comcast High Speed', duration: '12m 10s', activeSection: '#pricing (Global USD Tiers)', device: 'Mobile iPhone 15', browser: 'Safari 18', entrance: 'Social Referral / LinkedIn', lastActive: 'Just now', status: 'Active Online', radarX: 25, radarY: 38 },
-  { id: 'VIS-903', ip: '86.134.20.11', country: 'United Kingdom 🇬🇧', city: 'London', latitude: '51.5074', longitude: '-0.1278', isp: 'Vodafone Fiber', duration: '3m 15s', activeSection: '#speed-audit (PageSpeed Tool)', device: 'Desktop macOS', browser: 'Edge 126', entrance: 'Direct Hash #speed-audit', lastActive: '5 mins ago', status: 'Idle', radarX: 48, radarY: 30 },
-  { id: 'VIS-904', ip: '103.255.4.19', country: 'United Arab Emirates 🇦🇪', city: 'Dubai', latitude: '25.2048', longitude: '55.2708', isp: 'Etisalat UAE', duration: '8m 20s', activeSection: '#work (Portfolio Showcase)', device: 'Tablet iPad Pro', browser: 'Safari 17', entrance: 'Google Organic Search', lastActive: '12 mins ago', status: 'Offline', radarX: 64, radarY: 46 },
-  { id: 'VIS-905', ip: '115.186.160.4', country: 'Pakistan 🇵🇰', city: 'Lahore', latitude: '31.5204', longitude: '74.3587', isp: 'PTCL Fiber Broadband', duration: '14m 05s', activeSection: '#services (Service Guarantees)', device: 'Desktop Windows', browser: 'Firefox 130', entrance: 'Direct Access', lastActive: '15 mins ago', status: 'Offline', radarX: 74, radarY: 44 }
-]
+const INITIAL_VISITOR_LOGS = []
 
-// Initial Active Founder Sessions
-const INITIAL_ACTIVE_SESSIONS = [
-  { id: 'SES-FOUNDER-01', device: 'Desktop Windows 11', browser: 'Chrome 128', ip: '182.185.142.92', location: 'Karachi, Pakistan 🇵🇰', loginTime: 'Sep 28, 2026 09:00 PM', status: 'CURRENT SESSION', active: true },
-  { id: 'SES-ADMIN-02', device: 'Apple MacBook Pro', browser: 'Safari 18', ip: '86.134.20.11', location: 'London, UK 🇬🇧', loginTime: 'Sep 28, 2026 04:30 PM', status: 'Authorized Staging Console', active: true },
-  { id: 'SES-MOBILE-03', device: 'iPhone 15 Pro', browser: 'Mobile Safari', ip: '182.185.142.92', location: 'Karachi, Pakistan 🇵🇰', loginTime: 'Sep 27, 2026 11:15 AM', status: 'Authorized Mobile Session', active: true }
-]
+// Initial Active Founder Sessions (Loaded dynamically from current browser session)
+const INITIAL_ACTIVE_SESSIONS = []
 
 // Initial Security Audit Logs
 const INITIAL_SECURITY_LOGS = [
-  { id: 1, event: 'Founder Authentication Granted', ip: '182.185.142.92', time: new Date().toLocaleString(), status: 'SUCCESS', details: '256-Bit Session Key Generated' },
-  { id: 2, event: 'Real-Time Geo Radar Initialized', ip: 'Localhost / Staging', time: '2026-09-28 21:00:00', status: 'INFO', details: 'Geo Coordinates Listening' }
+  { id: 1, event: 'Founder Security Console Initialized', ip: 'Verified Client IP', time: new Date().toLocaleString(), status: 'SUCCESS', details: 'Session Telemetry Listening' }
 ]
+
 
 export default function AdminPortalPage({ onExit }) {
   // Passcode Security State
@@ -227,7 +141,7 @@ export default function AdminPortalPage({ onExit }) {
   const [inboxMessages, setInboxMessages] = useState([])
   const [auditLeads, setAuditLeads] = useState([])
   const [visitorLogs, setVisitorLogs] = useState([])
-  const [activeSessions, setActiveSessions] = useState(INITIAL_ACTIVE_SESSIONS)
+  const [activeSessions, setActiveSessions] = useState([])
   const [securityLogs, setSecurityLogs] = useState([])
   const [launchSlots, setLaunchSlots] = useState({ total: 20, claimed: 3, discount: '35%', code: 'LAUNCH35' })
 
@@ -259,8 +173,45 @@ export default function AdminPortalPage({ onExit }) {
       const geo = await getRealVisitorGeo()
       setCurrentVisitorGeo(geo)
 
+      const { device, browser } = detectBrowserAndDevice()
+
+      // Dynamically build current real active session
+      const currentRealSession = {
+        id: 'SES-LIVE-101',
+        device: device,
+        browser: browser,
+        ip: geo.ip,
+        location: `${geo.city}, ${geo.country} ${geo.flag}`,
+        loginTime: new Date().toLocaleString('en-US', { dateStyle: 'medium', timeStyle: 'short' }),
+        status: 'CURRENT ACTIVE SESSION',
+        active: true
+      }
+
+      const savedSessions = localStorage.getItem('NEXORA_ACTIVE_SESSIONS')
+      if (savedSessions) {
+        try {
+          const parsed = JSON.parse(savedSessions)
+          if (Array.isArray(parsed) && parsed.length > 0) {
+            const updated = parsed.map(s => s.status?.includes('CURRENT') ? { ...s, ip: geo.ip, location: `${geo.city}, ${geo.country} ${geo.flag}`, device, browser } : s)
+            setActiveSessions(updated)
+            localStorage.setItem('NEXORA_ACTIVE_SESSIONS', JSON.stringify(updated))
+          } else {
+            setActiveSessions([currentRealSession])
+            localStorage.setItem('NEXORA_ACTIVE_SESSIONS', JSON.stringify([currentRealSession]))
+          }
+        } catch (e) {
+          setActiveSessions([currentRealSession])
+          localStorage.setItem('NEXORA_ACTIVE_SESSIONS', JSON.stringify([currentRealSession]))
+        }
+      } else {
+        setActiveSessions([currentRealSession])
+        localStorage.setItem('NEXORA_ACTIVE_SESSIONS', JSON.stringify([currentRealSession]))
+      }
+
+      // Dynamically log/update real visitor telemetry
       setVisitorLogs(prev => {
-        if (!prev.some(v => v.ip === geo.ip)) {
+        const hasMyIp = prev.some(v => v.ip === geo.ip)
+        if (!hasMyIp) {
           const newVis = {
             id: `VIS-${Math.floor(100 + Math.random() * 900)}`,
             ip: geo.ip,
@@ -271,12 +222,12 @@ export default function AdminPortalPage({ onExit }) {
             isp: geo.isp,
             duration: '1m 20s',
             activeSection: '#admin (Founder Portal)',
-            device: window.innerWidth < 768 ? 'Mobile Phone' : 'Desktop',
-            browser: 'Chrome 128',
+            device: device,
+            browser: browser,
             entrance: 'Direct / Admin Access',
             lastActive: 'Just now',
             status: 'Active Online',
-            radarX: 72,
+            radarX: 52,
             radarY: 48
           }
           const updated = [newVis, ...prev]
@@ -287,6 +238,7 @@ export default function AdminPortalPage({ onExit }) {
       })
     }
     fetchGeo()
+
 
     const sessionAuth = sessionStorage.getItem('NEXORA_ADMIN_AUTH')
     if (sessionAuth === 'true') {
@@ -468,12 +420,17 @@ export default function AdminPortalPage({ onExit }) {
 
   // Session Revoke
   const handleRevokeSession = (sessionId) => {
-    if (confirm(`Revoke session token ${sessionId}?`)) {
-      setActiveSessions(prev => prev.filter(s => s.id !== sessionId))
+    const sessionToRevoke = activeSessions.find(s => s.id === sessionId)
+    const sessionLabel = sessionToRevoke ? `${sessionToRevoke.device} (${sessionToRevoke.ip})` : sessionId
+    if (confirm(`Revoke session token for ${sessionLabel}?`)) {
+      const updated = activeSessions.filter(s => s.id !== sessionId)
+      setActiveSessions(updated)
+      localStorage.setItem('NEXORA_ACTIVE_SESSIONS', JSON.stringify(updated))
+
       const newSecLog = {
         id: Date.now(),
         event: 'Remote Session Revoked',
-        ip: '182.185.142.92',
+        ip: currentVisitorGeo?.ip || 'Verified Local IP',
         time: new Date().toLocaleString(),
         status: 'REVOKED',
         details: `Session token ${sessionId} invalidated by Founder`
@@ -481,8 +438,15 @@ export default function AdminPortalPage({ onExit }) {
       const updatedSec = [newSecLog, ...securityLogs]
       setSecurityLogs(updatedSec)
       localStorage.setItem('NEXORA_SECURITY_LOGS', JSON.stringify(updatedSec))
+
+      if (sessionToRevoke && (sessionToRevoke.status?.includes('CURRENT') || updated.length === 0)) {
+        sessionStorage.removeItem('NEXORA_ADMIN_AUTH')
+        setIsAuthenticated(false)
+        alert('Current active session token was revoked. You have been securely logged out.')
+      }
     }
   }
+
 
   // Update Passcode
   const handleChangePasscode = (e) => {

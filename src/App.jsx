@@ -25,6 +25,7 @@ import ClientPortalModal from './components/ClientPortal/ClientPortalModal'
 import AdminPortalPage from './components/Admin/AdminPortalPage'
 import Footer from './components/Footer/Footer'
 import DiscountRoastFlyer from './components/DiscountFlyer/DiscountRoastFlyer'
+import { getRealVisitorGeo, logRealTimeVisitor } from './utils/geoTracker'
 
 
 export default function App() {
@@ -68,26 +69,22 @@ export default function App() {
     }
   }, [])
 
-  // Auto-detect Geo-location currency (PKR for PK, USD for International)
+  // Auto-detect Geo-location currency and log real-time visitor session
   useEffect(() => {
-    const detectCurrency = async () => {
+    const detectAndLogVisitor = async () => {
       try {
-        const controller = new AbortController()
-        const timeoutId = setTimeout(() => controller.abort(), 2000)
-        const res = await fetch('https://ipapi.co/json/', { signal: controller.signal })
-        clearTimeout(timeoutId)
-        if (res.ok) {
-          const data = await res.json()
-          if (data && data.country_code) {
-            setCurrency(data.country_code === 'PK' ? 'PKR' : 'USD')
-          }
+        const geo = await getRealVisitorGeo()
+        if (geo && geo.countryCode) {
+          setCurrency(geo.countryCode === 'PK' ? 'PKR' : 'USD')
+          logRealTimeVisitor(geo, window.location.hash || '#home')
         }
       } catch (err) {
-        // Fallback default to PKR
+        // Fallback default
       }
     }
-    detectCurrency()
+    detectAndLogVisitor()
   }, [])
+
 
   // Scroll-reveal animation observer fallback
   useEffect(() => {
