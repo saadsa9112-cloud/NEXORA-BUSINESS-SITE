@@ -22,35 +22,48 @@ import WhatsAppButton from './components/WhatsAppButton/WhatsAppButton'
 import FloatingActionBar from './components/FloatingBar/FloatingActionBar'
 import AiAssistantModal from './components/AiAssistant/AiAssistantModal'
 import ClientPortalModal from './components/ClientPortal/ClientPortalModal'
-import AdminPanelModal from './components/Admin/AdminPanelModal'
+import AdminPortalPage from './components/Admin/AdminPortalPage'
 import Footer from './components/Footer/Footer'
 
 export default function App() {
   const [currency, setCurrency] = useState('PKR')
-  const [isAdminOpen, setIsAdminOpen] = useState(false)
+  const [isAdminPage, setIsAdminPage] = useState(false)
   const [isSpeedAuditOpen, setIsSpeedAuditOpen] = useState(false)
   const [isRoiOpen, setIsRoiOpen] = useState(false)
 
-  // URL Hash Triggers for Modals (#admin, #speed-audit, #roi-calculator)
+  // URL Path/Hash Triggers for Admin Page & Modals
   useEffect(() => {
-    const checkUrlHashes = () => {
+    const checkUrlState = () => {
       const hash = window.location.hash
       const search = window.location.search
+      const path = window.location.pathname
 
-      if (hash === '#admin' || search.includes('admin')) {
-        setIsAdminOpen(true)
+      if (path === '/admin' || hash === '#admin' || search.includes('admin')) {
+        setIsAdminPage(true)
+      } else {
+        setIsAdminPage(false)
       }
+
       if (hash === '#speed-audit' || hash === '#audit') {
         setIsSpeedAuditOpen(true)
+      } else {
+        setIsSpeedAuditOpen(false)
       }
+
       if (hash === '#roi-calculator' || hash === '#roi') {
         setIsRoiOpen(true)
+      } else {
+        setIsRoiOpen(false)
       }
     }
 
-    checkUrlHashes()
-    window.addEventListener('hashchange', checkUrlHashes)
-    return () => window.removeEventListener('hashchange', checkUrlHashes)
+    checkUrlState()
+    window.addEventListener('hashchange', checkUrlState)
+    window.addEventListener('popstate', checkUrlState)
+    return () => {
+      window.removeEventListener('hashchange', checkUrlState)
+      window.removeEventListener('popstate', checkUrlState)
+    }
   }, [])
 
   // Auto-detect Geo-location currency (PKR for PK, USD for International)
@@ -96,12 +109,14 @@ export default function App() {
     allElements.forEach((el) => observer.observe(el))
 
     return () => observer.disconnect()
-  }, [])
+  }, [isAdminPage])
 
-  const handleCloseAdmin = () => {
-    setIsAdminOpen(false)
-    if (window.location.hash === '#admin') {
+  const handleExitAdmin = () => {
+    setIsAdminPage(false)
+    if (window.location.hash === '#admin' || window.location.search.includes('admin')) {
       history.replaceState(null, '', window.location.pathname)
+    } else if (window.location.pathname === '/admin') {
+      history.replaceState(null, '', '/')
     }
   }
 
@@ -117,6 +132,11 @@ export default function App() {
     if (window.location.hash === '#roi-calculator' || window.location.hash === '#roi') {
       history.replaceState(null, '', window.location.pathname)
     }
+  }
+
+  // IF ADMIN ROUTE/HASH IS ACTIVE, RENDER DEDICATED FULL-SCREEN ADMIN PAGE
+  if (isAdminPage) {
+    return <AdminPortalPage onExit={handleExitAdmin} />
   }
 
   return (
@@ -135,7 +155,7 @@ export default function App() {
       {/* Main Single Page Header Navbar */}
       <Navbar />
 
-      {/* Clean Single Page Body without clutter */}
+      {/* Clean Single Page Body */}
       <main id="main-content">
         <section id="home">
           <Hero />
@@ -193,9 +213,6 @@ export default function App() {
       {/* Dedicated Standalone Tool Modals */}
       <WebsiteAuditModal isOpen={isSpeedAuditOpen} onClose={handleCloseSpeedAudit} />
       <RoiCalculatorModal isOpen={isRoiOpen} onClose={handleCloseRoi} />
-
-      {/* URL-Only Admin Control Portal (#admin) */}
-      <AdminPanelModal isOpen={isAdminOpen} onClose={handleCloseAdmin} />
     </div>
   )
 }
