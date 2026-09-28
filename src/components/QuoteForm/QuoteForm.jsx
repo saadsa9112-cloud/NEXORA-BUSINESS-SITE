@@ -54,6 +54,7 @@ function validate(fields) {
 
 export default function QuoteForm({ currency = 'PKR', setCurrency }) {
   const [fields, setFields] = useState(INITIAL_FIELDS)
+  const [lastSubmitted, setLastSubmitted] = useState(null)
   const [errors, setErrors] = useState({})
   const [status, setStatus] = useState('idle') // idle | submitting | success
 
@@ -85,6 +86,8 @@ export default function QuoteForm({ currency = 'PKR', setCurrency }) {
     }
 
     setStatus('submitting')
+    const currentSubmitted = { ...fields }
+    setLastSubmitted(currentSubmitted)
 
     const encode = (data) => {
       return Object.keys(data)
@@ -144,15 +147,9 @@ export default function QuoteForm({ currency = 'PKR', setCurrency }) {
         }),
       })
 
-      if (response.ok) {
-        setStatus('success')
-        setFields(INITIAL_FIELDS)
-        setErrors({})
-      } else {
-        setStatus('success')
-        setFields(INITIAL_FIELDS)
-        setErrors({})
-      }
+      setStatus('success')
+      setFields(INITIAL_FIELDS)
+      setErrors({})
     } catch (err) {
       setStatus('success')
       setFields(INITIAL_FIELDS)
@@ -164,6 +161,10 @@ export default function QuoteForm({ currency = 'PKR', setCurrency }) {
     `form-input w-full px-4 py-3 rounded-xl text-sm placeholder:text-gray-400 bg-white border border-[#E5EAF1] text-[#0B1020] transition-all duration-200 focus:border-[#0066FF] focus:ring-2 focus:ring-[#0066FF]/15 focus:outline-none ${
       errors[name] ? 'border-red-400 bg-red-50/50' : ''
     }`
+
+  const waFormattedText = lastSubmitted
+    ? encodeURIComponent(`Hello NEXORA DIGITAL! 👋 I just submitted a project quote request.\n\n👤 Full Name: ${lastSubmitted.fullName}\n🏢 Business: ${lastSubmitted.businessName || 'N/A'}\n📱 WhatsApp: ${lastSubmitted.whatsapp}\n🛠️ Service Requested: ${lastSubmitted.service}\n💰 Target Budget: ${lastSubmitted.budget || 'N/A'}\n\n📝 Project Scope & Details:\n${lastSubmitted.details}`)
+    : CONTACT.whatsappMessage
 
   return (
     <section
@@ -230,7 +231,7 @@ export default function QuoteForm({ currency = 'PKR', setCurrency }) {
                     </div>
                     <h3 className="text-2xl font-bold text-[#0B1020] mb-3">Request Sent Successfully</h3>
                     <p className="text-[#4B5563] text-sm sm:text-base leading-relaxed mb-8 max-w-md mx-auto">
-                      Thanks for reaching out. We'll review your requirements and get back to you shortly.
+                      Thanks for reaching out! Your inquiry has been sent to our Founder Admin Portal. You can also send this exact quote summary directly to our executive WhatsApp.
                     </p>
                     <div className="flex flex-wrap items-center justify-center gap-4">
                       <button
@@ -240,21 +241,22 @@ export default function QuoteForm({ currency = 'PKR', setCurrency }) {
                           setFields(INITIAL_FIELDS)
                           setErrors({})
                         }}
-                        className="inline-flex items-center gap-2 px-6 py-3.5 bg-[#0066FF] hover:bg-[#0052CC] text-white text-sm font-semibold rounded-xl transition-all duration-200 shadow-md shadow-blue-500/20"
+                        className="inline-flex items-center gap-2 px-6 py-3.5 bg-[#0066FF] hover:bg-[#0052CC] text-white text-sm font-semibold rounded-xl transition-all duration-200 shadow-md shadow-blue-500/20 cursor-pointer"
                       >
                         Send Another Inquiry
                       </button>
                       <a
-                        href={`https://wa.me/${CONTACT.whatsapp}?text=${CONTACT.whatsappMessage}`}
+                        href={`https://wa.me/${CONTACT.whatsapp}?text=${waFormattedText}`}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="inline-flex items-center gap-2 px-6 py-3.5 bg-[#25D366]/10 border border-[#25D366]/30 text-[#16a34a] text-sm font-semibold rounded-xl hover:bg-[#25D366]/20 transition-all duration-200"
+                        className="inline-flex items-center gap-2 px-6 py-3.5 bg-[#25D366] hover:bg-[#20bd5a] text-white text-sm font-bold rounded-xl transition-all duration-200 shadow-md cursor-pointer"
                       >
                         <MessageCircle size={16} aria-hidden="true" />
-                        WhatsApp Us
+                        Send Full Details to WhatsApp →
                       </a>
                     </div>
                   </motion.div>
+
                 ) : (
                   /* FORM STATE */
                   <form

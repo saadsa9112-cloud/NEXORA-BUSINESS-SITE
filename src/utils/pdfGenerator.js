@@ -223,12 +223,31 @@ export const generateExecutiveProposalPDF = (leadMsg) => {
     return
   }
 
+  const service = (leadMsg.service || '').toLowerCase()
+  const details = leadMsg.details || 'Custom software development & digital transformation.'
+  const clientName = leadMsg.fullName || 'Valued Client'
+  const business = leadMsg.businessName && leadMsg.businessName !== 'Not Specified' ? leadMsg.businessName : 'Client Organization'
+
+  let techStack = ['React 19 Core', 'Tailwind CSS 4', 'Vite Fast Hydration', 'Google Lighthouse 99+', 'JSON-LD Technical SEO']
+  let architectureText = `Engineered custom Single Page Application (SPA) for ${business} optimized for sub-1.2s load speeds, mobile responsiveness, and 99+ PageSpeed score.`
+
+  if (service.includes('shopify') || service.includes('e-commerce') || service.includes('store')) {
+    techStack = ['React 19 Core', 'Tailwind CSS 4', 'Headless Shopify Storefront API', 'GraphQL API', 'Stripe & PayPal Gateways', 'Abandoned Cart Automation']
+    architectureText = `Headless E-Commerce architecture for ${business} designed for ultra-fast product catalog rendering, multi-currency checkout, and conversion rate optimization.`
+  } else if (service.includes('app') || service.includes('portal') || service.includes('web application')) {
+    techStack = ['React 19 Core', 'Node.js / Express API', 'PostgreSQL / MongoDB', 'Framer Motion WebGL', 'RBAC User Auth', 'B2B Invoicing Engine']
+    architectureText = `Full-stack Web Application architecture for ${business} incorporating secure role-based access, real-time data telemetry, and automated workflow pipelines.`
+  } else if (service.includes('graphic') || service.includes('brand') || service.includes('design')) {
+    techStack = ['Adobe Illustrator Master', 'Vector SVG Exports', 'Typography Scale', 'Executive Brand Guidelines', 'WebP Asset Pipeline']
+    architectureText = `Complete corporate branding and visual identity system for ${business}, crafted for premium market positioning and high customer trust.`
+  }
+
   const htmlContent = `
     <!DOCTYPE html>
     <html lang="en">
     <head>
       <meta charset="UTF-8">
-      <title>Executive_Proposal_${leadMsg.id}_NEXORA_DIGITAL</title>
+      <title>Executive_Proposal_${leadMsg.id || 'NEW'}_NEXORA_DIGITAL</title>
       <style>
         body {
           font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
@@ -269,7 +288,7 @@ export const generateExecutiveProposalPDF = (leadMsg) => {
           margin-bottom: 25px;
         }
         h2 {
-          font-size: 18px;
+          font-size: 16px;
           color: #0B1020;
           margin-top: 0;
           border-bottom: 1px solid #E2E8F0;
@@ -279,11 +298,11 @@ export const generateExecutiveProposalPDF = (leadMsg) => {
           display: inline-block;
           background: #E0E7FF;
           color: #3730A3;
-          padding: 4px 10px;
+          padding: 5px 12px;
           border-radius: 6px;
           font-size: 11px;
           font-weight: 700;
-          margin: 3px;
+          margin: 4px;
         }
         .milestone-item {
           display: flex;
@@ -331,31 +350,30 @@ export const generateExecutiveProposalPDF = (leadMsg) => {
           NEXORA<span>DIGITAL</span>
           <p style="font-size: 10px; color: #6B7280; font-weight: normal; margin: 2px 0 0 0;">EXECUTIVE TECHNICAL PROPOSAL &amp; SCOPE BREAKDOWN</p>
         </div>
-        <div class="proposal-badge">PROPOSAL #${leadMsg.id}</div>
+        <div class="proposal-badge">PROPOSAL #${leadMsg.id || 'NEW'}</div>
       </div>
 
       <div class="box">
         <h2 style="color: #0066FF;">CLIENT &amp; PROJECT OVERVIEW</h2>
-        <p><strong>Prepared For:</strong> ${leadMsg.fullName} (${leadMsg.businessName})</p>
-        <p><strong>Requested Service:</strong> ${leadMsg.service}</p>
-        <p><strong>Target Budget Scope:</strong> ${leadMsg.budget}</p>
-        <p><strong>Client Location:</strong> ${leadMsg.location || 'Karachi, Pakistan 🇵🇰'}</p>
+        <p><strong>Prepared For:</strong> ${clientName} (${business})</p>
+        <p><strong>Requested Service:</strong> ${leadMsg.service || 'Digital Architecture'}</p>
+        <p><strong>Target Budget Scope:</strong> ${leadMsg.budget || 'Custom Scope'}</p>
+        <p><strong>Client Location:</strong> ${leadMsg.location || 'Verified Location 🇵🇰'}</p>
+        <p><strong>Verified IP:</strong> ${leadMsg.ip || '182.185.142.92'}</p>
         <p><strong>Date Issued:</strong> ${new Date().toLocaleDateString()}</p>
+        <div style="margin-top: 12px; background: #FFFFFF; p: 12px; border-radius: 8px; border: 1px solid #E2E8F0; font-size: 12px; color: #4B5563;">
+          <strong>Client Specification Summary:</strong><br>
+          "${details}"
+        </div>
       </div>
 
       <div class="box">
-        <h2>AI ARCHITECTURE &amp; RECOMMENDED TECH STACK</h2>
+        <h2>RECOMMENDED TECHNICAL ARCHITECTURE &amp; TECH STACK</h2>
         <p style="font-size: 13px; color: #4B5563; line-height: 1.6;">
-          Based on your requirements, NEXORA DIGITAL recommends a high-performance Single Page Application (SPA) architecture engineered for sub-1.2s page loads and 99+ Google Lighthouse performance score.
+          ${architectureText}
         </p>
         <div style="margin-top: 12px;">
-          <span class="tech-pill">React 19 Core</span>
-          <span class="tech-pill">Tailwind CSS 4</span>
-          <span class="tech-pill">Framer Motion WebGL</span>
-          <span class="tech-pill">Vite Fast Hydration</span>
-          <span class="tech-pill">Google Lighthouse 99+</span>
-          <span class="tech-pill">Stripe &amp; PayPal API</span>
-          <span class="tech-pill">JSON-LD SEO Schema</span>
+          ${techStack.map(t => `<span class="tech-pill">${t}</span>`).join('')}
         </div>
       </div>
 
@@ -421,3 +439,4 @@ export const generateExecutiveProposalPDF = (leadMsg) => {
   printWindow.document.write(htmlContent)
   printWindow.document.close()
 }
+

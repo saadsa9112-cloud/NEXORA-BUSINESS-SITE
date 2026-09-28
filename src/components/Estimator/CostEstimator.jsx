@@ -234,16 +234,17 @@ export default function CostEstimator({ currency = 'PKR', setCurrency }) {
     const el = document.getElementById('contact')
     if (el) {
       const detailsField = document.getElementById('details')
-      if (detailsField) {
-        const addonNames = selectedAddons
-          .map((id) => addonsList.find((a) => a.id === id)?.name)
-          .filter(Boolean)
-          .join(', ')
+      const addonNames = selectedAddons
+        .map((id) => addonsList.find((a) => a.id === id)?.name)
+        .filter(Boolean)
+        .join(', ')
 
-        detailsField.value = `Estimated Project Scope (${isUsd ? 'Global USD' : 'Domestic PKR'}): ${domain.name} [${selectedScopeObj.name}]. Add-ons: ${
-          addonNames || 'None'
-        }. Estimated Starting Investment: ${currencySymbol}${estimatedTotal.toLocaleString()}`
+      const scopeText = `[ESTIMATE CALCULATOR SELECTION]\n• Website Type: ${domain.name}\n• Selected Scope: ${selectedScopeObj.name}\n• Add-ons & Upgrades: ${addonNames || 'None'}\n• Calculated Investment: ${currencySymbol}${estimatedTotal.toLocaleString()}`
+
+      if (detailsField) {
+        detailsField.value = scopeText
         detailsField.dispatchEvent(new Event('input', { bubbles: true }))
+        detailsField.dispatchEvent(new Event('change', { bubbles: true }))
       }
 
       const serviceSelect = document.getElementById('service')
@@ -262,6 +263,7 @@ export default function CostEstimator({ currency = 'PKR', setCurrency }) {
       window.scrollTo({ top, behavior: 'smooth' })
     }
   }
+
 
   const handleExportPdf = () => {
     const addonNames = selectedAddons

@@ -2208,80 +2208,116 @@ END OF REPORT — NEXORA DIGITAL ENTERPRISE OS
       </main>
 
       {/* AI PROPOSAL PITCH DRAWER / MODAL */}
-      {aiProposalModalMsg && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/85 backdrop-blur-md">
-          <div className="bg-[#0B1020] border border-white/20 rounded-3xl p-6 max-w-2xl w-full text-white space-y-5 shadow-2xl relative max-h-[90vh] overflow-y-auto">
-            <div className="flex items-center justify-between border-b border-white/10 pb-4">
-              <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-xl bg-purple-600/20 border border-purple-500/30 flex items-center justify-center text-purple-400">
-                  <Bot size={22} />
-                </div>
-                <div>
-                  <h3 className="text-base font-bold text-white">AI Executive Proposal Generator</h3>
-                  <p className="text-xs text-gray-400">Target Client: {aiProposalModalMsg.fullName} ({aiProposalModalMsg.businessName})</p>
-                </div>
-              </div>
-              <button
-                onClick={() => setAiProposalModalMsg(null)}
-                className="text-gray-400 hover:text-white p-2 rounded-xl bg-white/5 hover:bg-white/10 transition-colors"
-              >
-                <X size={16} />
-              </button>
-            </div>
+      {aiProposalModalMsg && (() => {
+        const msgService = (aiProposalModalMsg.service || '').toLowerCase()
+        const msgBusiness = aiProposalModalMsg.businessName && aiProposalModalMsg.businessName !== 'Not Specified' ? aiProposalModalMsg.businessName : 'Client Organization'
+        const msgDetails = aiProposalModalMsg.details || 'Custom software development & technical architecture.'
+        
+        let dynamicTechPills = ['React 19 Core', 'Tailwind CSS 4', 'Vite Fast Hydration', 'Google Lighthouse 99+', 'JSON-LD Technical SEO']
+        let dynamicArch = `Engineered Single Page Application (SPA) architecture for ${msgBusiness} optimized for sub-1.2s page loads, mobile responsiveness, and 99+ Lighthouse score.`
 
-            {/* AI Generated Proposal Card */}
-            <div className="p-4 bg-black/50 rounded-2xl border border-white/10 space-y-3 text-xs">
-              <div className="flex items-center justify-between border-b border-white/10 pb-2">
-                <span className="font-bold text-purple-400 uppercase tracking-wider text-[11px]">Recommended Technical Architecture</span>
-                <span className="font-mono text-emerald-400 font-bold">{aiProposalModalMsg.budget}</span>
-              </div>
-              <p className="text-gray-300 leading-relaxed font-sans">
-                "Engineered Single Page Application (SPA) utilizing <strong>React 19 Core</strong>, <strong>Tailwind CSS 4</strong>, <strong>Framer Motion WebGL</strong>, and <strong>Google Lighthouse 99+ Telemetry</strong>. Includes 100% full IP source code handoff and signed mutual NDA."
-              </p>
-            </div>
+        if (msgService.includes('shopify') || msgService.includes('e-commerce') || msgService.includes('store')) {
+          dynamicTechPills = ['React 19 Core', 'Tailwind CSS 4', 'Headless Shopify Storefront API', 'GraphQL API', 'Stripe & PayPal API', 'Abandoned Cart Recovery']
+          dynamicArch = `Headless E-Commerce architecture for ${msgBusiness} designed for ultra-fast product catalog rendering, multi-currency checkout, and maximum conversion rates.`
+        } else if (msgService.includes('app') || msgService.includes('portal') || msgService.includes('web application')) {
+          dynamicTechPills = ['React 19 Core', 'Node.js / Express API', 'PostgreSQL / MongoDB', 'Framer Motion WebGL', 'RBAC User Auth', 'B2B Invoicing Engine']
+          dynamicArch = `Full-stack Web Application architecture for ${msgBusiness} incorporating secure role-based access control, real-time telemetry, and automated workflow pipelines.`
+        } else if (msgService.includes('graphic') || msgService.includes('brand') || msgService.includes('design')) {
+          dynamicTechPills = ['Adobe Illustrator Master', 'Vector SVG Exports', 'Typography Scale', 'Executive Brand Guidelines', 'WebP Asset Pipeline']
+          dynamicArch = `Complete corporate branding & visual identity suite for ${msgBusiness}, crafted for premium market positioning and customer retention.`
+        }
 
-            {/* Ready-to-Send WhatsApp Pitch Text */}
-            <div className="space-y-2 text-xs">
-              <div className="flex items-center justify-between">
-                <label className="font-bold text-gray-300 uppercase tracking-wider">
-                  Ready-To-Send WhatsApp Pitch Message
-                </label>
+        const dynamicPitchText = `Hello ${aiProposalModalMsg.fullName}! 👋 Thank you for contacting NEXORA DIGITAL regarding ${aiProposalModalMsg.service}. We have analyzed your project scope for ${msgBusiness} ("${msgDetails.slice(0, 100)}${msgDetails.length > 100 ? '...' : ''}") and generated a tailored Executive Technical Proposal with 99+ PageSpeed guarantee & 100% Source Code ownership. Target Budget: ${aiProposalModalMsg.budget}. Let's schedule a 10-minute technical discovery call!`
+
+        return (
+          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/85 backdrop-blur-md">
+            <div className="bg-[#0B1020] border border-white/20 rounded-3xl p-6 max-w-2xl w-full text-white space-y-5 shadow-2xl relative max-h-[90vh] overflow-y-auto">
+              <div className="flex items-center justify-between border-b border-white/10 pb-4">
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 rounded-xl bg-purple-600/20 border border-purple-500/30 flex items-center justify-center text-purple-400">
+                    <Bot size={22} />
+                  </div>
+                  <div>
+                    <h3 className="text-base font-bold text-white">AI Executive Proposal Generator</h3>
+                    <p className="text-xs text-gray-400">Target Client: {aiProposalModalMsg.fullName} ({msgBusiness})</p>
+                  </div>
+                </div>
                 <button
-                  type="button"
-                  onClick={() => copyPitchTextToClipboard(`Hello ${aiProposalModalMsg.fullName}! Thank you for contacting NEXORA DIGITAL regarding ${aiProposalModalMsg.service}. We have analyzed your requirements for ${aiProposalModalMsg.businessName} and prepared an Executive Proposal with 99+ PageSpeed guarantee & 100% IP Code Handoff. Let's schedule a 10-minute technical discovery call!`)}
-                  className="text-blue-400 hover:underline flex items-center gap-1 font-bold"
+                  onClick={() => setAiProposalModalMsg(null)}
+                  className="text-gray-400 hover:text-white p-2 rounded-xl bg-white/5 hover:bg-white/10 transition-colors"
                 >
-                  <Copy size={13} />
-                  <span>{copiedPitchText ? '✓ Copied to Clipboard!' : 'Copy Text'}</span>
+                  <X size={16} />
                 </button>
               </div>
-              <div className="p-3.5 bg-black/60 rounded-xl border border-white/15 text-gray-300 font-mono text-[11px] leading-relaxed">
-                {`Hello ${aiProposalModalMsg.fullName}! Thank you for contacting NEXORA DIGITAL regarding ${aiProposalModalMsg.service}. We have analyzed your requirements for ${aiProposalModalMsg.businessName} and prepared an Executive Proposal with 99+ PageSpeed guarantee & 100% IP Code Handoff. Let's schedule a 10-minute technical discovery call!`}
+
+              {/* Client Scope Summary */}
+              <div className="p-3.5 bg-white/5 rounded-2xl border border-white/10 space-y-1 text-xs">
+                <span className="font-bold text-blue-400 uppercase tracking-wider text-[10px]">Client Request Details</span>
+                <p className="text-gray-300 italic font-sans">"{msgDetails}"</p>
+              </div>
+
+              {/* AI Generated Proposal Card */}
+              <div className="p-4 bg-black/50 rounded-2xl border border-white/10 space-y-3 text-xs">
+                <div className="flex items-center justify-between border-b border-white/10 pb-2">
+                  <span className="font-bold text-purple-400 uppercase tracking-wider text-[11px]">Recommended Technical Architecture</span>
+                  <span className="font-mono text-emerald-400 font-bold">{aiProposalModalMsg.budget}</span>
+                </div>
+                <p className="text-gray-300 leading-relaxed font-sans">
+                  "{dynamicArch}"
+                </p>
+                <div className="flex flex-wrap gap-1.5 pt-1">
+                  {dynamicTechPills.map((tech, idx) => (
+                    <span key={idx} className="px-2.5 py-1 bg-purple-500/20 text-purple-300 border border-purple-500/30 rounded-lg text-[10px] font-mono font-bold">
+                      {tech}
+                    </span>
+                  ))}
+                </div>
+              </div>
+
+              {/* Ready-to-Send WhatsApp Pitch Text */}
+              <div className="space-y-2 text-xs">
+                <div className="flex items-center justify-between">
+                  <label className="font-bold text-gray-300 uppercase tracking-wider">
+                    Ready-To-Send WhatsApp Pitch Message
+                  </label>
+                  <button
+                    type="button"
+                    onClick={() => copyPitchTextToClipboard(dynamicPitchText)}
+                    className="text-blue-400 hover:underline flex items-center gap-1 font-bold cursor-pointer"
+                  >
+                    <Copy size={13} />
+                    <span>{copiedPitchText ? '✓ Copied to Clipboard!' : 'Copy Text'}</span>
+                  </button>
+                </div>
+                <div className="p-3.5 bg-black/60 rounded-xl border border-white/15 text-gray-300 font-mono text-[11px] leading-relaxed">
+                  {dynamicPitchText}
+                </div>
+              </div>
+
+              <div className="pt-3 border-t border-white/10 flex flex-wrap items-center justify-between gap-3">
+                <button
+                  onClick={() => handleGenerateAIProposalPDF(aiProposalModalMsg)}
+                  className="px-4 py-2.5 bg-purple-600 hover:bg-purple-500 text-white font-bold text-xs rounded-xl flex items-center gap-2 shadow-md cursor-pointer"
+                >
+                  <Download size={14} />
+                  <span>Download Official PDF Proposal</span>
+                </button>
+
+                <a
+                  href={`https://wa.me/${aiProposalModalMsg.whatsapp.replace(/[^0-9]/g, '')}?text=${encodeURIComponent(dynamicPitchText)}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="px-4 py-2.5 bg-[#25D366] hover:bg-[#20bd5a] text-white font-bold text-xs rounded-xl flex items-center gap-2 shadow-md cursor-pointer"
+                >
+                  <Send size={14} />
+                  <span>Send Pitch via WhatsApp</span>
+                </a>
               </div>
             </div>
-
-            <div className="pt-3 border-t border-white/10 flex flex-wrap items-center justify-between gap-3">
-              <button
-                onClick={() => handleGenerateAIProposalPDF(aiProposalModalMsg)}
-                className="px-4 py-2.5 bg-purple-600 hover:bg-purple-500 text-white font-bold text-xs rounded-xl flex items-center gap-2 shadow-md cursor-pointer"
-              >
-                <Download size={14} />
-                <span>Download Official PDF Proposal</span>
-              </button>
-
-              <a
-                href={`https://wa.me/${aiProposalModalMsg.whatsapp.replace(/[^0-9]/g, '')}?text=${encodeURIComponent(`Hello ${aiProposalModalMsg.fullName}! Thank you for contacting NEXORA DIGITAL regarding ${aiProposalModalMsg.service}. We have analyzed your requirements for ${aiProposalModalMsg.businessName} and prepared an Executive Proposal with 99+ PageSpeed guarantee & 100% IP Code Handoff.`)}`}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="px-4 py-2.5 bg-[#25D366] hover:bg-[#20bd5a] text-white font-bold text-xs rounded-xl flex items-center gap-2 shadow-md cursor-pointer"
-              >
-                <Send size={14} />
-                <span>Send Pitch via WhatsApp</span>
-              </a>
-            </div>
           </div>
-        </div>
-      )}
+        )
+      })()}
+
 
       {/* MULTIPLE EXPORT OPTIONS MODAL */}
       {isExportModalOpen && (
