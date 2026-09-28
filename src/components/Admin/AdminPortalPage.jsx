@@ -236,8 +236,26 @@ export default function AdminPortalPage({ onExit }) {
         }
         return prev
       })
+
+      // BroadcastChannel Real-Time Listener for Cross-Tab / Mobile Sync
+      if ('BroadcastChannel' in window) {
+        try {
+          const bc = new BroadcastChannel('NEXORA_TELEMETRY_CHANNEL')
+          bc.onmessage = (event) => {
+            if (event.data && event.data.type === 'VISITOR_LOGGED') {
+              const newV = event.data.visitor
+              setVisitorLogs(prev => {
+                const filtered = prev.filter(v => v.ip !== newV.ip)
+                return [newV, ...filtered]
+              })
+            }
+          }
+        } catch (e) {}
+      }
     }
     fetchGeo()
+
+
 
 
     const sessionAuth = sessionStorage.getItem('NEXORA_ADMIN_AUTH')
