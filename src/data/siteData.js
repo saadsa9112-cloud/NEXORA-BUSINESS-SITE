@@ -437,7 +437,6 @@ export const SERVICES_LIST = [
   'Graphic Design',
   'Hosting & Domain',
   'Website Maintenance',
-  'Other',
 ]
 
 export const BUDGET_RANGES_PKR = [

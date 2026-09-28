@@ -84,40 +84,16 @@ export default function Footer({ onOpenSpeedAudit, onOpenRoi }) {
             </nav>
           </div>
 
-          {/* Free Interactive Tools (Opens Standalone Tool Modals) */}
+          {/* Services column */}
           <div>
-            <h3 className="text-white font-bold text-xs uppercase tracking-wider mb-4">Free Business Tools</h3>
-            <ul className="flex flex-col gap-3" role="list">
-              <li>
-                <button
-                  type="button"
-                  onClick={onOpenSpeedAudit}
-                  className="inline-flex items-center gap-2 text-[#A7ADBB] hover:text-blue-400 text-sm font-medium transition-colors cursor-pointer"
-                >
-                  <Gauge size={14} className="text-blue-400" />
-                  <span>Free Speed &amp; SEO Audit</span>
-                </button>
-              </li>
-              <li>
-                <button
-                  type="button"
-                  onClick={onOpenRoi}
-                  className="inline-flex items-center gap-2 text-[#A7ADBB] hover:text-green-400 text-sm font-medium transition-colors cursor-pointer"
-                >
-                  <Calculator size={14} className="text-green-400" />
-                  <span>ROI Growth Estimator</span>
-                </button>
-              </li>
-            </ul>
-
-            <h3 className="text-white font-bold text-xs uppercase tracking-wider mt-6 mb-3">Core Services</h3>
-            <ul className="flex flex-col gap-2" role="list">
-              {SERVICES_LIST.slice(0, 4).map((s) => (
+            <h3 className="text-white font-bold text-xs uppercase tracking-wider mb-4">Services</h3>
+            <ul className="flex flex-col gap-2.5" role="list">
+              {SERVICES_LIST.map((s) => (
                 <li key={s}>
                   <a
                     href="#services"
                     onClick={(e) => { e.preventDefault(); handleNavClick('services') }}
-                    className="text-[#A7ADBB] hover:text-[#1F90FF] text-xs transition-colors"
+                    className="text-[#A7ADBB] hover:text-[#1F90FF] text-sm font-medium transition-colors duration-200"
                   >
                     {s}
                   </a>
@@ -126,35 +102,69 @@ export default function Footer({ onOpenSpeedAudit, onOpenRoi }) {
             </ul>
           </div>
 
-          {/* Contact */}
+          {/* Tools & Contact column */}
           <div>
-            <h3 className="text-white font-bold text-xs uppercase tracking-wider mb-4">Contact</h3>
-            <ul className="flex flex-col gap-3.5" role="list">
-              <li>
-                <a
-                  href={`tel:${CONTACT.phone}`}
-                  className="flex items-start gap-2.5 text-[#A7ADBB] hover:text-[#1F90FF] transition-colors duration-200 text-sm"
-                >
-                  <Phone size={15} className="mt-0.5 text-[#1F90FF] flex-shrink-0" aria-hidden="true" />
-                  <span>{CONTACT.phone}</span>
-                </a>
-              </li>
-              <li>
-                <a
-                  href={`mailto:${CONTACT.email}`}
-                  className="flex items-start gap-2.5 text-[#A7ADBB] hover:text-[#1F90FF] transition-colors duration-200 text-sm"
-                >
-                  <Mail size={15} className="mt-0.5 text-[#1F90FF] flex-shrink-0" aria-hidden="true" />
-                  <span className="break-all">{CONTACT.email}</span>
-                </a>
-              </li>
-              <li>
-                <div className="flex items-start gap-2.5 text-[#A7ADBB] text-sm">
-                  <MapPin size={15} className="mt-0.5 text-[#1F90FF] flex-shrink-0" aria-hidden="true" />
-                  <span>Karachi, Pakistan</span>
-                </div>
-              </li>
-            </ul>
+            {/* Free Business Tools (Top) */}
+            <div className="mb-8">
+              <h3 className="text-white font-bold text-xs uppercase tracking-wider mb-4">Free Business Tools</h3>
+              <ul className="flex flex-col gap-3" role="list">
+                <li>
+                  <button
+                    type="button"
+                    onClick={onOpenSpeedAudit}
+                    className="inline-flex items-center gap-2.5 text-[#A7ADBB] hover:text-[#1F90FF] text-sm font-medium transition-colors cursor-pointer group"
+                  >
+                    <div className="w-7 h-7 rounded-lg bg-[#1F90FF]/10 border border-[#1F90FF]/20 flex items-center justify-center text-[#1F90FF] group-hover:bg-[#1F90FF]/20 transition-colors">
+                      <Gauge size={14} />
+                    </div>
+                    <span>Free Speed &amp; SEO Audit</span>
+                  </button>
+                </li>
+                <li>
+                  <button
+                    type="button"
+                    onClick={onOpenRoi}
+                    className="inline-flex items-center gap-2.5 text-[#A7ADBB] hover:text-emerald-400 text-sm font-medium transition-colors cursor-pointer group"
+                  >
+                    <div className="w-7 h-7 rounded-lg bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center text-emerald-400 group-hover:bg-emerald-500/20 transition-colors">
+                      <Calculator size={14} />
+                    </div>
+                    <span>ROI Growth Estimator</span>
+                  </button>
+                </li>
+              </ul>
+            </div>
+
+            {/* Contact Info (Bottom) */}
+            <div>
+              <h3 className="text-white font-bold text-xs uppercase tracking-wider mb-4">Contact Us</h3>
+              <ul className="flex flex-col gap-3.5" role="list">
+                <li>
+                  <a
+                    href={`tel:${CONTACT.phone}`}
+                    className="flex items-start gap-2.5 text-[#A7ADBB] hover:text-[#1F90FF] transition-colors duration-200 text-sm"
+                  >
+                    <Phone size={15} className="mt-0.5 text-[#1F90FF] flex-shrink-0" aria-hidden="true" />
+                    <span>{CONTACT.phone}</span>
+                  </a>
+                </li>
+                <li>
+                  <a
+                    href={`mailto:${CONTACT.email}`}
+                    className="flex items-start gap-2.5 text-[#A7ADBB] hover:text-[#1F90FF] transition-colors duration-200 text-sm"
+                  >
+                    <Mail size={15} className="mt-0.5 text-[#1F90FF] flex-shrink-0" aria-hidden="true" />
+                    <span className="break-all">{CONTACT.email}</span>
+                  </a>
+                </li>
+                <li>
+                  <div className="flex items-start gap-2.5 text-[#A7ADBB] text-sm">
+                    <MapPin size={15} className="mt-0.5 text-[#1F90FF] flex-shrink-0" aria-hidden="true" />
+                    <span>Karachi, Pakistan</span>
+                  </div>
+                </li>
+              </ul>
+            </div>
           </div>
         </div>
 
