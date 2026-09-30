@@ -293,6 +293,18 @@ export default function AdminPortalPage({ onExit }) {
       setIsAuthenticated(true)
     }
 
+    // Restore persistent lockout on page refresh
+    const lockoutData = JSON.parse(localStorage.getItem('NEXORA_LOCKOUT') || 'null')
+    if (lockoutData && lockoutData.until > Date.now()) {
+      const remaining = Math.ceil((lockoutData.until - Date.now()) / 1000)
+      setLockoutTimer(remaining)
+      setAuthError(`🔒 Console locked. Try again in ${Math.ceil(remaining / 60)} min.`)
+    }
+
+    // Restore fail count
+    const savedFails = parseInt(localStorage.getItem('NEXORA_FAIL_COUNT') || '0', 10)
+    if (savedFails > 0) setFailedAttempts(savedFails)
+
     const customPass = localStorage.getItem('NEXORA_ADMIN_PASSCODE')
     if (customPass) {
       setStoredPasscode(customPass)
@@ -436,57 +448,117 @@ export default function AdminPortalPage({ onExit }) {
     }
   }, [selectedProjectId, projects, isCreatingNewProject])
 
-  // Login Handler
-  const handleLogin = (e) => {
+  // Login Handler — Hardened Security
+  const handleLogin = async (e) => {
     e.preventDefault()
+
+    // Check persistent lockout from localStorage (survives page refresh)
+    const lockoutData = JSON.parse(localStorage.getItem('NEXORA_LOCKOUT') || 'null')
+    if (lockoutData && lockoutData.until > Date.now()) {
+      const remaining = Math.ceil((lockoutData.until - Date.now()) / 1000)
+      setLockoutTimer(remaining)
+      setAuthError(`🔒 Console locked. Try again in ${remaining}s.`)
+      return
+    }
 
     if (lockoutTimer > 0) return
 
     const cleanPass = passcode.trim()
-    const validPasses = [storedPasscode, 'nexora2026', 'admin', 'saad']
+    if (!cleanPass) {
+      setAuthError('Please enter your passcode.')
+      return
+    }
 
-    if (validPasses.includes(cleanPass)) {
+    // Hash the entered passcode with SHA-256 and compare
+    let isValid = false
+    try {
+      const encoder = new TextEncoder()
+      const data = encoder.encode(cleanPass)
+      const hashBuffer = await window.crypto.subtle.digest('SHA-256', data)
+      const hashArray = Array.from(new Uint8Array(hashBuffer))
+      const hashHex = hashArray.map(b => b.toString(16).padStart(2, '0')).join('')
+
+      // Hash of 'nexora2026' — SHA-256
+      // To update passcode: hash your new password and replace this value
+      const VALID_HASH = 'a20fee02edd16bcd75d7f338061135797ef19dc85d9d3965ff24a65da1897161'
+
+      // Also check against custom stored passcode hash in localStorage
+      const storedHash = localStorage.getItem('NEXORA_ADMIN_HASH')
+      isValid = (hashHex === VALID_HASH) || (storedHash && hashHex === storedHash)
+
+      // Fallback plain-text compare for custom passcode (if no hash stored yet)
+      if (!isValid && storedPasscode && cleanPass === storedPasscode) {
+        isValid = true
+      }
+    } catch (_) {
+      // SubtleCrypto not available — fallback to plain compare
+      isValid = cleanPass === storedPasscode || cleanPass === 'nexora2026'
+    }
+
+    const realIp = currentVisitorGeo?.ip || 'Unknown IP'
+    const realLoc = currentVisitorGeo
+      ? `${currentVisitorGeo.city || '—'}, ${currentVisitorGeo.country || '—'}`
+      : 'Unknown Location'
+
+    if (isValid) {
       setIsAuthenticated(true)
       sessionStorage.setItem('NEXORA_ADMIN_AUTH', 'true')
       setAuthError('')
       setFailedAttempts(0)
       setPasscode('')
+      // Clear any lockout
+      localStorage.removeItem('NEXORA_LOCKOUT')
+      localStorage.removeItem('NEXORA_FAIL_COUNT')
 
       const newSecLog = {
         id: Date.now(),
-        event: 'Founder Authentication Granted',
-        ip: currentVisitorGeo ? currentVisitorGeo.ip : '182.185.142.92',
+        event: '✅ Founder Authentication Granted',
+        ip: realIp,
         time: new Date().toLocaleString(),
         status: 'SUCCESS',
-        details: `Session Granted (${currentVisitorGeo ? `${currentVisitorGeo.city}, ${currentVisitorGeo.country}` : 'Karachi, PK'})`
+        details: `Session authenticated from ${realLoc}`
       }
-      const updatedSec = [newSecLog, ...securityLogs]
+      const updatedSec = [newSecLog, ...securityLogs].slice(0, 50)
       setSecurityLogs(updatedSec)
       localStorage.setItem('NEXORA_SECURITY_LOGS', JSON.stringify(updatedSec))
     } else {
-      const attempts = failedAttempts + 1
+      // Increment persistent fail counter
+      const prevFails = parseInt(localStorage.getItem('NEXORA_FAIL_COUNT') || '0', 10)
+      const attempts = prevFails + 1
+      localStorage.setItem('NEXORA_FAIL_COUNT', String(attempts))
       setFailedAttempts(attempts)
+
+      // Progressive lockout durations: 60s → 5min → 15min → 30min
+      let lockSec = 0
+      if (attempts >= 3) lockSec = 60
+      if (attempts >= 5) lockSec = 5 * 60
+      if (attempts >= 7) lockSec = 15 * 60
+      if (attempts >= 10) lockSec = 30 * 60
+
+      if (lockSec > 0) {
+        const until = Date.now() + lockSec * 1000
+        localStorage.setItem('NEXORA_LOCKOUT', JSON.stringify({ until, attempts }))
+        setLockoutTimer(lockSec)
+        setAuthError(`🔒 Too many failed attempts. Locked for ${lockSec >= 60 ? `${lockSec / 60}min` : `${lockSec}s`}.`)
+      } else {
+        const remaining = 3 - attempts
+        setAuthError(`❌ Wrong passcode. ${remaining > 0 ? `${remaining} attempt${remaining !== 1 ? 's' : ''} before lockout.` : 'One more fail triggers lockout!'}`)
+      }
 
       const newSecLog = {
         id: Date.now(),
-        event: 'Failed Passcode Attempt',
-        ip: currentVisitorGeo ? currentVisitorGeo.ip : '182.185.142.92',
+        event: `⚠️ Failed Login Attempt #${attempts}`,
+        ip: realIp,
         time: new Date().toLocaleString(),
         status: 'FAILED',
-        details: `Invalid Passcode (${attempts}/5 attempts)`
+        details: `Wrong passcode from ${realLoc} — ${attempts} total fails`
       }
-      const updatedSec = [newSecLog, ...securityLogs]
+      const updatedSec = [newSecLog, ...securityLogs].slice(0, 50)
       setSecurityLogs(updatedSec)
       localStorage.setItem('NEXORA_SECURITY_LOGS', JSON.stringify(updatedSec))
-
-      if (attempts >= 5) {
-        setLockoutTimer(60)
-        setAuthError('Too many failed attempts! Console locked for 60 seconds.')
-      } else {
-        setAuthError(`Authentication failed! Invalid passcode. (${5 - attempts} attempts remaining)`)
-      }
     }
   }
+
 
   const handleLogout = () => {
     setIsAuthenticated(false)
