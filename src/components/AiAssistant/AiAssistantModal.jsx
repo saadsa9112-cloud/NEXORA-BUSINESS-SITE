@@ -31,70 +31,70 @@ export default function AiAssistantModal() {
 
   return (
     <>
-      {/* Floating AI Launcher Button */}
+      {/* Floating AI Launcher Button — left side, above WhatsApp on mobile */}
       <button
         onClick={() => setIsOpen(true)}
         aria-label="Open AI Consultation Assistant"
-        className="fixed bottom-6 left-6 z-40 bg-[#05070D] hover:bg-[#0066FF] text-white p-3.5 sm:px-4 sm:py-3 rounded-full shadow-2xl border border-white/20 flex items-center gap-2.5 transition-all duration-300 hover:scale-105 group cursor-pointer"
+        className="fixed bottom-20 left-4 sm:bottom-6 sm:left-6 z-40 bg-[#05070D] hover:bg-[#0066FF] text-white p-3 sm:px-4 sm:py-3 rounded-full shadow-2xl border border-white/20 flex items-center gap-2 transition-all duration-300 hover:scale-105 group cursor-pointer"
       >
         <div className="relative">
-          <Bot size={20} className="text-[#1F90FF] group-hover:text-white transition-colors" />
-          <span className="absolute -top-1 -right-1 w-2.5 h-2.5 bg-green-500 rounded-full ring-2 ring-black" />
+          <Bot size={18} className="text-[#1F90FF] group-hover:text-white transition-colors" />
+          <span className="absolute -top-1 -right-1 w-2 h-2 bg-green-500 rounded-full ring-2 ring-black" />
         </div>
         <span className="hidden sm:inline-block text-xs font-bold tracking-wide">
           AI Project Assistant
         </span>
       </button>
 
-      {/* AI Modal Drawer */}
+      {/* AI Modal — full screen on mobile, centered card on desktop */}
       <AnimatePresence>
         {isOpen && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 overflow-y-auto">
+          <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center sm:p-4">
             {/* Backdrop */}
             <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               onClick={() => setIsOpen(false)}
-              className="fixed inset-0 bg-black/60 backdrop-blur-xs"
+              className="fixed inset-0 bg-black/60 backdrop-blur-sm"
             />
 
-            {/* Modal Card */}
+            {/* Modal Card — bottom sheet on mobile, centered card on desktop */}
             <motion.div
-              initial={{ opacity: 0, scale: 0.9, y: 20 }}
-              animate={{ opacity: 1, scale: 1, y: 0 }}
-              exit={{ opacity: 0, scale: 0.9, y: 20 }}
-              className="relative w-full max-w-lg bg-white rounded-3xl shadow-2xl border border-[#E5EAF1] z-10 overflow-hidden text-[#0B1020]"
+              initial={{ opacity: 0, y: 40 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: 40 }}
+              className="relative w-full sm:max-w-lg bg-white sm:rounded-3xl rounded-t-3xl shadow-2xl border border-[#E5EAF1] z-10 overflow-hidden text-[#0B1020] max-h-[90vh] flex flex-col"
             >
               {/* Header */}
-              <div className="bg-[#05070D] text-white p-5 flex items-center justify-between border-b border-white/10">
-                <div className="flex items-center gap-3">
-                  <div className="w-9 h-9 rounded-xl bg-[#0066FF] flex items-center justify-center text-white font-bold">
-                    <Bot size={20} />
+              <div className="bg-[#05070D] text-white px-4 py-3.5 flex items-center justify-between border-b border-white/10 flex-shrink-0">
+                <div className="flex items-center gap-2.5">
+                  <div className="w-8 h-8 rounded-xl bg-[#0066FF] flex items-center justify-center text-white font-bold flex-shrink-0">
+                    <Bot size={17} />
                   </div>
                   <div>
-                    <h3 className="text-sm font-bold flex items-center gap-1.5">
+                    <h3 className="text-xs font-bold flex items-center gap-1.5">
                       NEXORA Instant Assistant
-                      <Sparkles size={13} className="text-blue-400" />
+                      <Sparkles size={12} className="text-blue-400" />
                     </h3>
-                    <p className="text-[11px] text-gray-400">Get an instant project recommendation in 30 seconds</p>
+                    <p className="text-[10px] text-gray-400 hidden sm:block">Get an instant project recommendation in 30 seconds</p>
                   </div>
                 </div>
                 <button
                   onClick={() => setIsOpen(false)}
-                  className="text-gray-400 hover:text-white p-1 rounded-lg transition-colors cursor-pointer"
+                  className="text-gray-400 hover:text-white p-1.5 rounded-lg transition-colors cursor-pointer flex-shrink-0"
                 >
-                  <X size={18} />
+                  <X size={17} />
                 </button>
               </div>
 
-              {/* Body Steps */}
-              <div className="p-6">
+              {/* Body Steps — scrollable */}
+              <div className="p-4 sm:p-6 overflow-y-auto flex-1">
                 {step === 1 && (
-                  <div className="space-y-4">
+                  <div className="space-y-3">
                     <div className="text-xs font-bold uppercase tracking-wider text-[#0066FF]">Step 1 of 3</div>
-                    <h4 className="text-base font-bold text-[#0B1020]">What type of digital project do you need?</h4>
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+                    <h4 className="text-sm font-bold text-[#0B1020]">What type of digital project do you need?</h4>
+                    <div className="grid grid-cols-2 gap-2">
                       {[
                         'Business Website',
                         'WordPress CMS Site',
@@ -110,10 +110,10 @@ export default function AiAssistantModal() {
                             setSelectedService(item)
                             setStep(2)
                           }}
-                          className="p-3 text-left border border-[#E5EAF1] hover:border-[#0066FF] hover:bg-blue-50/50 rounded-xl text-xs font-semibold text-[#0B1020] transition-all cursor-pointer flex items-center justify-between"
+                          className="p-2.5 text-left border border-[#E5EAF1] hover:border-[#0066FF] hover:bg-blue-50/50 rounded-xl text-xs font-semibold text-[#0B1020] transition-all cursor-pointer flex items-center justify-between gap-1"
                         >
-                          <span>{item}</span>
-                          <ArrowRight size={14} className="text-slate-400" />
+                          <span className="leading-snug">{item}</span>
+                          <ArrowRight size={12} className="text-slate-400 flex-shrink-0" />
                         </button>
                       ))}
                     </div>
@@ -121,13 +121,13 @@ export default function AiAssistantModal() {
                 )}
 
                 {step === 2 && (
-                  <div className="space-y-4">
+                  <div className="space-y-3">
                     <div className="text-xs font-bold uppercase tracking-wider text-[#0066FF]">Step 2 of 3</div>
-                    <h4 className="text-base font-bold text-[#0B1020]">What is your estimated target budget?</h4>
-                    <div className="grid grid-cols-1 gap-2.5">
+                    <h4 className="text-sm font-bold text-[#0B1020]">What is your estimated target budget?</h4>
+                    <div className="grid grid-cols-1 gap-2">
                       {[
-                        'Starter (Rs. 15,000 – 35,000 / $100 – $299)',
-                        'Growth (Rs. 35,000 – 75,000 / $299 – $599)',
+                        'Starter (Rs. 15,000–35,000 / $100–$299)',
+                        'Growth (Rs. 35,000–75,000 / $299–$599)',
                         'Enterprise (Rs. 75,000+ / $599+)',
                         'Custom Enterprise Scope'
                       ].map((b) => (
@@ -138,41 +138,41 @@ export default function AiAssistantModal() {
                             setSelectedBudget(b)
                             setStep(3)
                           }}
-                          className="p-3 text-left border border-[#E5EAF1] hover:border-[#0066FF] hover:bg-blue-50/50 rounded-xl text-xs font-semibold text-[#0B1020] transition-all cursor-pointer flex items-center justify-between"
+                          className="p-2.5 text-left border border-[#E5EAF1] hover:border-[#0066FF] hover:bg-blue-50/50 rounded-xl text-xs font-semibold text-[#0B1020] transition-all cursor-pointer flex items-center justify-between gap-2"
                         >
                           <span>{b}</span>
-                          <CheckCircle2 size={14} className="text-[#0066FF]" />
+                          <CheckCircle2 size={13} className="text-[#0066FF] flex-shrink-0" />
                         </button>
                       ))}
                     </div>
                     <button
                       onClick={() => setStep(1)}
-                      className="text-xs text-[#6B7280] underline hover:text-[#0B1020] pt-2"
+                      className="text-xs text-[#6B7280] underline hover:text-[#0B1020] pt-1"
                     >
-                      ← Back to Service Type
+                      ← Back
                     </button>
                   </div>
                 )}
 
                 {step === 3 && (
-                  <div className="space-y-4 text-center py-2">
-                    <div className="w-12 h-12 bg-green-50 text-green-600 rounded-full flex items-center justify-center mx-auto">
-                      <CheckCircle2 size={24} />
+                  <div className="space-y-3 text-center py-2">
+                    <div className="w-11 h-11 bg-green-50 text-green-600 rounded-full flex items-center justify-center mx-auto">
+                      <CheckCircle2 size={22} />
                     </div>
-                    <h4 className="text-lg font-bold text-[#0B1020]">Recommendation Ready!</h4>
-                    <div className="bg-[#F8FAFC] p-4 rounded-2xl border border-[#E5EAF1] text-left text-xs space-y-2">
+                    <h4 className="text-base font-bold text-[#0B1020]">Recommendation Ready!</h4>
+                    <div className="bg-[#F8FAFC] p-3.5 rounded-2xl border border-[#E5EAF1] text-left text-xs space-y-2">
                       <div><strong>Selected Service:</strong> {selectedService}</div>
                       <div><strong>Target Budget:</strong> {selectedBudget}</div>
-                      <div className="text-green-700 font-semibold pt-1">✓ Includes full design, mobile responsiveness, fast delivery &amp; Technical SEO.</div>
+                      <div className="text-green-700 font-semibold pt-1">✓ Includes full design, mobile responsiveness, fast delivery & Technical SEO.</div>
                     </div>
 
-                    <div className="pt-2 flex flex-col gap-2.5">
+                    <div className="pt-2 flex flex-col gap-2">
                       <button
                         type="button"
                         onClick={handleLaunchWhatsApp}
-                        className="w-full py-3.5 bg-[#25D366] hover:bg-[#20bd5a] text-white text-xs font-bold rounded-xl shadow-md flex items-center justify-center gap-2 transition-all cursor-pointer"
+                        className="w-full py-3 bg-[#25D366] hover:bg-[#20bd5a] text-white text-xs font-bold rounded-xl shadow-md flex items-center justify-center gap-2 transition-all cursor-pointer"
                       >
-                        <MessageSquare size={16} />
+                        <MessageSquare size={15} />
                         <span>Chat Instantly on WhatsApp</span>
                       </button>
 
