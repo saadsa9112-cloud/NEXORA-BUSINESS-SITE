@@ -25,103 +25,144 @@ export const getMobileGPSLocation = () => {
 }
 
 export const getRealVisitorGeo = async () => {
-  // Request HTML5 GPS concurrently while API runs
+  // Start GPS in background — don't await yet
   const gpsPromise = getMobileGPSLocation()
 
-  // Tier 1: freeipapi.com — no rate limit, CORS-safe, returns full geo
+  // ── Tier 1: freeipapi.com ──────────────────────────────────────────────
+  // Returns: ipAddress, cityName, regionName, countryName, countryCode,
+  //          latitude, longitude, asnOrganization, timeZones
   try {
     const controller = new AbortController()
-    const timeoutId = setTimeout(() => controller.abort(), 4000)
-    const res = await fetch('https://freeipapi.com/api/json', { signal: controller.signal })
-    clearTimeout(timeoutId)
+    const tid = setTimeout(() => controller.abort(), 5000)
+    const res = await fetch('https://freeipapi.com/api/json', {
+      signal: controller.signal,
+      mode: 'cors'
+    })
+    clearTimeout(tid)
     if (res.ok) {
-      const data = await res.json()
-      if (data && data.ipAddress) {
-        const gps = await gpsPromise
+      const d = await res.json()
+      if (d && d.ipAddress) {
+        const gps = await Promise.race([gpsPromise, new Promise(r => setTimeout(() => r(null), 2000))])
         return {
-          ip: data.ipAddress,
-          city: data.cityName || '—',
-          region: data.regionName || '—',
-          country: data.countryName || '—',
-          countryCode: data.countryCode || '',
-          flag: getFlagEmoji(data.countryCode),
-          latitude: gps?.latitude || (data.latitude ? Number(data.latitude).toFixed(4) : null),
-          longitude: gps?.longitude || (data.longitude ? Number(data.longitude).toFixed(4) : null),
-          isp: data.isp || data.asName || '—',
-          timezone: data.timeZone || '—',
+          ip: d.ipAddress,
+          city: d.cityName || '—',
+          region: d.regionName || '—',
+          country: d.countryName || '—',
+          countryCode: d.countryCode || '',
+          flag: getFlagEmoji(d.countryCode),
+          latitude: gps?.latitude || (d.latitude != null ? Number(d.latitude).toFixed(4) : null),
+          longitude: gps?.longitude || (d.longitude != null ? Number(d.longitude).toFixed(4) : null),
+          isp: d.asnOrganization || d.asn || '—',
+          timezone: (d.timeZones && d.timeZones[0]) || '—',
         }
       }
     }
   } catch (_) {}
 
-  // Tier 2: ipwho.is
+  // ── Tier 2: ipwho.is ──────────────────────────────────────────────────
+  // Returns: ip, city, region, country, country_code, latitude, longitude,
+  //          connection.isp, connection.org, timezone.id, flag.emoji
   try {
     const controller = new AbortController()
-    const timeoutId = setTimeout(() => controller.abort(), 4000)
-    const res = await fetch('https://ipwho.is/', { signal: controller.signal })
-    clearTimeout(timeoutId)
+    const tid = setTimeout(() => controller.abort(), 5000)
+    const res = await fetch('https://ipwho.is/', {
+      signal: controller.signal,
+      mode: 'cors'
+    })
+    clearTimeout(tid)
     if (res.ok) {
-      const data = await res.json()
-      if (data && data.success !== false && data.ip) {
-        const gps = await gpsPromise
+      const d = await res.json()
+      if (d && d.success !== false && d.ip) {
+        const gps = await Promise.race([gpsPromise, new Promise(r => setTimeout(() => r(null), 2000))])
         return {
-          ip: data.ip,
-          city: data.city || '—',
-          region: data.region || '—',
-          country: data.country || '—',
-          countryCode: data.country_code || '',
-          flag: data.flag?.emoji || getFlagEmoji(data.country_code),
-          latitude: gps?.latitude || (data.latitude ? Number(data.latitude).toFixed(4) : null),
-          longitude: gps?.longitude || (data.longitude ? Number(data.longitude).toFixed(4) : null),
-          isp: data.connection?.isp || data.connection?.org || '—',
-          timezone: data.timezone?.id || '—',
+          ip: d.ip,
+          city: d.city || '—',
+          region: d.region || '—',
+          country: d.country || '—',
+          countryCode: d.country_code || '',
+          flag: d.flag?.emoji || getFlagEmoji(d.country_code),
+          latitude: gps?.latitude || (d.latitude != null ? Number(d.latitude).toFixed(4) : null),
+          longitude: gps?.longitude || (d.longitude != null ? Number(d.longitude).toFixed(4) : null),
+          isp: d.connection?.isp || d.connection?.org || '—',
+          timezone: d.timezone?.id || '—',
         }
       }
     }
   } catch (_) {}
 
-  // Tier 3: ipapi.co
+  // ── Tier 3: ip-api.com (HTTP only — works from browser) ───────────────
+  // Returns: query, city, regionName, country, countryCode, lat, lon, isp, timezone
   try {
     const controller = new AbortController()
-    const timeoutId = setTimeout(() => controller.abort(), 3500)
-    const res = await fetch('https://ipapi.co/json/', { signal: controller.signal })
-    clearTimeout(timeoutId)
+    const tid = setTimeout(() => controller.abort(), 5000)
+    const res = await fetch('http://ip-api.com/json/?fields=status,message,country,countryCode,regionName,city,lat,lon,isp,org,query,timezone', {
+      signal: controller.signal
+    })
+    clearTimeout(tid)
     if (res.ok) {
-      const data = await res.json()
-      if (data && data.ip && !data.error) {
-        const gps = await gpsPromise
+      const d = await res.json()
+      if (d && d.status === 'success' && d.query) {
+        const gps = await Promise.race([gpsPromise, new Promise(r => setTimeout(() => r(null), 2000))])
         return {
-          ip: data.ip,
-          city: data.city || '—',
-          region: data.region || '—',
-          country: data.country_name || '—',
-          countryCode: data.country_code || '',
-          flag: getFlagEmoji(data.country_code),
-          latitude: gps?.latitude || (data.latitude ? Number(data.latitude).toFixed(4) : null),
-          longitude: gps?.longitude || (data.longitude ? Number(data.longitude).toFixed(4) : null),
-          isp: data.org || data.asn || '—',
-          timezone: data.timezone || '—',
+          ip: d.query,
+          city: d.city || '—',
+          region: d.regionName || '—',
+          country: d.country || '—',
+          countryCode: d.countryCode || '',
+          flag: getFlagEmoji(d.countryCode),
+          latitude: gps?.latitude || (d.lat != null ? Number(d.lat).toFixed(4) : null),
+          longitude: gps?.longitude || (d.lon != null ? Number(d.lon).toFixed(4) : null),
+          isp: d.isp || d.org || '—',
+          timezone: d.timezone || '—',
         }
       }
     }
   } catch (_) {}
 
-  // Tier 4: ipify — IP only, then reverse geo via freeipapi
+  // ── Tier 4: ipapi.co ─────────────────────────────────────────────────
   try {
     const controller = new AbortController()
-    const timeoutId = setTimeout(() => controller.abort(), 3000)
+    const tid = setTimeout(() => controller.abort(), 4000)
+    const res = await fetch('https://ipapi.co/json/', {
+      signal: controller.signal,
+      mode: 'cors'
+    })
+    clearTimeout(tid)
+    if (res.ok) {
+      const d = await res.json()
+      if (d && d.ip && !d.error) {
+        const gps = await Promise.race([gpsPromise, new Promise(r => setTimeout(() => r(null), 2000))])
+        return {
+          ip: d.ip,
+          city: d.city || '—',
+          region: d.region || '—',
+          country: d.country_name || '—',
+          countryCode: d.country_code || '',
+          flag: getFlagEmoji(d.country_code),
+          latitude: gps?.latitude || (d.latitude != null ? Number(d.latitude).toFixed(4) : null),
+          longitude: gps?.longitude || (d.longitude != null ? Number(d.longitude).toFixed(4) : null),
+          isp: d.org || d.asn || '—',
+          timezone: d.timezone || '—',
+        }
+      }
+    }
+  } catch (_) {}
+
+  // ── Tier 5: ipify (IP only) + freeipapi reverse lookup ───────────────
+  try {
+    const controller = new AbortController()
+    const tid = setTimeout(() => controller.abort(), 3000)
     const res = await fetch('https://api.ipify.org?format=json', { signal: controller.signal })
-    clearTimeout(timeoutId)
+    clearTimeout(tid)
     if (res.ok) {
-      const data = await res.json()
-      if (data && data.ip) {
-        const gps = await gpsPromise
-        // Try to reverse geo the IP
+      const d = await res.json()
+      if (d && d.ip) {
         try {
-          const r2 = await fetch(`https://freeipapi.com/api/json/${data.ip}`)
+          const r2 = await fetch(`https://freeipapi.com/api/json/${d.ip}`, { mode: 'cors' })
           if (r2.ok) {
             const d2 = await r2.json()
             if (d2 && d2.ipAddress) {
+              const gps = await Promise.race([gpsPromise, new Promise(r => setTimeout(() => r(null), 1000))])
               return {
                 ip: d2.ipAddress,
                 city: d2.cityName || '—',
@@ -129,44 +170,35 @@ export const getRealVisitorGeo = async () => {
                 country: d2.countryName || '—',
                 countryCode: d2.countryCode || '',
                 flag: getFlagEmoji(d2.countryCode),
-                latitude: gps?.latitude || (d2.latitude ? Number(d2.latitude).toFixed(4) : null),
-                longitude: gps?.longitude || (d2.longitude ? Number(d2.longitude).toFixed(4) : null),
-                isp: d2.isp || '—',
-                timezone: d2.timeZone || '—',
+                latitude: gps?.latitude || (d2.latitude != null ? Number(d2.latitude).toFixed(4) : null),
+                longitude: gps?.longitude || (d2.longitude != null ? Number(d2.longitude).toFixed(4) : null),
+                isp: d2.asnOrganization || '—',
+                timezone: (d2.timeZones && d2.timeZones[0]) || '—',
               }
             }
           }
         } catch (_) {}
-
+        // IP only — no geo
+        const gps = await Promise.race([gpsPromise, new Promise(r => setTimeout(() => r(null), 500))])
         return {
-          ip: data.ip,
-          city: '—',
-          region: '—',
-          country: '—',
-          countryCode: '',
-          flag: '🌐',
+          ip: d.ip,
+          city: '—', region: '—', country: '—', countryCode: '', flag: '🌐',
           latitude: gps?.latitude || null,
           longitude: gps?.longitude || null,
-          isp: '—',
-          timezone: '—',
+          isp: '—', timezone: '—',
         }
       }
     }
   } catch (_) {}
 
-  // Final fallback — no fake data, all nulls
+  // ── Final fallback — no fake data ─────────────────────────────────────
   const gps = await gpsPromise
   return {
     ip: 'Detecting...',
-    city: '—',
-    region: '—',
-    country: '—',
-    countryCode: '',
-    flag: '🌐',
+    city: '—', region: '—', country: '—', countryCode: '', flag: '🌐',
     latitude: gps?.latitude || null,
     longitude: gps?.longitude || null,
-    isp: '—',
-    timezone: '—',
+    isp: '—', timezone: '—',
   }
 }
 
@@ -175,7 +207,6 @@ export const detectBrowserAndDevice = () => {
   if (typeof window === 'undefined' || !navigator) {
     return { device: 'Desktop Workstation', browser: 'Browser Engine' }
   }
-
   const ua = navigator.userAgent
   let device = 'Desktop PC'
   if (/iphone/i.test(ua)) device = 'iPhone Mobile (iOS)'
@@ -190,6 +221,7 @@ export const detectBrowserAndDevice = () => {
   else if (/firefox/i.test(ua)) browser = 'Mozilla Firefox'
   else if (/crios/i.test(ua)) browser = 'Chrome iOS'
   else if (/fxios/i.test(ua)) browser = 'Firefox iOS'
+  else if (/samsung/i.test(ua)) browser = 'Samsung Browser'
   else if (/safari/i.test(ua) && !/chrome/i.test(ua)) browser = 'Mobile Safari'
   else if (/opr|opera/i.test(ua)) browser = 'Opera'
 
@@ -199,34 +231,31 @@ export const detectBrowserAndDevice = () => {
 export function getFlagEmoji(countryCode) {
   if (!countryCode) return '🌐'
   try {
-    const codePoints = countryCode
-      .toUpperCase()
-      .split('')
-      .map(char => 127397 + char.charCodeAt(0))
+    const codePoints = countryCode.toUpperCase().split('').map(c => 127397 + c.charCodeAt(0))
     return String.fromCodePoint(...codePoints)
-  } catch (_) {
-    return '🌐'
-  }
+  } catch (_) { return '🌐' }
 }
 
 // Safe Coordinate Formatter — never returns fake Karachi defaults
 export const formatCoordinates = (lat, lng) => {
-  const isValid = (v) => v !== null && v !== undefined && v !== '' && v !== 'undefined' && v !== 'null' && !isNaN(Number(v))
+  const isValid = (v) =>
+    v !== null && v !== undefined && v !== '' &&
+    v !== 'undefined' && v !== 'null' && v !== '—' && !isNaN(Number(v))
   if (isValid(lat) && isValid(lng)) {
     return `${Number(lat).toFixed(4)}° N, ${Number(lng).toFixed(4)}° E`
   }
   return 'Locating...'
 }
 
+const FAKE_IPS = ['86.134.20.11', '35.212.89.104', '103.255.4.19', '115.186.160.4', '182.185.142.92']
+
 // Log real visitor session into localStorage with section tracking
 export const logRealTimeVisitor = (geo, activeSection = '#home', durationSeconds = 0) => {
   if (typeof window === 'undefined') return
   try {
     const { device, browser } = detectBrowserAndDevice()
-
-    // Clean stale fake visitors that may be cached
-    const FAKE_IPS = ['86.134.20.11', '35.212.89.104', '103.255.4.19', '115.186.160.4', '182.185.142.92']
     const existing = JSON.parse(localStorage.getItem('NEXORA_VISITOR_LOGS') || '[]')
+    // Purge fake IPs
     const cleaned = existing.filter(item => item && !FAKE_IPS.includes(item.ip))
 
     const currentVisitor = {
@@ -234,13 +263,15 @@ export const logRealTimeVisitor = (geo, activeSection = '#home', durationSeconds
       ip: geo?.ip || 'Detecting...',
       country: geo?.country ? `${geo.country} ${geo?.flag || ''}`.trim() : '—',
       city: geo?.city || '—',
-      latitude: geo?.latitude ? String(geo.latitude) : null,
-      longitude: geo?.longitude ? String(geo.longitude) : null,
+      latitude: geo?.latitude != null ? String(geo.latitude) : null,
+      longitude: geo?.longitude != null ? String(geo.longitude) : null,
       isp: geo?.isp || '—',
-      duration: durationSeconds > 0 ? `${Math.floor(durationSeconds / 60)}m ${durationSeconds % 60}s` : 'Active Now',
-      activeSection: activeSection,
-      device: device,
-      browser: browser,
+      duration: durationSeconds > 0
+        ? `${Math.floor(durationSeconds / 60)}m ${durationSeconds % 60}s`
+        : 'Active Now',
+      activeSection,
+      device,
+      browser,
       entrance: 'Direct Visit',
       lastActive: 'Just now',
       status: 'Active Online',
@@ -249,12 +280,10 @@ export const logRealTimeVisitor = (geo, activeSection = '#home', durationSeconds
       timestamp: new Date().toISOString()
     }
 
-    // Deduplicate by IP
-    const sanitized = cleaned.filter(item => item.ip !== currentVisitor.ip)
+    const sanitized = cleaned.filter(v => v.ip !== currentVisitor.ip)
     const updated = [currentVisitor, ...sanitized].slice(0, 20)
     localStorage.setItem('NEXORA_VISITOR_LOGS', JSON.stringify(updated))
 
-    // Broadcast to Admin Panel tab
     if ('BroadcastChannel' in window) {
       try {
         const bc = new BroadcastChannel('NEXORA_TELEMETRY_CHANNEL')
@@ -262,7 +291,6 @@ export const logRealTimeVisitor = (geo, activeSection = '#home', durationSeconds
         bc.close()
       } catch (_) {}
     }
-
     return updated
   } catch (err) {
     console.error('Visitor log error:', err)
@@ -279,7 +307,9 @@ export const updateVisitorSection = (ip, activeSection, durationSeconds) => {
         return {
           ...v,
           activeSection,
-          duration: durationSeconds > 0 ? `${Math.floor(durationSeconds / 60)}m ${durationSeconds % 60}s` : 'Active Now',
+          duration: durationSeconds > 0
+            ? `${Math.floor(durationSeconds / 60)}m ${durationSeconds % 60}s`
+            : 'Active Now',
           lastActive: 'Just now'
         }
       }
