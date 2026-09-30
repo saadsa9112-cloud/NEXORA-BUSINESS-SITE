@@ -169,19 +169,34 @@ export default function AdminPortalPage({ onExit }) {
 
   // Load persistent data & Real Geo IP Lookup
   useEffect(() => {
+    // Purge any fake/hardcoded IPs from past localStorage cache
+    const FAKE_IPS = ['86.134.20.11', '35.212.89.104', '103.255.4.19', '115.186.160.4', '182.185.142.92']
+    try {
+      const cachedVisitors = JSON.parse(localStorage.getItem('NEXORA_VISITOR_LOGS') || '[]')
+      const purged = cachedVisitors.filter(v => v && !FAKE_IPS.includes(v.ip))
+      localStorage.setItem('NEXORA_VISITOR_LOGS', JSON.stringify(purged))
+
+      const cachedSessions = JSON.parse(localStorage.getItem('NEXORA_ACTIVE_SESSIONS') || '[]')
+      const purgedSessions = cachedSessions.filter(s => s && !FAKE_IPS.includes(s.ip))
+      localStorage.setItem('NEXORA_ACTIVE_SESSIONS', JSON.stringify(purgedSessions))
+    } catch (_) {}
+
     const fetchGeo = async () => {
       const geo = await getRealVisitorGeo()
       setCurrentVisitorGeo(geo)
 
       const { device, browser } = detectBrowserAndDevice()
 
+      const locationParts = [geo.city, geo.country].filter(x => x && x !== '—')
+      const locationStr = (locationParts.join(', ') + (geo.flag ? ` ${geo.flag}` : '')).trim() || 'Detecting...'
+
       // Dynamically build current real active session
       const currentRealSession = {
         id: 'SES-LIVE-101',
         device: device,
         browser: browser,
-        ip: geo.ip,
-        location: `${geo.city}, ${geo.country} ${geo.flag}`,
+        ip: geo.ip || 'Detecting...',
+        location: locationStr,
         loginTime: new Date().toLocaleString('en-US', { dateStyle: 'medium', timeStyle: 'short' }),
         status: 'CURRENT ACTIVE SESSION',
         active: true
@@ -192,14 +207,14 @@ export default function AdminPortalPage({ onExit }) {
         try {
           const parsed = JSON.parse(savedSessions)
           if (Array.isArray(parsed) && parsed.length > 0) {
-            const updated = parsed.map(s => s.status?.includes('CURRENT') ? { ...s, ip: geo.ip, location: `${geo.city}, ${geo.country} ${geo.flag}`, device, browser } : s)
+            const updated = parsed.map(s => s.status?.includes('CURRENT') ? { ...s, ip: geo.ip || 'Detecting...', location: locationStr, device, browser } : s)
             setActiveSessions(updated)
             localStorage.setItem('NEXORA_ACTIVE_SESSIONS', JSON.stringify(updated))
           } else {
             setActiveSessions([currentRealSession])
             localStorage.setItem('NEXORA_ACTIVE_SESSIONS', JSON.stringify([currentRealSession]))
           }
-        } catch (e) {
+        } catch (_) {
           setActiveSessions([currentRealSession])
           localStorage.setItem('NEXORA_ACTIVE_SESSIONS', JSON.stringify([currentRealSession]))
         }
@@ -208,19 +223,19 @@ export default function AdminPortalPage({ onExit }) {
         localStorage.setItem('NEXORA_ACTIVE_SESSIONS', JSON.stringify([currentRealSession]))
       }
 
-      // Dynamically log/update real visitor telemetry
+      // Dynamically log/update real visitor telemetry (admin access)
       setVisitorLogs(prev => {
         const hasMyIp = prev.some(v => v.ip === geo.ip)
-        if (!hasMyIp) {
+        if (!hasMyIp && geo.ip && geo.ip !== 'Detecting...') {
           const newVis = {
             id: `VIS-${Math.floor(100 + Math.random() * 900)}`,
             ip: geo.ip,
-            country: `${geo.country} ${geo.flag}`,
-            city: geo.city,
+            country: `${geo.country || '—'} ${geo.flag || ''}`.trim(),
+            city: geo.city || '—',
             latitude: geo.latitude,
             longitude: geo.longitude,
-            isp: geo.isp,
-            duration: '1m 20s',
+            isp: geo.isp || '—',
+            duration: 'Active Now',
             activeSection: '#admin (Founder Portal)',
             device: device,
             browser: browser,
@@ -228,7 +243,8 @@ export default function AdminPortalPage({ onExit }) {
             lastActive: 'Just now',
             status: 'Active Online',
             radarX: 52,
-            radarY: 48
+            radarY: 48,
+            timestamp: new Date().toISOString()
           }
           const updated = [newVis, ...prev]
           localStorage.setItem('NEXORA_VISITOR_LOGS', JSON.stringify(updated))
@@ -242,15 +258,29 @@ export default function AdminPortalPage({ onExit }) {
         try {
           const bc = new BroadcastChannel('NEXORA_TELEMETRY_CHANNEL')
           bc.onmessage = (event) => {
-            if (event.data && event.data.type === 'VISITOR_LOGGED') {
+            if (!event.data) return
+            if (event.data.type === 'VISITOR_LOGGED') {
               const newV = event.data.visitor
               setVisitorLogs(prev => {
                 const filtered = prev.filter(v => v.ip !== newV.ip)
                 return [newV, ...filtered]
               })
+            } else if (event.data.type === 'VISITOR_SECTION_UPDATE') {
+              const { ip, activeSection, durationSeconds } = event.data
+              setVisitorLogs(prev => prev.map(v => {
+                if (v.ip === ip) {
+                  return {
+                    ...v,
+                    activeSection,
+                    duration: durationSeconds > 0 ? `${Math.floor(durationSeconds / 60)}m ${durationSeconds % 60}s` : 'Active Now',
+                    lastActive: 'Just now'
+                  }
+                }
+                return v
+              }))
             }
           }
-        } catch (e) {}
+        } catch (_) {}
       }
     }
     fetchGeo()
@@ -270,7 +300,7 @@ export default function AdminPortalPage({ onExit }) {
 
     const savedProjects = localStorage.getItem('NEXORA_PROJECTS_STORE')
     if (savedProjects) {
-      try { setProjects(JSON.parse(savedProjects)) } catch (e) { setProjects(INITIAL_PROJECTS) }
+      try { setProjects(JSON.parse(savedProjects)) } catch (_) { setProjects(INITIAL_PROJECTS) }
     } else {
       setProjects(INITIAL_PROJECTS)
       localStorage.setItem('NEXORA_PROJECTS_STORE', JSON.stringify(INITIAL_PROJECTS))
@@ -278,7 +308,7 @@ export default function AdminPortalPage({ onExit }) {
 
     const savedInbox = localStorage.getItem('NEXORA_INBOX_STORE')
     if (savedInbox) {
-      try { setInboxMessages(JSON.parse(savedInbox)) } catch (e) { setInboxMessages(INITIAL_INBOX_MESSAGES) }
+      try { setInboxMessages(JSON.parse(savedInbox)) } catch (_) { setInboxMessages(INITIAL_INBOX_MESSAGES) }
     } else {
       setInboxMessages(INITIAL_INBOX_MESSAGES)
       localStorage.setItem('NEXORA_INBOX_STORE', JSON.stringify(INITIAL_INBOX_MESSAGES))
@@ -286,26 +316,17 @@ export default function AdminPortalPage({ onExit }) {
 
     const savedLeads = localStorage.getItem('NEXORA_AUDIT_LEADS')
     if (savedLeads) {
-      try { setAuditLeads(JSON.parse(savedLeads)) } catch (e) { setAuditLeads(INITIAL_AUDIT_LEADS) }
+      try { setAuditLeads(JSON.parse(savedLeads)) } catch (_) { setAuditLeads(INITIAL_AUDIT_LEADS) }
     } else {
       setAuditLeads(INITIAL_AUDIT_LEADS)
       localStorage.setItem('NEXORA_AUDIT_LEADS', JSON.stringify(INITIAL_AUDIT_LEADS))
     }
 
-    const FAKE_IPS = ['86.134.20.11', '35.212.89.104', '103.255.4.19', '115.186.160.4']
-
+    // Load visitor logs BEFORE fetchGeo so async append builds on real data
     const savedVisitors = localStorage.getItem('NEXORA_VISITOR_LOGS')
     if (savedVisitors) {
-      try {
-        const parsed = JSON.parse(savedVisitors)
-        const cleanVisitors = parsed.filter(v => v && !FAKE_IPS.includes(v.ip))
-        setVisitorLogs(cleanVisitors)
-        localStorage.setItem('NEXORA_VISITOR_LOGS', JSON.stringify(cleanVisitors))
-      } catch (e) { setVisitorLogs([]) }
-    } else {
-      setVisitorLogs([])
+      try { setVisitorLogs(JSON.parse(savedVisitors)) } catch (_) { setVisitorLogs([]) }
     }
-
 
     const savedSecLogs = localStorage.getItem('NEXORA_SECURITY_LOGS')
     if (savedSecLogs) {

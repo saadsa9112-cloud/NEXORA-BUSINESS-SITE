@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import LaunchBanner from './components/LaunchBanner/LaunchBanner'
 import Navbar from './components/Navbar/Navbar'
 import Hero from './components/Hero/Hero'
@@ -24,14 +24,23 @@ import AiAssistantModal from './components/AiAssistant/AiAssistantModal'
 import ClientPortalModal from './components/ClientPortal/ClientPortalModal'
 import AdminPortalPage from './components/Admin/AdminPortalPage'
 import Footer from './components/Footer/Footer'
-import { getRealVisitorGeo, logRealTimeVisitor, updateVisitorSession } from './utils/geoTracker'
+import DiscountRoastFlyer from './components/DiscountFlyer/DiscountRoastFlyer'
+import { getRealVisitorGeo, logRealTimeVisitor, updateVisitorSection } from './utils/geoTracker'
 
+// Tracked sections on the page
+const TRACKED_SECTIONS = ['home', 'services', 'work', 'pricing', 'about', 'faq', 'contact']
 
 export default function App() {
   const [currency, setCurrency] = useState('PKR')
   const [isAdminPage, setIsAdminPage] = useState(false)
   const [isSpeedAuditOpen, setIsSpeedAuditOpen] = useState(false)
   const [isRoiOpen, setIsRoiOpen] = useState(false)
+
+  // Visitor telemetry state
+  const visitorGeoRef = useRef(null)          // real geo once fetched
+  const currentSectionRef = useRef('#home')   // which section is visible
+  const sectionEntryTimeRef = useRef(Date.now()) // when visitor entered current section
+  const totalDurationRef = useRef(0)          // total seconds on site
 
   // URL Path/Hash Triggers for Admin Page & Modals
   useEffect(() => {
@@ -68,58 +77,100 @@ export default function App() {
     }
   }, [])
 
-  // Auto-detect Geo-location currency and log real-time visitor session & live section dwell time
+  // ─── REAL VISITOR TELEMETRY ───────────────────────────────────────────────
   useEffect(() => {
-    let geoData = null
-    const startTime = Date.now()
-
-    const detectAndLogVisitor = async () => {
+    // Step 1: Fetch real geo and log the initial visit
+    const initVisitor = async () => {
       try {
-        geoData = await getRealVisitorGeo()
-        if (geoData) {
-          if (geoData.countryCode) {
-            setCurrency(geoData.countryCode === 'PK' ? 'PKR' : 'USD')
+        const geo = await getRealVisitorGeo()
+        if (geo) {
+          visitorGeoRef.current = geo
+          // Set currency from country
+          if (geo.countryCode) {
+            setCurrency(geo.countryCode === 'PK' ? 'PKR' : 'USD')
           }
-          updateVisitorSession(geoData, window.location.hash || '#home', startTime)
+          // Log initial visit
+          logRealTimeVisitor(geo, currentSectionRef.current, 0)
         }
-      } catch (err) {}
+      } catch (_) {}
     }
-    detectAndLogVisitor()
+    initVisitor()
 
-    // 2-Second Live Dwell Time & Section Tracking Interval
-    const intervalId = setInterval(() => {
-      if (geoData) {
-        const activeHash = window.location.hash || '#home'
-        updateVisitorSession(geoData, activeHash, startTime)
+    // Step 2: Total time-on-site ticker (every 15s update duration)
+    const durationTicker = setInterval(() => {
+      totalDurationRef.current += 15
+      if (visitorGeoRef.current?.ip && visitorGeoRef.current.ip !== 'Detecting...') {
+        updateVisitorSection(
+          visitorGeoRef.current.ip,
+          currentSectionRef.current,
+          totalDurationRef.current
+        )
       }
-    }, 2000)
+    }, 15000)
 
-    // Section Scroll Observer
-    const sections = ['home', 'services', 'work', 'pricing', 'about', 'faq', 'contact']
-    const observer = new IntersectionObserver(
+    // Step 3: Section dwell tracking via IntersectionObserver
+    const sectionObserver = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
-          if (entry.isIntersecting && geoData) {
-            const hash = `#${entry.target.id}`
-            updateVisitorSession(geoData, hash, startTime)
+          if (entry.isIntersecting) {
+            const sectionId = '#' + entry.target.id
+            if (sectionId !== currentSectionRef.current) {
+              // Record dwell time on previous section
+              const dwell = Math.floor((Date.now() - sectionEntryTimeRef.current) / 1000)
+              totalDurationRef.current += dwell
+
+              // Switch to new section
+              currentSectionRef.current = sectionId
+              sectionEntryTimeRef.current = Date.now()
+
+              // Push update to admin panel
+              if (visitorGeoRef.current?.ip && visitorGeoRef.current.ip !== 'Detecting...') {
+                updateVisitorSection(
+                  visitorGeoRef.current.ip,
+                  sectionId,
+                  totalDurationRef.current
+                )
+              }
+            }
           }
         })
       },
-      { threshold: 0.3 }
+      { threshold: 0.4 }
     )
 
-    sections.forEach((id) => {
-      const el = document.getElementById(id)
-      if (el) observer.observe(el)
-    })
+    // Observe all tracked sections (wait for DOM)
+    const observeSections = () => {
+      TRACKED_SECTIONS.forEach(id => {
+        const el = document.getElementById(id)
+        if (el) sectionObserver.observe(el)
+      })
+    }
+
+    // Give React time to render sections
+    const observeTimer = setTimeout(observeSections, 800)
+
+    // Step 4: Log final duration when user leaves page
+    const handleUnload = () => {
+      const finalDuration = totalDurationRef.current + Math.floor((Date.now() - sectionEntryTimeRef.current) / 1000)
+      if (visitorGeoRef.current?.ip && visitorGeoRef.current.ip !== 'Detecting...') {
+        updateVisitorSection(
+          visitorGeoRef.current.ip,
+          currentSectionRef.current,
+          finalDuration
+        )
+      }
+    }
+    window.addEventListener('beforeunload', handleUnload)
+    window.addEventListener('pagehide', handleUnload)
 
     return () => {
-      clearInterval(intervalId)
-      observer.disconnect()
+      clearInterval(durationTicker)
+      clearTimeout(observeTimer)
+      sectionObserver.disconnect()
+      window.removeEventListener('beforeunload', handleUnload)
+      window.removeEventListener('pagehide', handleUnload)
     }
   }, [])
-
-
 
   // Scroll-reveal animation observer fallback
   useEffect(() => {
