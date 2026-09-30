@@ -12,7 +12,7 @@ import {
 } from 'lucide-react'
 import { CONTACT } from '../../data/siteData'
 import NexoraBrand from '../NexoraBrand/NexoraBrand'
-import { getRealVisitorGeo, detectBrowserAndDevice, formatCoordinates } from '../../utils/geoTracker'
+import { getRealVisitorGeo, detectBrowserAndDevice, formatCoordinates, purgeFakeData, FAKE_IPS } from '../../utils/geoTracker'
 
 import { generateB2BInvoicePDF, generateExecutiveProposalPDF } from '../../utils/pdfGenerator'
 
@@ -330,7 +330,7 @@ export default function AdminPortalPage({ onExit }) {
 
     const savedSecLogs = localStorage.getItem('NEXORA_SECURITY_LOGS')
     if (savedSecLogs) {
-      try { setSecurityLogs(JSON.parse(savedSecLogs)) } catch (e) { setSecurityLogs(INITIAL_SECURITY_LOGS) }
+      try { setSecurityLogs(JSON.parse(savedSecLogs)) } catch (_) { setSecurityLogs(INITIAL_SECURITY_LOGS) }
     } else {
       setSecurityLogs(INITIAL_SECURITY_LOGS)
       localStorage.setItem('NEXORA_SECURITY_LOGS', JSON.stringify(INITIAL_SECURITY_LOGS))
@@ -338,9 +338,47 @@ export default function AdminPortalPage({ onExit }) {
 
     const savedSlots = localStorage.getItem('NEXORA_LAUNCH_SLOTS')
     if (savedSlots) {
-      try { setLaunchSlots(JSON.parse(savedSlots)) } catch (e) {}
+      try { setLaunchSlots(JSON.parse(savedSlots)) } catch (_) {}
+    }
+
+    // ── REAL-TIME VISITOR POLLING every 5s ─────────────────────────────
+    // Picks up visitors from main site tab, mobile visitors, admin itself
+    const pollVisitors = setInterval(() => {
+      purgeFakeData()
+      try {
+        const fresh = JSON.parse(localStorage.getItem('NEXORA_VISITOR_LOGS') || '[]')
+        const clean = fresh.filter(v => v && !FAKE_IPS.includes(v.ip))
+        setVisitorLogs(clean)
+
+        const freshSessions = JSON.parse(localStorage.getItem('NEXORA_ACTIVE_SESSIONS') || '[]')
+        const cleanSessions = freshSessions.filter(s => s && !FAKE_IPS.includes(s.ip))
+        setActiveSessions(cleanSessions)
+      } catch (_) {}
+    }, 5000)
+
+    // ── CROSS-TAB storage event (fires when OTHER tab writes localStorage) ──
+    const handleStorage = (e) => {
+      if (e.key === 'NEXORA_VISITOR_LOGS' && e.newValue) {
+        try {
+          const updated = JSON.parse(e.newValue).filter(v => v && !FAKE_IPS.includes(v.ip))
+          setVisitorLogs(updated)
+        } catch (_) {}
+      }
+      if (e.key === 'NEXORA_ACTIVE_SESSIONS' && e.newValue) {
+        try {
+          const updated = JSON.parse(e.newValue).filter(s => s && !FAKE_IPS.includes(s.ip))
+          setActiveSessions(updated)
+        } catch (_) {}
+      }
+    }
+    window.addEventListener('storage', handleStorage)
+
+    return () => {
+      clearInterval(pollVisitors)
+      window.removeEventListener('storage', handleStorage)
     }
   }, [])
+
 
   // Lockout Timer
   useEffect(() => {
