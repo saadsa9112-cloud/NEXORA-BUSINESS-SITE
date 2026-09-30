@@ -1169,24 +1169,35 @@ END OF REPORT — NEXORA DIGITAL ENTERPRISE OS
       {/* MAIN CONTENT WORKSPACE */}
       <main className="flex-1 min-w-0 p-4 sm:p-6 lg:p-8 space-y-6 overflow-y-auto">
         
-        {/* Top Header Controls Bar */}
-        <div className="flex flex-wrap items-center justify-between gap-4 bg-[#0B1020] p-4 rounded-2xl border border-white/10 shadow-md">
-          <div className="flex items-center gap-3">
-            <h2 className="text-lg font-bold text-white capitalize flex items-center gap-2">
-              <span>{activeTab.replace('_', ' ')} Control Center</span>
-              <span className="px-2.5 py-0.5 bg-blue-500/10 text-blue-400 border border-blue-500/20 text-[10px] font-mono rounded-md">
-                ENTERPRISE OS v3.4
+        {/* Top Header Controls Bar — Mobile & Desktop Unified */}
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 bg-[#0B1020] p-3 sm:p-4 rounded-2xl border border-white/10 shadow-md">
+          <div className="flex items-center justify-between w-full sm:w-auto">
+            <h2 className="text-base sm:text-lg font-bold text-white capitalize flex items-center gap-2">
+              <span>{activeTab.replace('_', ' ')}</span>
+              <span className="px-2 py-0.5 bg-blue-500/10 text-blue-400 border border-blue-500/20 text-[9px] sm:text-[10px] font-mono rounded-md">
+                v3.4
               </span>
             </h2>
+
+            {/* Quick Export on mobile right */}
+            <div className="sm:hidden flex items-center gap-2">
+              <button
+                onClick={() => setIsExportModalOpen(true)}
+                className="p-2 bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-xl shadow-md cursor-pointer"
+                title="Export Options"
+              >
+                <Download size={14} />
+              </button>
+            </div>
           </div>
 
-          <div className="flex items-center gap-3 flex-wrap">
+          <div className="flex items-center justify-between sm:justify-end gap-2 sm:gap-3 w-full sm:w-auto">
             {/* Currency Mode Switcher ($ USD / Rs. PKR) */}
             <div className="flex items-center bg-black/60 border border-white/15 p-1 rounded-xl text-xs font-bold font-mono">
               <button
                 type="button"
                 onClick={() => setCurrencyMode('USD')}
-                className={`px-3 py-1 rounded-lg transition-all cursor-pointer ${
+                className={`px-2.5 sm:px-3 py-1 rounded-lg transition-all cursor-pointer ${
                   currencyMode === 'USD' ? 'bg-blue-600 text-white shadow-sm' : 'text-gray-400 hover:text-white'
                 }`}
               >
@@ -1195,7 +1206,7 @@ END OF REPORT — NEXORA DIGITAL ENTERPRISE OS
               <button
                 type="button"
                 onClick={() => setCurrencyMode('PKR')}
-                className={`px-3 py-1 rounded-lg transition-all cursor-pointer ${
+                className={`px-2.5 sm:px-3 py-1 rounded-lg transition-all cursor-pointer ${
                   currencyMode === 'PKR' ? 'bg-emerald-600 text-white shadow-sm' : 'text-gray-400 hover:text-white'
                 }`}
               >
@@ -1206,14 +1217,13 @@ END OF REPORT — NEXORA DIGITAL ENTERPRISE OS
             {currentVisitorGeo && (
               <div className="hidden xl:flex items-center gap-2 bg-white/5 border border-white/10 px-3 py-1.5 rounded-xl text-xs font-mono text-gray-300">
                 <Compass size={14} className="text-blue-400" />
-                <span>IP: <strong className="text-white">{currentVisitorGeo.ip}</strong> ({formatCoordinates(currentVisitorGeo.latitude, currentVisitorGeo.longitude)})</span>
+                <span>IP: <strong className="text-white">{currentVisitorGeo.ip}</strong></span>
               </div>
             )}
 
-
             <button
               onClick={() => setIsExportModalOpen(true)}
-              className="px-4 py-2 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white font-bold text-xs rounded-xl shadow-lg shadow-blue-600/30 flex items-center gap-2 transition-all cursor-pointer"
+              className="hidden sm:flex px-4 py-2 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white font-bold text-xs rounded-xl shadow-lg shadow-blue-600/30 items-center gap-2 transition-all cursor-pointer"
             >
               <Download size={14} />
               <span>Export Options 📥</span>
@@ -1225,78 +1235,80 @@ END OF REPORT — NEXORA DIGITAL ENTERPRISE OS
             TAB 1: EXECUTIVE OVERVIEW & REVENUE INTELLIGENCE
            ---------------------------------------------------- */}
         {activeTab === 'overview' && (
-          <div className="space-y-6">
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-              <div className="bg-[#0B1020] p-5 rounded-2xl border border-white/10 space-y-2">
-                <div className="flex justify-between items-center text-xs text-gray-400 font-bold">
-                  <span>ACTIVE CLIENT SPRINTS</span>
-                  <div className="p-2 rounded-lg bg-blue-500/10 text-blue-400"><Layers size={16} /></div>
+          <div className="space-y-4 sm:space-y-6">
+            {/* 2x2 Metric Grid on Mobile, 4-Col on Desktop */}
+            <div className="grid grid-cols-2 lg:grid-cols-4 gap-2.5 sm:gap-4">
+              <div className="bg-[#0B1020] p-3.5 sm:p-5 rounded-2xl border border-white/10 space-y-1.5 sm:space-y-2">
+                <div className="flex justify-between items-center text-[10px] sm:text-xs text-gray-400 font-bold">
+                  <span className="truncate">ACTIVE SPRINTS</span>
+                  <div className="p-1.5 sm:p-2 rounded-lg bg-blue-500/10 text-blue-400"><Layers size={14} /></div>
                 </div>
-                <div className="text-3xl font-black text-white">{projectList.length}</div>
-                <div className="text-[11px] text-emerald-400 font-semibold flex items-center gap-1">
-                  <CheckCircle2 size={12} />
-                  <span>100% On-Time SLA Guarantee</span>
+                <div className="text-xl sm:text-3xl font-black text-white">{projectList.length}</div>
+                <div className="text-[9px] sm:text-[11px] text-emerald-400 font-semibold truncate flex items-center gap-1">
+                  <CheckCircle2 size={11} className="flex-shrink-0" />
+                  <span>100% On-Time</span>
                 </div>
               </div>
 
-              <div className="bg-[#0B1020] p-5 rounded-2xl border border-white/10 space-y-2">
-                <div className="flex justify-between items-center text-xs text-gray-400 font-bold">
-                  <span>COLLECTED REVENUE</span>
-                  <div className="p-2 rounded-lg bg-emerald-500/10 text-emerald-400"><DollarSign size={16} /></div>
+              <div className="bg-[#0B1020] p-3.5 sm:p-5 rounded-2xl border border-white/10 space-y-1.5 sm:space-y-2">
+                <div className="flex justify-between items-center text-[10px] sm:text-xs text-gray-400 font-bold">
+                  <span className="truncate">COLLECTED REV</span>
+                  <div className="p-1.5 sm:p-2 rounded-lg bg-emerald-500/10 text-emerald-400"><DollarSign size={14} /></div>
                 </div>
-                <div className="text-3xl font-black text-emerald-400 font-mono">{formatMoney(collectedRevenue)}</div>
-                <div className="text-[11px] text-gray-400">Total Pipeline: {formatMoney(totalRevenue)}</div>
+                <div className="text-xl sm:text-3xl font-black text-emerald-400 font-mono truncate">{formatMoney(collectedRevenue)}</div>
+                <div className="text-[9px] sm:text-[11px] text-gray-400 truncate">Total: {formatMoney(totalRevenue)}</div>
               </div>
 
-              <div className="bg-[#0B1020] p-5 rounded-2xl border border-white/10 space-y-2">
-                <div className="flex justify-between items-center text-xs text-gray-400 font-bold">
-                  <span>UNREAD QUOTE LEADS</span>
-                  <div className="p-2 rounded-lg bg-indigo-500/10 text-indigo-400"><Inbox size={16} /></div>
+              <div className="bg-[#0B1020] p-3.5 sm:p-5 rounded-2xl border border-white/10 space-y-1.5 sm:space-y-2">
+                <div className="flex justify-between items-center text-[10px] sm:text-xs text-gray-400 font-bold">
+                  <span className="truncate">UNREAD LEADS</span>
+                  <div className="p-1.5 sm:p-2 rounded-lg bg-indigo-500/10 text-indigo-400"><Inbox size={14} /></div>
                 </div>
-                <div className="text-3xl font-black text-indigo-400 font-mono">{unreadMsgCount} / {inboxMessages.length}</div>
-                <div className="text-[11px] text-gray-400">Received via Quote Form</div>
+                <div className="text-xl sm:text-3xl font-black text-indigo-400 font-mono">{unreadMsgCount} / {inboxMessages.length}</div>
+                <div className="text-[9px] sm:text-[11px] text-gray-400 truncate">Inbound Quotes</div>
               </div>
 
-              <div className="bg-[#0B1020] p-5 rounded-2xl border border-white/10 space-y-2">
-                <div className="flex justify-between items-center text-xs text-gray-400 font-bold">
-                  <span>REAL-TIME VISITORS</span>
-                  <div className="p-2 rounded-lg bg-purple-500/10 text-purple-400"><Users size={16} /></div>
+              <div className="bg-[#0B1020] p-3.5 sm:p-5 rounded-2xl border border-white/10 space-y-1.5 sm:space-y-2">
+                <div className="flex justify-between items-center text-[10px] sm:text-xs text-gray-400 font-bold">
+                  <span className="truncate">LIVE VISITORS</span>
+                  <div className="p-1.5 sm:p-2 rounded-lg bg-purple-500/10 text-purple-400"><Users size={14} /></div>
                 </div>
-                <div className="text-3xl font-black text-purple-400 font-mono">{activeVisitorCount} Active</div>
-                <div className="text-[11px] text-gray-400">Total Tracked: {visitorLogs.length} Sessions</div>
+                <div className="text-xl sm:text-3xl font-black text-purple-400 font-mono truncate">{activeVisitorCount} Active</div>
+                <div className="text-[9px] sm:text-[11px] text-gray-400 truncate">{visitorLogs.length} Total Sessions</div>
               </div>
             </div>
 
-            {/* Conversion Funnel Analytics Widget */}
-            <div className="bg-[#0B1020] p-6 rounded-2xl border border-white/10 space-y-4">
-              <h3 className="text-sm font-bold text-white flex items-center gap-2 border-b border-white/10 pb-3">
-                <TrendingUp size={16} className="text-emerald-400" />
-                <span>Executive Conversion Funnel &amp; Growth Analytics ({currencyMode})</span>
+            {/* Conversion Funnel Analytics Widget — 2x2 on Mobile */}
+            <div className="bg-[#0B1020] p-4 sm:p-6 rounded-2xl border border-white/10 space-y-3 sm:space-y-4">
+              <h3 className="text-xs sm:text-sm font-bold text-white flex items-center gap-2 border-b border-white/10 pb-2 sm:pb-3">
+                <TrendingUp size={15} className="text-emerald-400 flex-shrink-0" />
+                <span className="truncate">Conversion Funnel &amp; Growth Analytics ({currencyMode})</span>
               </h3>
 
-              <div className="grid grid-cols-1 sm:grid-cols-4 gap-4 text-center">
-                <div className="p-4 bg-black/40 rounded-xl border border-white/10">
-                  <div className="text-xs text-gray-400 font-bold mb-1">TOTAL VISITS</div>
-                  <div className="text-2xl font-black text-white font-mono">1,420</div>
-                  <div className="text-[10px] text-gray-500 mt-1">100% Top of Funnel</div>
+              <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5 sm:gap-4 text-center">
+                <div className="p-3 sm:p-4 bg-black/40 rounded-xl border border-white/10">
+                  <div className="text-[10px] sm:text-xs text-gray-400 font-bold mb-1 truncate">TOTAL VISITS</div>
+                  <div className="text-lg sm:text-2xl font-black text-white font-mono">1,420</div>
+                  <div className="text-[9px] sm:text-[10px] text-gray-500 mt-0.5">Top of Funnel</div>
                 </div>
-                <div className="p-4 bg-black/40 rounded-xl border border-white/10">
-                  <div className="text-xs text-gray-400 font-bold mb-1">AUDIT TOOL RUNS</div>
-                  <div className="text-2xl font-black text-purple-400 font-mono">{auditLeads.length + 80}</div>
-                  <div className="text-[10px] text-purple-400 mt-1">5.9% Engagement</div>
+                <div className="p-3 sm:p-4 bg-black/40 rounded-xl border border-white/10">
+                  <div className="text-[10px] sm:text-xs text-gray-400 font-bold mb-1 truncate">AUDIT RUNS</div>
+                  <div className="text-lg sm:text-2xl font-black text-purple-400 font-mono">{auditLeads.length + 80}</div>
+                  <div className="text-[9px] sm:text-[10px] text-purple-400 mt-0.5">Engagement</div>
                 </div>
-                <div className="p-4 bg-black/40 rounded-xl border border-white/10">
-                  <div className="text-xs text-gray-400 font-bold mb-1">QUOTE SUBMISSIONS</div>
-                  <div className="text-2xl font-black text-blue-400 font-mono">{inboxMessages.length}</div>
-                  <div className="text-[10px] text-blue-400 mt-1">Lead Capture Rate</div>
+                <div className="p-3 sm:p-4 bg-black/40 rounded-xl border border-white/10">
+                  <div className="text-[10px] sm:text-xs text-gray-400 font-bold mb-1 truncate">QUOTES</div>
+                  <div className="text-lg sm:text-2xl font-black text-blue-400 font-mono">{inboxMessages.length}</div>
+                  <div className="text-[9px] sm:text-[10px] text-blue-400 mt-0.5">Lead Capture</div>
                 </div>
-                <div className="p-4 bg-black/40 rounded-xl border border-white/10">
-                  <div className="text-xs text-gray-400 font-bold mb-1">CLOSED CLIENT CONTRACTS</div>
-                  <div className="text-2xl font-black text-emerald-400 font-mono">{projectList.length}</div>
-                  <div className="text-[10px] text-emerald-400 mt-1">25.0% Conversion</div>
+                <div className="p-3 sm:p-4 bg-black/40 rounded-xl border border-white/10">
+                  <div className="text-[10px] sm:text-xs text-gray-400 font-bold mb-1 truncate">CLOSED DEALS</div>
+                  <div className="text-lg sm:text-2xl font-black text-emerald-400 font-mono">{projectList.length}</div>
+                  <div className="text-[9px] sm:text-[10px] text-emerald-400 mt-0.5">Conversion</div>
                 </div>
               </div>
             </div>
+
 
             {/* Active Sprints Table */}
             <div className="bg-[#0B1020] p-6 rounded-2xl border border-white/10 space-y-4">

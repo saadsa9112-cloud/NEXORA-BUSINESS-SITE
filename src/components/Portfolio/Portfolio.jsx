@@ -124,9 +124,14 @@ export default function Portfolio() {
                     <h3 className="text-[#0B1020] font-bold text-lg mb-2 leading-snug group-hover:text-[#0066FF] transition-colors">{item.title}</h3>
                     <p className="text-[#4B5563] text-sm leading-relaxed">{item.description}</p>
 
-                    <div className="mt-4 flex items-center gap-1.5 text-xs font-semibold text-[#0066FF] group-hover:text-[#0052CC] transition-colors duration-200">
-                      <span>View Full Case Study</span>
-                      <ExternalLink size={12} className="group-hover:translate-x-1 group-hover:-translate-y-0.5 transition-transform" aria-hidden="true" />
+                    <div className="mt-4 pt-3 border-t border-slate-100 flex items-center justify-between">
+                      <span className="text-xs font-bold text-[#0066FF] flex items-center gap-1.5 group-hover:text-[#0052CC] transition-colors">
+                        <span>Preview Project</span>
+                        <ExternalLink size={12} className="group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" aria-hidden="true" />
+                      </span>
+                      <span className="text-[10px] font-bold px-2.5 py-1 rounded-lg bg-blue-50 text-[#0066FF] border border-blue-200 group-hover:bg-[#0066FF] group-hover:text-white transition-colors">
+                        Case Study ↗
+                      </span>
                     </div>
                   </div>
                 </TiltCard>
@@ -150,38 +155,38 @@ export default function Portfolio() {
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               onClick={() => setPreviewProject(null)}
-              className="fixed inset-0 z-50 bg-black/70 backdrop-blur-xs flex items-center justify-center p-4 sm:p-6"
+              className="fixed inset-0 z-50 bg-black/70 backdrop-blur-xs flex items-end sm:items-center justify-center p-0 sm:p-6"
             >
               <motion.div
-                initial={{ opacity: 0, scale: 0.95, y: 20 }}
+                initial={{ opacity: 0, scale: 0.95, y: 30 }}
                 animate={{ opacity: 1, scale: 1, y: 0 }}
-                exit={{ opacity: 0, scale: 0.95, y: 20 }}
+                exit={{ opacity: 0, scale: 0.95, y: 30 }}
                 onClick={(e) => e.stopPropagation()}
-                className="relative w-full max-w-3xl bg-white border border-[#E5EAF1] rounded-2xl shadow-2xl overflow-hidden flex flex-col max-h-[90vh]"
+                className="relative w-full sm:max-w-3xl bg-white border border-[#E5EAF1] rounded-t-3xl sm:rounded-2xl shadow-2xl overflow-hidden flex flex-col max-h-[92vh] sm:max-h-[90vh]"
                 role="dialog"
                 aria-modal="true"
                 aria-label={previewProject.title}
               >
                 {/* Modal Header */}
-                <div className="px-6 py-4 border-b border-[#E5EAF1] flex items-center justify-between bg-white/95 backdrop-blur-md">
+                <div className="px-4 py-3 sm:px-6 sm:py-4 border-b border-[#E5EAF1] flex items-center justify-between bg-white/95 backdrop-blur-md">
                   <div>
                     <span className="text-[10px] font-bold text-[#0066FF] uppercase tracking-wider block">{previewProject.category} Case Study</span>
-                    <h3 className="text-xl font-bold text-[#0B1020]">{previewProject.title}</h3>
+                    <h3 className="text-base sm:text-xl font-bold text-[#0B1020]">{previewProject.title}</h3>
                   </div>
                   <button
                     type="button"
                     onClick={() => setPreviewProject(null)}
                     aria-label="Close modal"
-                    className="w-9 h-9 rounded-xl border border-[#E5EAF1] hover:bg-gray-100 flex items-center justify-center text-[#4B5563] transition-colors"
+                    className="w-8 h-8 sm:w-9 sm:h-9 rounded-xl border border-[#E5EAF1] hover:bg-gray-100 flex items-center justify-center text-[#4B5563] transition-colors cursor-pointer"
                   >
-                    <X size={18} />
+                    <X size={17} />
                   </button>
                 </div>
 
                 {/* Modal Body */}
-                <div className="p-6 overflow-y-auto flex flex-col gap-6">
+                <div className="p-4 sm:p-6 overflow-y-auto flex flex-col gap-4 sm:gap-6">
                   {/* Large High-Res Image Preview */}
-                  <div className="rounded-xl overflow-hidden border border-[#E5EAF1] shadow-soft max-h-[360px]">
+                  <div className="rounded-xl overflow-hidden border border-[#E5EAF1] shadow-soft max-h-[260px] sm:max-h-[360px]">
                     <img
                       src={previewProject.image}
                       alt={previewProject.title}
@@ -191,8 +196,8 @@ export default function Portfolio() {
 
                   {/* Highlights Grid */}
                   <div>
-                    <h4 className="text-xs font-bold uppercase tracking-wider text-[#0B1020] mb-3">Project Deliverables & Architecture</h4>
-                    <div className="grid sm:grid-cols-2 gap-3">
+                    <h4 className="text-xs font-bold uppercase tracking-wider text-[#0B1020] mb-2 sm:mb-3">Project Deliverables &amp; Architecture</h4>
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 sm:gap-3">
                       {[
                         'Custom Modern UI/UX Design System',
                         '100% Fully Responsive Across Mobile & Desktop',
@@ -201,8 +206,8 @@ export default function Portfolio() {
                         'Secure Form Submission & Anti-Spam Setup',
                         '30-Day Post-Launch Support Included',
                       ].map((item, i) => (
-                        <div key={i} className="flex items-center gap-2.5 text-xs text-[#4B5563] bg-[#F8FAFC] p-3 rounded-xl border border-[#E5EAF1]">
-                          <Check size={14} className="text-[#0066FF] flex-shrink-0" />
+                        <div key={i} className="flex items-center gap-2 text-xs text-[#4B5563] bg-[#F8FAFC] p-2.5 sm:p-3 rounded-xl border border-[#E5EAF1]">
+                          <Check size={13} className="text-[#0066FF] flex-shrink-0" />
                           <span>{item}</span>
                         </div>
                       ))}
@@ -210,10 +215,10 @@ export default function Portfolio() {
                   </div>
 
                   {/* Tech stack */}
-                  <div className="flex items-center gap-2 flex-wrap">
-                    <span className="text-xs font-bold text-[#0B1020] mr-2">Built With:</span>
-                    {['React 18', 'Tailwind CSS', 'Framer Motion', 'SEO Ready', 'Vite'].map((tag) => (
-                      <span key={tag} className="px-3 py-1 rounded-lg bg-blue-50 text-[#0066FF] text-xs font-semibold">
+                  <div className="flex items-center gap-1.5 sm:gap-2 flex-wrap">
+                    <span className="text-xs font-bold text-[#0B1020] mr-1">Built With:</span>
+                    {['React 19', 'Tailwind CSS', 'Framer Motion', 'SEO Ready', 'Vite'].map((tag) => (
+                      <span key={tag} className="px-2.5 py-0.5 sm:px-3 sm:py-1 rounded-lg bg-blue-50 text-[#0066FF] text-[11px] sm:text-xs font-semibold">
                         {tag}
                       </span>
                     ))}
@@ -221,7 +226,7 @@ export default function Portfolio() {
                 </div>
 
                 {/* Modal Footer */}
-                <div className="p-6 border-t border-[#E5EAF1] bg-[#F8FAFC] flex flex-wrap items-center justify-between gap-4">
+                <div className="p-4 sm:p-6 border-t border-[#E5EAF1] bg-[#F8FAFC] flex flex-col sm:flex-row items-center justify-between gap-3 sm:gap-4">
                   <div className="flex items-center gap-2 text-xs text-[#6B7280]">
                     <ShieldCheck size={16} className="text-[#0066FF]" />
                     <span>NEXORA DIGITAL Verified Project</span>
@@ -232,7 +237,7 @@ export default function Portfolio() {
                       setPreviewProject(null)
                       scrollToContact()
                     }}
-                    className="px-6 py-3 bg-[#0066FF] hover:bg-[#0052CC] text-white text-xs font-bold rounded-xl shadow-md shadow-blue-500/20 transition-all"
+                    className="w-full sm:w-auto px-6 py-3 bg-[#0066FF] hover:bg-[#0052CC] text-white text-xs font-bold rounded-xl shadow-md shadow-blue-500/20 transition-all cursor-pointer text-center"
                   >
                     Build A Site Like This →
                   </button>

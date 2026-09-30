@@ -272,52 +272,110 @@ export default function Hero() {
             </motion.div>
 
             {/* H1 Headline */}
-            <motion.h1 variants={itemVariants} className="text-4xl sm:text-5xl lg:text-6xl font-black text-[#0B1020] leading-[1.1] tracking-tight mb-6">
+            <motion.h1 variants={itemVariants} className="text-3xl sm:text-5xl lg:text-6xl font-black text-[#0B1020] leading-[1.15] tracking-tight mb-5 sm:mb-6">
               Digital Solutions That <br className="hidden sm:inline" />
               <span className="text-gradient-blue">Move Your Business Forward.</span>
             </motion.h1>
 
             {/* Supporting copy */}
-            <motion.p variants={itemVariants} className="text-[#4B5563] text-base sm:text-lg leading-relaxed mb-8 max-w-xl">
+            <motion.p variants={itemVariants} className="text-[#4B5563] text-sm sm:text-base lg:text-lg leading-relaxed mb-6 sm:mb-8 max-w-xl">
               Professional website development, WordPress, Shopify, SEO, graphic design,
               hosting and maintenance services designed to help your business build trust and grow online.
             </motion.p>
 
-            {/* CTAs with Magnetic Buttons */}
-            <motion.div variants={itemVariants} className="flex flex-wrap gap-4 mb-10">
-              <MagneticButton onClick={scrollToContact}>
+            {/* CTAs with Magnetic Buttons — full-width touch friendly on mobile */}
+            <motion.div variants={itemVariants} className="flex flex-col sm:flex-row gap-3 sm:gap-4 mb-8 sm:mb-10 w-full sm:w-auto">
+              <MagneticButton onClick={scrollToContact} className="w-full sm:w-auto">
                 <button
                   type="button"
-                  className="inline-flex items-center gap-2.5 px-7 py-4 bg-[#0066FF] hover:bg-[#0052CC] text-white font-semibold rounded-xl transition-all duration-200 shadow-md shadow-blue-500/20 hover:shadow-lg hover:shadow-blue-500/30 text-base"
+                  className="w-full sm:w-auto inline-flex items-center justify-center gap-2.5 px-6 sm:px-7 py-3.5 sm:py-4 bg-[#0066FF] hover:bg-[#0052CC] text-white font-semibold rounded-xl transition-all duration-200 shadow-md shadow-blue-500/20 hover:shadow-lg hover:shadow-blue-500/30 text-sm sm:text-base cursor-pointer"
                 >
-                  Get Free Quote
-                  <ArrowRight size={18} aria-hidden="true" />
+                  <span>Get Free Quote</span>
+                  <ArrowRight size={17} aria-hidden="true" />
                 </button>
               </MagneticButton>
 
-              <MagneticButton onClick={scrollToWork}>
+              <MagneticButton onClick={scrollToWork} className="w-full sm:w-auto">
                 <button
                   type="button"
-                  className="inline-flex items-center gap-2 px-7 py-4 bg-white border border-[#E5EAF1] hover:border-gray-300 text-[#0B1020] font-semibold rounded-xl transition-all duration-200 hover:bg-gray-50 shadow-xs text-base"
+                  className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 sm:px-7 py-3.5 sm:py-4 bg-white border border-[#E5EAF1] hover:border-gray-300 text-[#0B1020] font-semibold rounded-xl transition-all duration-200 hover:bg-gray-50 shadow-xs text-sm sm:text-base cursor-pointer"
                 >
-                  View Our Work
-                  <ChevronDown size={18} aria-hidden="true" />
+                  <span>View Our Work</span>
+                  <ChevronDown size={17} aria-hidden="true" />
                 </button>
               </MagneticButton>
             </motion.div>
 
             {/* Tags strip */}
-            <motion.div variants={itemVariants} className="flex flex-wrap items-center gap-x-4 gap-y-2 text-[#6B7280] text-sm font-medium">
+            <motion.div variants={itemVariants} className="flex flex-wrap items-center gap-x-3 gap-y-1.5 text-[#6B7280] text-xs sm:text-sm font-medium">
               {['Web Development', 'SEO', 'E-commerce', 'Graphic Design'].map((tag, i) => (
-                <span key={tag} className="flex items-center gap-4">
+                <span key={tag} className="flex items-center gap-2.5 sm:gap-3">
                   {i > 0 && <span className="text-gray-300" aria-hidden="true">•</span>}
                   <span>{tag}</span>
                 </span>
               ))}
             </motion.div>
+
+            {/* MOBILE INTERACTIVE TECH SHOWCASE CARD — Instant High Attraction */}
+            <motion.div variants={itemVariants} className="lg:hidden mt-8 w-full">
+              <div className="relative rounded-2xl p-4 bg-gradient-to-br from-white via-blue-50/40 to-white border border-[#E5EAF1] shadow-xl overflow-hidden">
+                {/* Subtle top ambient glow */}
+                <div className="absolute top-0 right-0 w-36 h-36 bg-blue-500/10 rounded-full blur-2xl pointer-events-none" />
+
+                {/* Header of mobile card */}
+                <div className="flex items-center justify-between pb-3 border-b border-[#F1F5F9] mb-3">
+                  <div className="flex items-center gap-2">
+                    <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse" />
+                    <span className="text-xs font-black text-[#0B1020] tracking-wide">NEXORA ARCHITECTURE</span>
+                  </div>
+                  <span className="px-2 py-0.5 rounded-full bg-blue-50 text-[#0066FF] border border-blue-200 text-[10px] font-bold font-mono">
+                    REACT 19 • ULTRA FAST
+                  </span>
+                </div>
+
+                {/* 3 Live Telemetry Stat Pills */}
+                <div className="grid grid-cols-3 gap-2 mb-3">
+                  <div className="p-2.5 bg-white rounded-xl border border-slate-100 shadow-xs text-center">
+                    <div className="text-[10px] text-gray-500 font-semibold">PageSpeed</div>
+                    <div className="text-base font-black text-emerald-600 flex items-center justify-center gap-0.5">
+                      <span>99+</span>
+                      <span className="text-[9px] text-emerald-500">⚡</span>
+                    </div>
+                  </div>
+                  <div className="p-2.5 bg-white rounded-xl border border-slate-100 shadow-xs text-center">
+                    <div className="text-[10px] text-gray-500 font-semibold">Load Time</div>
+                    <div className="text-base font-black text-[#0066FF]">0.8s</div>
+                  </div>
+                  <div className="p-2.5 bg-white rounded-xl border border-slate-100 shadow-xs text-center">
+                    <div className="text-[10px] text-gray-500 font-semibold">OWASP SSL</div>
+                    <div className="text-base font-black text-indigo-600">100%</div>
+                  </div>
+                </div>
+
+                {/* Interactive Mini Deliverables Preview Bar */}
+                <div className="p-3 bg-[#0B1020] rounded-xl text-white flex items-center justify-between shadow-md">
+                  <div className="flex items-center gap-2.5">
+                    <div className="w-8 h-8 rounded-lg bg-[#0066FF] flex items-center justify-center text-sm font-bold flex-shrink-0">
+                      💎
+                    </div>
+                    <div className="text-left">
+                      <div className="text-xs font-bold">Enterprise Ready Delivery</div>
+                      <div className="text-[10px] text-gray-400">Full Code Ownership • 3-Day Sprint</div>
+                    </div>
+                  </div>
+                  <button
+                    onClick={scrollToWork}
+                    className="px-2.5 py-1 bg-white/10 hover:bg-white/20 text-white rounded-lg text-[10px] font-bold flex items-center gap-1 transition-colors flex-shrink-0 cursor-pointer"
+                  >
+                    <span>View Work</span>
+                    <ArrowRight size={11} />
+                  </button>
+                </div>
+              </div>
+            </motion.div>
           </motion.div>
 
-          {/* Right — Interactive 3D Visual */}
+          {/* Right — Interactive 3D Visual for Large Screens */}
           <motion.div
             initial={{ opacity: 0, scale: 0.95, y: 20 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}

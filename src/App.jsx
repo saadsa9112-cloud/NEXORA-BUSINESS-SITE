@@ -226,8 +226,6 @@ export default function App() {
 
   return (
     <div className="min-h-screen bg-[#F7F9FC] text-[#0B1020] overflow-x-hidden">
-      {/* Launch Offer Scarcity Announcement Banner */}
-      <LaunchBanner />
 
       {/* Skip to main content — accessibility */}
       <a

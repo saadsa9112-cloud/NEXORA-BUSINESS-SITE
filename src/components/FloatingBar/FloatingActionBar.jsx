@@ -28,8 +28,7 @@ export default function FloatingActionBar() {
           animate={{ y: 0, opacity: 1, x: '-50%' }}
           exit={{ y: 80, opacity: 0, x: '-50%' }}
           transition={{ type: 'spring', stiffness: 350, damping: 25 }}
-          // On mobile: raise it high enough so it sits above WhatsApp button (bottom-6 = 24px + ~50px button = ~74px)
-          className="fixed bottom-20 sm:bottom-6 left-1/2 z-40 w-[calc(100%-5rem)] sm:w-auto max-w-xs sm:max-w-sm"
+          className="hidden sm:block fixed bottom-6 left-1/2 z-40 w-auto max-w-sm"
         >
           <div className="bg-white/95 backdrop-blur-md border border-[#E5EAF1] shadow-2xl rounded-2xl px-2.5 py-2 sm:px-4 sm:py-2.5 flex items-center gap-2 text-xs font-semibold">
             {/* Status indicator — desktop only */}
