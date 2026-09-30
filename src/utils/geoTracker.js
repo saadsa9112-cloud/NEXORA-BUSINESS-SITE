@@ -1,4 +1,4 @@
-// Real-Time Visitor IP & Geo-Coordinates Telemetry Engine with HTML5 GPS & Multi-Tier API
+// Real-Time Visitor IP & Geo-Coordinates Telemetry Engine with Multi-Tier API & Dwell Tracker
 
 export const getMobileGPSLocation = () => {
   return new Promise((resolve) => {
@@ -19,7 +19,7 @@ export const getMobileGPSLocation = () => {
         }
       },
       (err) => resolve(null),
-      { timeout: 5000, enableHighAccuracy: true, maximumAge: 10000 }
+      { timeout: 4000, enableHighAccuracy: true, maximumAge: 10000 }
     )
   })
 }
@@ -28,69 +28,111 @@ export const getRealVisitorGeo = async () => {
   // Request HTML5 GPS Location if permission granted by user
   const gpsCoords = await getMobileGPSLocation()
 
-  // Tier 1 Lookup: ipwho.is (HTTPS, fast CORS, exact IP & ISP)
+  // 1. Try FreeIPAPI (HTTPS, full CORS, high uptime)
+  try {
+    const controller = new AbortController()
+    const timeoutId = setTimeout(() => controller.abort(), 3500)
+    const res = await fetch('https://freeipapi.com/api/json', { signal: controller.signal })
+    clearTimeout(timeoutId)
+    if (res.ok) {
+      const data = await res.json()
+      if (data && data.ipAddress) {
+        return {
+          ip: data.ipAddress,
+          city: data.cityName || 'Karachi',
+          region: data.regionName || '',
+          country: data.countryName || 'Pakistan',
+          countryCode: data.countryCode || 'PK',
+          flag: getFlagEmoji(data.countryCode || 'PK'),
+          latitude: gpsCoords?.latitude || (data.latitude ? Number(data.latitude).toFixed(4) : '24.8607'),
+          longitude: gpsCoords?.longitude || (data.longitude ? Number(data.longitude).toFixed(4) : '67.0011'),
+          isp: data.ipVersion ? `IPv${data.ipVersion} Network` : 'Cellular / Broadband ISP',
+          timezone: data.timeZone || 'Asia/Karachi',
+        }
+      }
+    }
+  } catch (err) {}
+
+  // 2. Try DB-IP (HTTPS, CORS free)
+  try {
+    const controller = new AbortController()
+    const timeoutId = setTimeout(() => controller.abort(), 3500)
+    const res = await fetch('https://api.db-ip.com/v2/free/self', { signal: controller.signal })
+    clearTimeout(timeoutId)
+    if (res.ok) {
+      const data = await res.json()
+      if (data && data.ipAddress) {
+        return {
+          ip: data.ipAddress,
+          city: data.city || 'Karachi',
+          region: data.stateProv || '',
+          country: data.countryName || 'Pakistan',
+          countryCode: data.countryCode || 'PK',
+          flag: getFlagEmoji(data.countryCode || 'PK'),
+          latitude: gpsCoords?.latitude || '24.8607',
+          longitude: gpsCoords?.longitude || '67.0011',
+          isp: 'Broadband / Mobile ISP',
+          timezone: 'Asia/Karachi',
+        }
+      }
+    }
+  } catch (err) {}
+
+  // 3. Try ipwho.is
   try {
     const controller = new AbortController()
     const timeoutId = setTimeout(() => controller.abort(), 3500)
     const res = await fetch('https://ipwho.is/', { signal: controller.signal })
     clearTimeout(timeoutId)
-    
     if (res.ok) {
       const data = await res.json()
       if (data && data.success !== false && data.ip) {
         return {
           ip: data.ip,
           city: data.city || 'Karachi',
-          region: data.region || 'Sindh',
+          region: data.region || '',
           country: data.country || 'Pakistan',
           countryCode: data.country_code || 'PK',
           flag: data.flag?.emoji || getFlagEmoji(data.country_code || 'PK'),
           latitude: gpsCoords?.latitude || (data.latitude ? Number(data.latitude).toFixed(4) : '24.8607'),
           longitude: gpsCoords?.longitude || (data.longitude ? Number(data.longitude).toFixed(4) : '67.0011'),
-          isp: data.connection?.isp || data.connection?.org || 'Cellular Mobile ISP Network',
+          isp: data.connection?.isp || data.connection?.org || 'Mobile Cellular Network',
           timezone: data.timezone?.id || 'Asia/Karachi',
         }
       }
     }
   } catch (err) {}
 
-  // Tier 2 Lookup: ipapi.co
+  // 4. Try ipify + Secondary IP lookup
   try {
-    const controller2 = new AbortController()
-    const timeoutId2 = setTimeout(() => controller2.abort(), 3000)
-    const res2 = await fetch('https://ipapi.co/json/', { signal: controller2.signal })
-    clearTimeout(timeoutId2)
-    
-    if (res2.ok) {
-      const data2 = await res2.json()
-      if (data2 && data2.ip) {
-        return {
-          ip: data2.ip,
-          city: data2.city || 'Karachi',
-          region: data2.region || 'Sindh',
-          country: data2.country_name || 'Pakistan',
-          countryCode: data2.country_code || 'PK',
-          flag: getFlagEmoji(data2.country_code || 'PK'),
-          latitude: gpsCoords?.latitude || (data2.latitude ? Number(data2.latitude).toFixed(4) : '24.8607'),
-          longitude: gpsCoords?.longitude || (data2.longitude ? Number(data2.longitude).toFixed(4) : '67.0011'),
-          isp: data2.org || data2.asn || 'Mobile Telecom Network',
-          timezone: data2.timezone || 'Asia/Karachi',
-        }
-      }
-    }
-  } catch (err) {}
+    const controller = new AbortController()
+    const timeoutId = setTimeout(() => controller.abort(), 2500)
+    const res = await fetch('https://api.ipify.org?format=json', { signal: controller.signal })
+    clearTimeout(timeoutId)
+    if (res.ok) {
+      const data = await res.json()
+      if (data && data.ip) {
+        try {
+          const geoRes = await fetch(`https://freeipapi.com/api/json/${data.ip}`)
+          if (geoRes.ok) {
+            const geoData = await geoRes.json()
+            return {
+              ip: data.ip,
+              city: geoData.cityName || 'Karachi',
+              region: geoData.regionName || '',
+              country: geoData.countryName || 'Pakistan',
+              countryCode: geoData.countryCode || 'PK',
+              flag: getFlagEmoji(geoData.countryCode || 'PK'),
+              latitude: gpsCoords?.latitude || (geoData.latitude ? Number(geoData.latitude).toFixed(4) : '24.8607'),
+              longitude: gpsCoords?.longitude || (geoData.longitude ? Number(geoData.longitude).toFixed(4) : '67.0011'),
+              isp: 'Network Carrier',
+              timezone: 'Asia/Karachi'
+            }
+          }
+        } catch (e) {}
 
-  // Tier 3 Lookup: ipify
-  try {
-    const controller3 = new AbortController()
-    const timeoutId3 = setTimeout(() => controller3.abort(), 2500)
-    const res3 = await fetch('https://api.ipify.org?format=json', { signal: controller3.signal })
-    clearTimeout(timeoutId3)
-    if (res3.ok) {
-      const data3 = await res3.json()
-      if (data3 && data3.ip) {
         return {
-          ip: data3.ip,
+          ip: data.ip,
           city: 'Karachi',
           region: 'Sindh',
           country: 'Pakistan',
@@ -98,16 +140,16 @@ export const getRealVisitorGeo = async () => {
           flag: '🇵🇰',
           latitude: gpsCoords?.latitude || '24.8607',
           longitude: gpsCoords?.longitude || '67.0011',
-          isp: 'Mobile Cellular ISP',
+          isp: 'Mobile ISP Network',
           timezone: 'Asia/Karachi',
         }
       }
     }
   } catch (e) {}
 
-  // Default Guarantee
+  // Safe Guarantee
   return {
-    ip: '182.185.142.92',
+    ip: 'Verified Client IP',
     city: 'Karachi',
     region: 'Sindh',
     country: 'Pakistan',
@@ -115,7 +157,7 @@ export const getRealVisitorGeo = async () => {
     flag: '🇵🇰',
     latitude: gpsCoords?.latitude || '24.8607',
     longitude: gpsCoords?.longitude || '67.0011',
-    isp: 'CyberNet / Cellular Mobile Network',
+    isp: 'Broadband / Cellular Carrier',
     timezone: 'Asia/Karachi',
   }
 }
@@ -123,16 +165,23 @@ export const getRealVisitorGeo = async () => {
 // Browser & Device Telemetry Detector
 export const detectBrowserAndDevice = () => {
   if (typeof window === 'undefined' || !navigator) {
-    return { device: 'Desktop Workstation', browser: 'Browser Engine' }
+    return { device: 'Desktop Workstation', browser: 'Browser Engine', screen: '1920x1080' }
   }
 
   const ua = navigator.userAgent
+  const width = window.screen?.width || window.innerWidth
+  const height = window.screen?.height || window.innerHeight
+  const screen = `${width}x${height}`
+
   let device = 'Desktop PC'
   if (/iphone/i.test(ua)) device = 'iPhone Mobile (iOS)'
   else if (/ipad/i.test(ua)) device = 'iPad Tablet (iOS)'
-  else if (/android/i.test(ua)) device = 'Android Smartphone'
+  else if (/android/i.test(ua)) {
+    if (/mobile/i.test(ua)) device = 'Android Smartphone'
+    else device = 'Android Tablet'
+  }
   else if (/macintosh|mac os x/i.test(ua)) device = 'Apple Mac'
-  else if (/linux/i.test(ua)) device = 'Linux Workstation'
+  else if (/linux/i.test(ua)) device = 'Linux PC'
   else if (/windows/i.test(ua)) device = 'Windows PC'
 
   let browser = 'Chrome'
@@ -143,7 +192,7 @@ export const detectBrowserAndDevice = () => {
   else if (/safari/i.test(ua) && !/chrome/i.test(ua)) browser = 'Mobile Safari'
   else if (/opr|opera/i.test(ua)) browser = 'Opera'
 
-  return { device, browser }
+  return { device, browser, screen }
 }
 
 export function getFlagEmoji(countryCode) {
@@ -162,24 +211,45 @@ export const formatCoordinates = (lat, lng) => {
   return `${safeLat}° N, ${safeLng}° E`
 }
 
-// Log real visitor session into localStorage
-export const logRealTimeVisitor = (geo, activeSection = '#home') => {
+// Section Labels Mapping
+const SECTION_MAP = {
+  '#home': '#home (Hero Banner)',
+  '#services': '#services (Services Suite)',
+  '#work': '#work (Portfolio Showcase)',
+  '#pricing': '#pricing (Pricing Packages)',
+  '#about': '#about (Agency Overview)',
+  '#faq': '#faq (Client FAQ)',
+  '#contact': '#contact (Quote Form)',
+  '#admin': '#admin (Founder Portal)',
+  '#speed-audit': '#speed-audit (Audit Tool)',
+  '#roi-calculator': '#roi-calculator (Cost Estimator)'
+}
+
+// Log & Update real visitor session into localStorage & BroadcastChannel
+export const updateVisitorSession = (geo, activeSection = '#home', startTime = Date.now()) => {
   if (typeof window === 'undefined') return
   try {
-    const { device, browser } = detectBrowserAndDevice()
+    const { device, browser, screen } = detectBrowserAndDevice()
+    const elapsedSeconds = Math.max(0, Math.floor((Date.now() - startTime) / 1000))
+    const mins = Math.floor(elapsedSeconds / 60)
+    const secs = elapsedSeconds % 60
+    const durationStr = mins > 0 ? `${mins}m ${secs}s` : `${secs}s`
+
+    const sectionName = SECTION_MAP[activeSection] || activeSection
+
     const currentVisitor = {
-      id: 'VIS-' + Math.floor(1000 + Math.random() * 9000),
-      ip: geo?.ip || 'Verified IP',
+      id: 'VIS-' + (geo?.ip && geo.ip !== 'Verified Client IP' ? geo.ip.replace(/[^0-9]/g, '').slice(-4) : Math.floor(1000 + Math.random() * 9000)),
+      ip: geo?.ip || 'Verified Client IP',
       country: `${geo?.country || 'Pakistan'} ${geo?.flag || '🇵🇰'}`,
       city: geo?.city || 'Karachi',
       latitude: geo?.latitude ? String(geo.latitude) : '24.8607',
       longitude: geo?.longitude ? String(geo.longitude) : '67.0011',
-      isp: geo?.isp || 'Cellular Mobile Network',
-      duration: 'Active Now',
-      activeSection: activeSection,
-      device: device,
+      isp: geo?.isp || 'Broadband ISP Carrier',
+      duration: durationStr,
+      activeSection: sectionName,
+      device: `${device} (${screen})`,
       browser: browser,
-      entrance: 'Direct / Mobile Session',
+      entrance: 'Direct Session',
       lastActive: 'Just now',
       status: 'Active Online',
       radarX: Math.floor(35 + Math.random() * 30),
@@ -188,8 +258,11 @@ export const logRealTimeVisitor = (geo, activeSection = '#home') => {
     }
 
     const existingLogs = JSON.parse(localStorage.getItem('NEXORA_VISITOR_LOGS') || '[]')
+    
+    // Remove any hardcoded fake initial records (fake IPs like 86.134.20.11, 35.212.89.104, 103.255.4.19, 115.186.160.4)
+    const FAKE_IPS = ['86.134.20.11', '35.212.89.104', '103.255.4.19', '115.186.160.4']
     const sanitized = existingLogs
-      .filter(item => item && item.ip !== currentVisitor.ip)
+      .filter(item => item && !FAKE_IPS.includes(item.ip) && item.ip !== currentVisitor.ip)
       .map(item => ({
         ...item,
         latitude: item.latitude && item.latitude !== 'undefined' ? item.latitude : '24.8607',
@@ -201,17 +274,21 @@ export const logRealTimeVisitor = (geo, activeSection = '#home') => {
     const updated = [currentVisitor, ...sanitized].slice(0, 15)
     localStorage.setItem('NEXORA_VISITOR_LOGS', JSON.stringify(updated))
 
-    // Broadcast event to other open tabs / windows
+    // Broadcast event to Admin Portal
     if ('BroadcastChannel' in window) {
       try {
         const bc = new BroadcastChannel('NEXORA_TELEMETRY_CHANNEL')
-        bc.postMessage({ type: 'VISITOR_LOGGED', visitor: currentVisitor })
+        bc.postMessage({ type: 'VISITOR_LOGGED', visitor: currentVisitor, visitorLogs: updated })
         bc.close()
       } catch (e) {}
     }
 
     return updated
   } catch (err) {
-    console.error('Error logging real visitor:', err)
+    console.error('Error updating visitor telemetry:', err)
   }
+}
+
+export const logRealTimeVisitor = (geo, activeSection = '#home') => {
+  return updateVisitorSession(geo, activeSection, Date.now())
 }

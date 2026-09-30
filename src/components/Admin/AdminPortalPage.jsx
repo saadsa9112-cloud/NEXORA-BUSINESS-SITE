@@ -292,13 +292,20 @@ export default function AdminPortalPage({ onExit }) {
       localStorage.setItem('NEXORA_AUDIT_LEADS', JSON.stringify(INITIAL_AUDIT_LEADS))
     }
 
+    const FAKE_IPS = ['86.134.20.11', '35.212.89.104', '103.255.4.19', '115.186.160.4']
+
     const savedVisitors = localStorage.getItem('NEXORA_VISITOR_LOGS')
     if (savedVisitors) {
-      try { setVisitorLogs(JSON.parse(savedVisitors)) } catch (e) { setVisitorLogs(INITIAL_VISITOR_LOGS) }
+      try {
+        const parsed = JSON.parse(savedVisitors)
+        const cleanVisitors = parsed.filter(v => v && !FAKE_IPS.includes(v.ip))
+        setVisitorLogs(cleanVisitors)
+        localStorage.setItem('NEXORA_VISITOR_LOGS', JSON.stringify(cleanVisitors))
+      } catch (e) { setVisitorLogs([]) }
     } else {
-      setVisitorLogs(INITIAL_VISITOR_LOGS)
-      localStorage.setItem('NEXORA_VISITOR_LOGS', JSON.stringify(INITIAL_VISITOR_LOGS))
+      setVisitorLogs([])
     }
+
 
     const savedSecLogs = localStorage.getItem('NEXORA_SECURITY_LOGS')
     if (savedSecLogs) {

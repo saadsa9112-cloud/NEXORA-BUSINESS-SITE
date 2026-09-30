@@ -24,8 +24,7 @@ import AiAssistantModal from './components/AiAssistant/AiAssistantModal'
 import ClientPortalModal from './components/ClientPortal/ClientPortalModal'
 import AdminPortalPage from './components/Admin/AdminPortalPage'
 import Footer from './components/Footer/Footer'
-import DiscountRoastFlyer from './components/DiscountFlyer/DiscountRoastFlyer'
-import { getRealVisitorGeo, logRealTimeVisitor } from './utils/geoTracker'
+import { getRealVisitorGeo, logRealTimeVisitor, updateVisitorSession } from './utils/geoTracker'
 
 
 export default function App() {
@@ -69,21 +68,57 @@ export default function App() {
     }
   }, [])
 
-  // Auto-detect Geo-location currency and log real-time visitor session
+  // Auto-detect Geo-location currency and log real-time visitor session & live section dwell time
   useEffect(() => {
+    let geoData = null
+    const startTime = Date.now()
+
     const detectAndLogVisitor = async () => {
       try {
-        const geo = await getRealVisitorGeo()
-        if (geo && geo.countryCode) {
-          setCurrency(geo.countryCode === 'PK' ? 'PKR' : 'USD')
-          logRealTimeVisitor(geo, window.location.hash || '#home')
+        geoData = await getRealVisitorGeo()
+        if (geoData) {
+          if (geoData.countryCode) {
+            setCurrency(geoData.countryCode === 'PK' ? 'PKR' : 'USD')
+          }
+          updateVisitorSession(geoData, window.location.hash || '#home', startTime)
         }
-      } catch (err) {
-        // Fallback default
-      }
+      } catch (err) {}
     }
     detectAndLogVisitor()
+
+    // 2-Second Live Dwell Time & Section Tracking Interval
+    const intervalId = setInterval(() => {
+      if (geoData) {
+        const activeHash = window.location.hash || '#home'
+        updateVisitorSession(geoData, activeHash, startTime)
+      }
+    }, 2000)
+
+    // Section Scroll Observer
+    const sections = ['home', 'services', 'work', 'pricing', 'about', 'faq', 'contact']
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting && geoData) {
+            const hash = `#${entry.target.id}`
+            updateVisitorSession(geoData, hash, startTime)
+          }
+        })
+      },
+      { threshold: 0.3 }
+    )
+
+    sections.forEach((id) => {
+      const el = document.getElementById(id)
+      if (el) observer.observe(el)
+    })
+
+    return () => {
+      clearInterval(intervalId)
+      observer.disconnect()
+    }
   }, [])
+
 
 
   // Scroll-reveal animation observer fallback
