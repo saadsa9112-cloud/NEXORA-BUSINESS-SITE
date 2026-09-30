@@ -18,7 +18,7 @@ import QualitySecurity from './components/QualitySecurity/QualitySecurity'
 import FAQ from './components/FAQ/FAQ'
 import QuoteForm from './components/QuoteForm/QuoteForm'
 import FinalCTA from './components/FinalCTA/FinalCTA'
-import WhatsAppButton from './components/WhatsAppButton/WhatsAppButton'
+import UnifiedFloatingHub from './components/FloatingHub/UnifiedFloatingHub'
 import FloatingActionBar from './components/FloatingBar/FloatingActionBar'
 import AiAssistantModal from './components/AiAssistant/AiAssistantModal'
 import ClientPortalModal from './components/ClientPortal/ClientPortalModal'
@@ -35,6 +35,8 @@ export default function App() {
   const [isAdminPage, setIsAdminPage] = useState(false)
   const [isSpeedAuditOpen, setIsSpeedAuditOpen] = useState(false)
   const [isRoiOpen, setIsRoiOpen] = useState(false)
+  const [isAiModalOpen, setIsAiModalOpen] = useState(false)
+  const [isClientPortalOpen, setIsClientPortalOpen] = useState(false)
 
   // Visitor telemetry state
   const visitorGeoRef = useRef(null)          // real geo once fetched
@@ -287,11 +289,24 @@ export default function App() {
         onOpenRoi={() => setIsRoiOpen(true)}
       />
 
-      {/* Interactive Floating Tools & Modals */}
+      {/* Interactive Desktop Floating Dock (Hidden on mobile) */}
       <FloatingActionBar />
-      <WhatsAppButton />
-      <AiAssistantModal />
-      <ClientPortalModal />
+
+      {/* Unified Mobile & Desktop Action Hub (Wraps WhatsApp, AI Assistant, and Project Progress) */}
+      <UnifiedFloatingHub
+        onOpenAi={() => setIsAiModalOpen(true)}
+        onOpenTracker={() => setIsClientPortalOpen(true)}
+      />
+
+      {/* Modals triggered cleanly on user selection */}
+      <AiAssistantModal
+        isOpen={isAiModalOpen}
+        onClose={() => setIsAiModalOpen(false)}
+      />
+      <ClientPortalModal
+        isOpen={isClientPortalOpen}
+        onClose={() => setIsClientPortalOpen(false)}
+      />
 
       {/* Dedicated Standalone Tool Modals */}
       <WebsiteAuditModal isOpen={isSpeedAuditOpen} onClose={handleCloseSpeedAudit} />

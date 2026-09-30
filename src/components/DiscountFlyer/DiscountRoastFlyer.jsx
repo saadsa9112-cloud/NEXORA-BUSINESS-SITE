@@ -89,23 +89,6 @@ export default function DiscountRoastFlyer() {
 
   return (
     <>
-      {/* Re-open pill — sits above AI bot button on mobile */}
-      {!isOpen && (
-        <motion.button
-          initial={{ scale: 0, opacity: 0 }}
-          animate={{ scale: 1, opacity: 1 }}
-          onClick={handleReopen}
-          className="fixed bottom-36 left-3 sm:bottom-32 sm:left-4 z-40 bg-gradient-to-r from-amber-500 via-rose-500 to-purple-600 text-white p-0.5 rounded-full shadow-xl hover:scale-105 transition-transform duration-200 cursor-pointer"
-          title="25% OFF Discount"
-        >
-          <div className="bg-[#0B1020] hover:bg-transparent px-2.5 py-1.5 rounded-full flex items-center gap-1.5 text-[11px] font-bold transition-colors">
-            <Flame size={12} className="text-amber-400 animate-pulse fill-current" />
-            <span className="text-amber-300 font-mono font-black">25% OFF</span>
-            <span className="hidden sm:inline-block text-white/90">Deal</span>
-          </div>
-        </motion.button>
-      )}
-
       {/* Flyer popup — bottom sheet on mobile */}
       <AnimatePresence>
         {isOpen && (

@@ -3,8 +3,19 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { Bot, X, MessageSquare, Send, Sparkles, CheckCircle2, ArrowRight, PhoneCall } from 'lucide-react'
 import { CONTACT } from '../../data/siteData'
 
-export default function AiAssistantModal() {
-  const [isOpen, setIsOpen] = useState(false)
+export default function AiAssistantModal({ isOpen: controlledIsOpen, onClose: controlledOnClose }) {
+  const [internalOpen, setInternalOpen] = useState(false)
+  const isControlled = controlledIsOpen !== undefined
+  const isOpen = isControlled ? controlledIsOpen : internalOpen
+
+  const handleClose = () => {
+    if (controlledOnClose) {
+      controlledOnClose()
+    } else {
+      setInternalOpen(false)
+    }
+  }
+
   const [step, setStep] = useState(1)
   const [selectedService, setSelectedService] = useState('')
   const [selectedBudget, setSelectedBudget] = useState('')
@@ -26,28 +37,11 @@ export default function AiAssistantModal() {
       `I'd like to discuss my project with your team.`
     )
     window.open(`https://wa.me/${CONTACT.whatsapp}?text=${text}`, '_blank')
-    setIsOpen(false)
+    handleClose()
   }
 
   return (
-    <>
-      {/* Floating AI Launcher Button — left side, above WhatsApp on mobile */}
-      <button
-        onClick={() => setIsOpen(true)}
-        aria-label="Open AI Consultation Assistant"
-        className="fixed bottom-20 left-4 sm:bottom-6 sm:left-6 z-40 bg-[#05070D] hover:bg-[#0066FF] text-white p-3 sm:px-4 sm:py-3 rounded-full shadow-2xl border border-white/20 flex items-center gap-2 transition-all duration-300 hover:scale-105 group cursor-pointer"
-      >
-        <div className="relative">
-          <Bot size={18} className="text-[#1F90FF] group-hover:text-white transition-colors" />
-          <span className="absolute -top-1 -right-1 w-2 h-2 bg-green-500 rounded-full ring-2 ring-black" />
-        </div>
-        <span className="hidden sm:inline-block text-xs font-bold tracking-wide">
-          AI Project Assistant
-        </span>
-      </button>
-
-      {/* AI Modal — full screen on mobile, centered card on desktop */}
-      <AnimatePresence>
+    <AnimatePresence>
         {isOpen && (
           <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center sm:p-4">
             {/* Backdrop */}
@@ -55,7 +49,7 @@ export default function AiAssistantModal() {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
-              onClick={() => setIsOpen(false)}
+              onClick={handleClose}
               className="fixed inset-0 bg-black/60 backdrop-blur-sm"
             />
 
@@ -81,7 +75,7 @@ export default function AiAssistantModal() {
                   </div>
                 </div>
                 <button
-                  onClick={() => setIsOpen(false)}
+                  onClick={handleClose}
                   className="text-gray-400 hover:text-white p-1.5 rounded-lg transition-colors cursor-pointer flex-shrink-0"
                 >
                   <X size={17} />
@@ -186,11 +180,10 @@ export default function AiAssistantModal() {
                     </div>
                   </div>
                 )}
-              </div>
-            </motion.div>
-          </div>
-        )}
-      </AnimatePresence>
-    </>
+            </div>
+          </motion.div>
+        </div>
+      )}
+    </AnimatePresence>
   )
 }

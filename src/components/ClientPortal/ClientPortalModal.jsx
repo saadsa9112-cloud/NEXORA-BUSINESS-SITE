@@ -52,8 +52,19 @@ const DEFAULT_PROJECTS = {
   }
 }
 
-export default function ClientPortalModal() {
-  const [isOpen, setIsOpen] = useState(false)
+export default function ClientPortalModal({ isOpen: controlledIsOpen, onClose: controlledOnClose }) {
+  const [internalOpen, setInternalOpen] = useState(false)
+  const isControlled = controlledIsOpen !== undefined
+  const isOpen = isControlled ? controlledIsOpen : internalOpen
+
+  const handleClose = () => {
+    if (controlledOnClose) {
+      controlledOnClose()
+    } else {
+      setInternalOpen(false)
+    }
+  }
+
   const [searchId, setSearchId] = useState('')
   const [foundProject, setFoundProject] = useState(null)
   const [notFoundId, setNotFoundId] = useState(null)
@@ -88,7 +99,6 @@ export default function ClientPortalModal() {
       setFoundProject(projectsStore[cleanId])
       setNotFoundId(null)
     } else {
-      // ONLY approved projects in database are shown. Show funny engaging warning for unapproved/unwanted codes!
       setFoundProject(null)
       setNotFoundId(cleanId)
     }
@@ -103,65 +113,51 @@ export default function ClientPortalModal() {
   }
 
   return (
-    <>
-      {/* Floating Client Tracker Button */}
-      <button
-        onClick={() => setIsOpen(true)}
-        aria-label="Open Client Portal Status Tracker"
-        className="fixed bottom-6 left-44 sm:left-52 z-40 bg-white hover:bg-blue-50 text-[#0066FF] p-3.5 sm:px-4 sm:py-3 rounded-full shadow-xl border border-[#E5EAF1] flex items-center gap-2 transition-all duration-300 hover:scale-105 group cursor-pointer"
-      >
-        <FolderCheck size={18} className="text-[#0066FF]" />
-        <span className="hidden sm:inline-block text-xs font-bold tracking-wide">
-          Project Status Tracker
-        </span>
-      </button>
+    <AnimatePresence>
+      {isOpen && (
+        <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center p-0 sm:p-4 overflow-y-auto">
+          {/* Backdrop */}
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            onClick={handleClose}
+            className="fixed inset-0 bg-black/70 backdrop-blur-xs"
+          />
 
-      {/* Modal Overlay */}
-      <AnimatePresence>
-        {isOpen && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 overflow-y-auto">
-            {/* Backdrop */}
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              onClick={() => setIsOpen(false)}
-              className="fixed inset-0 bg-black/70 backdrop-blur-xs"
-            />
-
-            {/* Modal Card */}
-            <motion.div
-              initial={{ opacity: 0, scale: 0.9, y: 20 }}
-              animate={{ opacity: 1, scale: 1, y: 0 }}
-              exit={{ opacity: 0, scale: 0.9, y: 20 }}
-              className="relative w-full max-w-lg bg-white rounded-3xl shadow-2xl border border-[#E5EAF1] z-10 overflow-hidden text-[#0B1020]"
-            >
-              {/* Header */}
-              <div className="bg-[#05070D] text-white p-5 flex items-center justify-between border-b border-white/10">
-                <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-xl bg-[#0066FF] flex items-center justify-center text-white font-bold shadow-md">
-                    <FolderCheck size={20} />
-                  </div>
-                  <div>
-                    <h3 className="text-sm font-bold flex items-center gap-2">
-                      <span>NEXORA Verified Tracker</span>
-                      <span className="px-2 py-0.5 bg-green-500/20 text-green-400 border border-green-500/30 text-[9px] font-bold rounded-full">
-                        ADMIN VERIFIED
-                      </span>
-                    </h3>
-                    <p className="text-[11px] text-gray-400">Track real-time development milestone status</p>
-                  </div>
+          {/* Modal Card — Bottom Sheet on Mobile, Centered on Desktop */}
+          <motion.div
+            initial={{ opacity: 0, scale: 0.95, y: 30 }}
+            animate={{ opacity: 1, scale: 1, y: 0 }}
+            exit={{ opacity: 0, scale: 0.95, y: 30 }}
+            className="relative w-full sm:max-w-lg bg-white rounded-t-3xl sm:rounded-3xl shadow-2xl border border-[#E5EAF1] z-10 overflow-hidden text-[#0B1020] max-h-[92vh] flex flex-col"
+          >
+            {/* Header */}
+            <div className="bg-[#05070D] text-white p-4 sm:p-5 flex items-center justify-between border-b border-white/10 flex-shrink-0">
+              <div className="flex items-center gap-3">
+                <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-[#0066FF] flex items-center justify-center text-white font-bold shadow-md flex-shrink-0">
+                  <FolderCheck size={19} />
                 </div>
-                <button
-                  onClick={() => setIsOpen(false)}
-                  className="text-gray-400 hover:text-white p-1 rounded-lg transition-colors cursor-pointer"
-                >
-                  <X size={18} />
-                </button>
+                <div>
+                  <h3 className="text-xs sm:text-sm font-bold flex items-center gap-2">
+                    <span>NEXORA Verified Tracker</span>
+                    <span className="px-2 py-0.5 bg-green-500/20 text-green-400 border border-green-500/30 text-[9px] font-bold rounded-full">
+                      LIVE
+                    </span>
+                  </h3>
+                  <p className="text-[10px] sm:text-[11px] text-gray-400">Track real-time development milestone status</p>
+                </div>
               </div>
+              <button
+                onClick={handleClose}
+                className="text-gray-400 hover:text-white p-1 rounded-lg transition-colors cursor-pointer flex-shrink-0"
+              >
+                <X size={18} />
+              </button>
+            </div>
 
-              {/* Body Content */}
-              <div className="p-6">
+            {/* Body Content */}
+            <div className="p-4 sm:p-6 overflow-y-auto flex-1">
                 {/* Search Form */}
                 <form onSubmit={handleSearch} className="mb-6">
                   <label className="block text-xs font-bold uppercase tracking-wider text-[#0B1020] mb-2">
@@ -325,6 +321,5 @@ export default function ClientPortalModal() {
           </div>
         )}
       </AnimatePresence>
-    </>
   )
 }
