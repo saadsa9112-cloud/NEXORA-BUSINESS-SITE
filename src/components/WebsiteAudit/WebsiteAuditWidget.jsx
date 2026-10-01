@@ -149,7 +149,7 @@ export default function WebsiteAuditWidget() {
   }
 
   return (
-    <section className="py-16 bg-[#05070D] text-white border-y border-white/10 relative overflow-hidden">
+    <section id="audit" aria-labelledby="audit-heading" className="py-20 lg:py-28 bg-[#05070D] text-white border-y border-white/10 relative overflow-hidden">
       {/* Background Glow */}
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-blue-600/10 blur-[120px] rounded-full pointer-events-none" />
 

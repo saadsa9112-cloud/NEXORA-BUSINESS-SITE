@@ -13,7 +13,7 @@ export default function Navbar() {
     const handleScroll = () => {
       setScrolled(window.scrollY > 20)
 
-      const sectionIds = ['home', 'services', 'features', 'work', 'tools', 'pricing', 'about', 'faq', 'contact']
+      const sectionIds = ['home', 'services', 'work', 'audit', 'roi', 'pricing', 'about', 'faq', 'contact']
 
       if (window.scrollY < 100) {
         setActiveSection('home')

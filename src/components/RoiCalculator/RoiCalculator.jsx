@@ -35,7 +35,7 @@ export default function RoiCalculator() {
   }
 
   return (
-    <section className="py-16 bg-white border-y border-[#E5EAF1] relative">
+    <section id="roi" aria-labelledby="roi-heading" className="py-20 lg:py-28 bg-white border-y border-[#E5EAF1] relative">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         
         <ScrollReveal variant="fadeUp" className="max-w-4xl mx-auto bg-[#F8FAFC] border border-[#E5EAF1] rounded-3xl p-6 sm:p-10 shadow-xl">

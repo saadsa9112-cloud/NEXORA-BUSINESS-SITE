@@ -11,7 +11,9 @@ import WhyChooseUs from './components/WhyChooseUs/WhyChooseUs'
 import Process from './components/Process/Process'
 import Pricing from './components/Pricing/Pricing'
 import PaymentBadges from './components/PaymentBadges/PaymentBadges'
+import WebsiteAuditWidget from './components/WebsiteAudit/WebsiteAuditWidget'
 import WebsiteAuditModal from './components/WebsiteAudit/WebsiteAuditModal'
+import RoiCalculator from './components/RoiCalculator/RoiCalculator'
 import RoiCalculatorModal from './components/RoiCalculator/RoiCalculatorModal'
 import About from './components/About/About'
 import QualitySecurity from './components/QualitySecurity/QualitySecurity'
@@ -28,7 +30,7 @@ import DiscountRoastFlyer from './components/DiscountFlyer/DiscountRoastFlyer'
 import { getRealVisitorGeo, logRealTimeVisitor, updateVisitorSection } from './utils/geoTracker'
 
 // Tracked sections on the page
-const TRACKED_SECTIONS = ['home', 'services', 'work', 'pricing', 'about', 'faq', 'contact']
+const TRACKED_SECTIONS = ['home', 'services', 'work', 'audit', 'roi', 'pricing', 'about', 'faq', 'contact']
 
 export default function App() {
   const [currency, setCurrency] = useState('PKR')
@@ -255,6 +257,12 @@ export default function App() {
         <section id="work">
           <Portfolio />
         </section>
+
+        {/* Live Google PageSpeed & SEO Audit Tool (Feature 7) */}
+        <WebsiteAuditWidget />
+
+        {/* Interactive ROI & Revenue Growth Calculator (Feature 8) */}
+        <RoiCalculator />
 
         <TechStack />
         <ServiceGuarantees />
