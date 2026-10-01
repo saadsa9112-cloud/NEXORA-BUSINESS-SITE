@@ -104,14 +104,6 @@ export default function ClientPortalModal({ isOpen: controlledIsOpen, onClose: c
     }
   }
 
-  const handleSelectDemo = (id) => {
-    setSearchId(id)
-    if (projectsStore[id]) {
-      setFoundProject(projectsStore[id])
-      setNotFoundId(null)
-    }
-  }
-
   return (
     <AnimatePresence>
       {isOpen && (
@@ -242,49 +234,37 @@ export default function ClientPortalModal({ isOpen: controlledIsOpen, onClose: c
                     </div>
                   </div>
                 ) : notFoundId ? (
-                  /* Funny & Engaging Error Message for Unapproved/Unwanted IDs */
+                  /* Professional Not Found Notice */
                   <div className="bg-amber-50/80 border border-amber-200 rounded-2xl p-5 text-center space-y-4 shadow-sm">
                     <div className="w-12 h-12 rounded-2xl bg-amber-100 text-amber-700 flex items-center justify-center mx-auto">
                       <AlertTriangle size={24} />
                     </div>
                     <div>
                       <span className="px-2.5 py-0.5 bg-amber-100 text-amber-800 text-[10px] font-bold uppercase tracking-wider rounded-full">
-                        Unapproved Code Warning 🕵️‍♂️
+                        ID Not Found
                       </span>
                       <h4 className="text-base font-black text-[#0B1020] mt-1">
-                        Whoops! Code Detective Mode Engaged!
+                        Unverified Project ID
                       </h4>
                       <p className="text-xs text-[#4B5563] mt-2 leading-relaxed">
-                        We searched the NEXORA server database for Project ID <code className="bg-amber-200/60 text-amber-900 font-mono font-bold px-1.5 py-0.5 rounded">{notFoundId}</code>, but Founder <strong>Hafiz Muhammad Saad</strong> hasn't approved this code yet!
+                        We searched the NEXORA database for Project ID <code className="bg-amber-200/60 text-amber-900 font-mono font-bold px-1.5 py-0.5 rounded">{notFoundId}</code>, but no active project was found with this identifier.
                       </p>
                     </div>
 
-                    <div className="bg-white border border-amber-200 rounded-xl p-3 text-xs text-left space-y-1.5">
-                      <span className="font-bold text-[#0B1020] block">💡 Did you type a typo or secret agent code?</span>
-                      <p className="text-gray-600 text-[11px]">
-                        Try one of our active approved client projects:
+                    <div className="bg-white border border-amber-200 rounded-xl p-3.5 text-xs text-left space-y-1.5">
+                      <span className="font-bold text-[#0B1020] block">Need Assistance with your Project ID?</span>
+                      <p className="text-gray-600 text-[11px] leading-relaxed">
+                        Please check your official invoice or contract document for your assigned NEX-ID code. If you have misplaced it, reach out to Founder Hafiz Muhammad Saad directly.
                       </p>
-                      <div className="flex flex-wrap gap-1.5 pt-1">
-                        {Object.keys(projectsStore).map((approvedId) => (
-                          <button
-                            key={approvedId}
-                            type="button"
-                            onClick={() => handleSelectDemo(approvedId)}
-                            className="px-2.5 py-1 bg-blue-50 hover:bg-blue-100 text-[#0066FF] border border-blue-200 rounded-lg text-xs font-bold font-mono transition-all cursor-pointer"
-                          >
-                            {approvedId}
-                          </button>
-                        ))}
-                      </div>
                     </div>
 
                     <div className="pt-2 border-t border-amber-200/60 flex items-center justify-between">
-                      <span className="text-[11px] text-gray-500 font-medium">Want your own official NEX-ID?</span>
+                      <span className="text-[11px] text-gray-500 font-medium">Have questions about your project?</span>
                       <a
-                        href={`https://wa.me/${CONTACT.whatsapp}?text=${encodeURIComponent(`Hello Founder Saad, I would like to get a project quote and request my official NEX-ID code for tracking.`)}`}
+                        href={`https://wa.me/${CONTACT.whatsapp}?text=${encodeURIComponent(`Hello Founder Saad, I am trying to track my project with ID: ${notFoundId}. Could you please verify my access?`)}`}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="px-3 py-1.5 bg-[#25D366] hover:bg-[#20bd5a] text-white text-xs font-bold rounded-xl flex items-center gap-1 shadow-xs cursor-pointer transition-all"
+                        className="px-3.5 py-1.5 bg-[#25D366] hover:bg-[#20bd5a] text-white text-xs font-bold rounded-xl flex items-center gap-1.5 shadow-xs cursor-pointer transition-all"
                       >
                         <MessageCircle size={13} />
                         <span>WhatsApp Founder →</span>
@@ -294,25 +274,18 @@ export default function ClientPortalModal({ isOpen: controlledIsOpen, onClose: c
                 ) : (
                   /* Initial Search Prompt */
                   <div className="text-center py-6 text-xs text-[#6B7280] space-y-3 bg-[#F8FAFC] rounded-2xl border border-[#E5EAF1] p-5">
-                    <Code size={24} className="mx-auto text-[#0066FF]" />
-                    <div>
-                      <p className="font-bold text-[#0B1020] text-sm">Verify Admin Approved Project Status</p>
-                      <p className="text-gray-500 text-xs mt-1">Enter your assigned project ID to view live milestone completion &amp; Netlify staging links.</p>
+                    <div className="w-10 h-10 rounded-xl bg-blue-50 text-[#0066FF] flex items-center justify-center mx-auto">
+                      <Code size={20} />
                     </div>
-                    <div className="pt-2 border-t border-[#E5EAF1]">
-                      <span className="text-[11px] text-gray-400 block mb-1.5 font-medium">Approved Demo Codes:</span>
-                      <div className="flex flex-wrap justify-center gap-2">
-                        {Object.keys(projectsStore).map((approvedId) => (
-                          <button
-                            key={approvedId}
-                            type="button"
-                            onClick={() => handleSelectDemo(approvedId)}
-                            className="px-2.5 py-1 bg-white hover:bg-blue-50 text-[#0066FF] border border-[#E5EAF1] rounded-lg font-mono text-xs font-bold shadow-2xs transition-all cursor-pointer"
-                          >
-                            {approvedId}
-                          </button>
-                        ))}
-                      </div>
+                    <div>
+                      <p className="font-bold text-[#0B1020] text-sm">Verify Client Milestone Access</p>
+                      <p className="text-gray-500 text-xs mt-1.5 max-w-sm mx-auto leading-relaxed">
+                        Enter your confidential Project ID (provided in your official invoice or agreement) to view live development sprints, milestone progress, and staging deployments.
+                      </p>
+                    </div>
+                    <div className="pt-3 border-t border-[#E5EAF1] flex items-center justify-center gap-2 text-[11px] text-gray-500 font-medium">
+                      <ShieldCheck size={14} className="text-green-600" />
+                      <span>Encrypted client verification protocol</span>
                     </div>
                   </div>
                 )}
