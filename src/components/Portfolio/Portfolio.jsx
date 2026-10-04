@@ -189,7 +189,7 @@ export default function Portfolio() {
                   <div className="rounded-xl overflow-hidden border border-[#E5EAF1] shadow-soft max-h-[260px] sm:max-h-[360px]">
                     <img
                       src={previewProject.image}
-                      alt={previewProject.title}
+                      alt={`${previewProject.title} — ${previewProject.category} case study showcase by NEXORA DIGITAL`}
                       className="w-full h-full object-cover object-top"
                     />
                   </div>

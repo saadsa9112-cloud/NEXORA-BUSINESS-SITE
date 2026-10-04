@@ -1,4 +1,6 @@
 User-agent: *
 Allow: /
 
+# Canonical Sitemaps & AI Index
 Sitemap: https://nexorabyhms.netlify.app/sitemap.xml
+# LLM Context: https://nexorabyhms.netlify.app/llms.txt

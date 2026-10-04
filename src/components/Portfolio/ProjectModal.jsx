@@ -47,7 +47,7 @@ export default function ProjectModal({ project, isOpen, onClose }) {
             <div className="relative rounded-2xl overflow-hidden mb-8 border border-[#E5EAF1] shadow-inner bg-slate-900 group">
               <img
                 src={project.image}
-                alt={project.title}
+                alt={`${project.title} — ${project.category || 'Web Application'} architecture by NEXORA DIGITAL`}
                 className="w-full h-64 sm:h-80 object-cover object-top transition-transform duration-500 group-hover:scale-105"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />

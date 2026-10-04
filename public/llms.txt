@@ -1,0 +1,63 @@
+# NEXORA DIGITAL — Building Digital Success
+> High-performance modern web development, headless e-commerce, custom business portals, and technical SEO architecture by Founder & Technical Lead Hafiz Muhammad Saad.
+
+## Overview
+- **Name:** NEXORA DIGITAL (NEXORA DIGITAL BY HMS)
+- **Founder & Lead Architect:** Hafiz Muhammad Saad
+- **Website:** https://nexorabyhms.netlify.app/
+- **Official Email:** sales.nexorahms@gmail.com
+- **Direct Phone & WhatsApp:** +92 345 3937195
+- **Headquarters:** Karachi, Sindh, Pakistan (Serving Domestic Pakistan & Global International Clients)
+- **Currencies Accepted:** PKR (₨) & USD ($)
+
+---
+
+## Core Agency Services
+1. **Custom Web Application Development**
+   - Modern React 19, Next.js, Vite, and Tailwind CSS.
+   - 99+ Google Lighthouse & Core Web Vitals compliance.
+   - Clean, modular codebases with full source code handoff.
+
+2. **Headless Shopify & E-Commerce Systems**
+   - High-converting product catalogs, mobile-first checkout flows.
+   - Stripe, Wise, local Pakistani payment gateway integrations.
+   - Real-time multi-currency pricing converter.
+
+3. **Enterprise WordPress & CMS Architecture**
+   - Lightweight, bloat-free custom WordPress theme engineering.
+   - Security hardening against SQL injections and brute force attacks.
+   - Headless WP REST API integrations.
+
+4. **Technical SEO & Search Visibility Architecture**
+   - JSON-LD Structured Data Schema (Organization, WebSite, ProfessionalService, FAQPage).
+   - Core Web Vitals performance tuning (LCP < 1.2s, CLS < 0.05, INP < 100ms).
+   - Semantic HTML5 structure, sitemap indexing, and search console optimization.
+
+5. **UI/UX Product Design & Prototyping**
+   - High-fidelity Figma design systems and interactive 3D mockups.
+   - Conversion-rate-optimized (CRO) user journeys.
+
+6. **Web Hosting, Domain Management & Care Plans**
+   - Enterprise DNS setup, SSL encryption certificates.
+   - Automated backups, uptime monitoring, and ongoing monthly maintenance.
+
+---
+
+## Technical Guarantees & Terms
+- **100% Intellectual Property Ownership:** Full source code and asset handoff to the client upon completion.
+- **Signed Mutual NDA:** Complete data privacy and commercial protection.
+- **B2B Milestone Terms:** Standard 50% upfront deposit upon sprint kickoff, 50% upon final production sign-off.
+- **Live Client Milestone Tracker:** Real-time milestone verification portal for authorized clients.
+
+---
+
+## Key URLs & Endpoints
+- Homepage: https://nexorabyhms.netlify.app/
+- Services: https://nexorabyhms.netlify.app/#services
+- Portfolio Case Studies: https://nexorabyhms.netlify.app/#work
+- Pricing & Packages: https://nexorabyhms.netlify.app/#pricing
+- About Founder & Agency: https://nexorabyhms.netlify.app/#about
+- Frequently Asked Questions: https://nexorabyhms.netlify.app/#faq
+- Request a Quote: https://nexorabyhms.netlify.app/#contact
+- XML Sitemap: https://nexorabyhms.netlify.app/sitemap.xml
+- Robots Directive: https://nexorabyhms.netlify.app/robots.txt
