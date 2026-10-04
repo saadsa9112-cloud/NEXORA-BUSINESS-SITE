@@ -2,7 +2,6 @@ import Services from '../components/Services/Services'
 import Pricing from '../components/Pricing/Pricing'
 import CostEstimator from '../components/Estimator/CostEstimator'
 import ServiceGuarantees from '../components/Guarantees/ServiceGuarantees'
-import PaymentBadges from '../components/PaymentBadges/PaymentBadges'
 import QuoteForm from '../components/QuoteForm/QuoteForm'
 
 export default function ServicesPage({ currency, setCurrency }) {
@@ -23,7 +22,6 @@ export default function ServicesPage({ currency, setCurrency }) {
       <Services />
       <CostEstimator />
       <Pricing currency={currency} setCurrency={setCurrency} />
-      <PaymentBadges />
       <ServiceGuarantees />
       <QuoteForm currency={currency} setCurrency={setCurrency} />
     </div>

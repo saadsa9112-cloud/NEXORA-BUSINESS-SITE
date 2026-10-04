@@ -10,7 +10,6 @@ import ServiceGuarantees from './components/Guarantees/ServiceGuarantees'
 import WhyChooseUs from './components/WhyChooseUs/WhyChooseUs'
 import Process from './components/Process/Process'
 import Pricing from './components/Pricing/Pricing'
-import PaymentBadges from './components/PaymentBadges/PaymentBadges'
 import WebsiteAuditModal from './components/WebsiteAudit/WebsiteAuditModal'
 import RoiCalculatorModal from './components/RoiCalculator/RoiCalculatorModal'
 import About from './components/About/About'
@@ -263,7 +262,6 @@ export default function App() {
 
         <section id="pricing">
           <Pricing currency={currency} setCurrency={setCurrency} />
-          <PaymentBadges />
         </section>
 
         <section id="about">
