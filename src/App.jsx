@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react'
+import { useState, useEffect, useRef, lazy, Suspense } from 'react'
 import LaunchBanner from './components/LaunchBanner/LaunchBanner'
 import Navbar from './components/Navbar/Navbar'
 import Hero from './components/Hero/Hero'
@@ -10,8 +10,6 @@ import ServiceGuarantees from './components/Guarantees/ServiceGuarantees'
 import WhyChooseUs from './components/WhyChooseUs/WhyChooseUs'
 import Process from './components/Process/Process'
 import Pricing from './components/Pricing/Pricing'
-import WebsiteAuditModal from './components/WebsiteAudit/WebsiteAuditModal'
-import RoiCalculatorModal from './components/RoiCalculator/RoiCalculatorModal'
 import About from './components/About/About'
 import QualitySecurity from './components/QualitySecurity/QualitySecurity'
 import FAQ from './components/FAQ/FAQ'
@@ -19,12 +17,16 @@ import QuoteForm from './components/QuoteForm/QuoteForm'
 import FinalCTA from './components/FinalCTA/FinalCTA'
 import UnifiedFloatingHub from './components/FloatingHub/UnifiedFloatingHub'
 import FloatingActionBar from './components/FloatingBar/FloatingActionBar'
-import AiAssistantModal from './components/AiAssistant/AiAssistantModal'
-import ClientPortalModal from './components/ClientPortal/ClientPortalModal'
-import AdminPortalPage from './components/Admin/AdminPortalPage'
 import Footer from './components/Footer/Footer'
-import DiscountRoastFlyer from './components/DiscountFlyer/DiscountRoastFlyer'
 import { getRealVisitorGeo, logRealTimeVisitor, updateVisitorSection } from './utils/geoTracker'
+
+// Code-split heavy modals and administrative suite for sub-second mobile loads
+const AdminPortalPage = lazy(() => import('./components/Admin/AdminPortalPage'))
+const WebsiteAuditModal = lazy(() => import('./components/WebsiteAudit/WebsiteAuditModal'))
+const RoiCalculatorModal = lazy(() => import('./components/RoiCalculator/RoiCalculatorModal'))
+const AiAssistantModal = lazy(() => import('./components/AiAssistant/AiAssistantModal'))
+const ClientPortalModal = lazy(() => import('./components/ClientPortal/ClientPortalModal'))
+const DiscountRoastFlyer = lazy(() => import('./components/DiscountFlyer/DiscountRoastFlyer'))
 
 // Tracked sections on the page
 const TRACKED_SECTIONS = ['home', 'services', 'work', 'pricing', 'about', 'faq', 'contact']
@@ -222,7 +224,11 @@ export default function App() {
 
   // IF ADMIN ROUTE/HASH IS ACTIVE, RENDER DEDICATED FULL-SCREEN ADMIN PAGE
   if (isAdminPage) {
-    return <AdminPortalPage onExit={handleExitAdmin} />
+    return (
+      <Suspense fallback={<div className="min-h-screen bg-[#05070D] flex items-center justify-center text-white font-mono text-xs">Initializing Secure Admin Portal...</div>}>
+        <AdminPortalPage onExit={handleExitAdmin} />
+      </Suspense>
+    )
   }
 
   return (
@@ -296,22 +302,28 @@ export default function App() {
         onOpenTracker={() => setIsClientPortalOpen(true)}
       />
 
-      {/* Modals triggered cleanly on user selection */}
-      <AiAssistantModal
-        isOpen={isAiModalOpen}
-        onClose={() => setIsAiModalOpen(false)}
-      />
-      <ClientPortalModal
-        isOpen={isClientPortalOpen}
-        onClose={() => setIsClientPortalOpen(false)}
-      />
-
-      {/* Dedicated Standalone Tool Modals */}
-      <WebsiteAuditModal isOpen={isSpeedAuditOpen} onClose={handleCloseSpeedAudit} />
-      <RoiCalculatorModal isOpen={isRoiOpen} onClose={handleCloseRoi} />
-
-      {/* Roasting & Funny 25% OFF B2B Discount Flyer Widget */}
-      <DiscountRoastFlyer />
+      {/* Lazy-Loaded Modals & Tool Suites — Zero impact on initial page load */}
+      <Suspense fallback={null}>
+        {isAiModalOpen && (
+          <AiAssistantModal
+            isOpen={isAiModalOpen}
+            onClose={() => setIsAiModalOpen(false)}
+          />
+        )}
+        {isClientPortalOpen && (
+          <ClientPortalModal
+            isOpen={isClientPortalOpen}
+            onClose={() => setIsClientPortalOpen(false)}
+          />
+        )}
+        {isSpeedAuditOpen && (
+          <WebsiteAuditModal isOpen={isSpeedAuditOpen} onClose={handleCloseSpeedAudit} />
+        )}
+        {isRoiOpen && (
+          <RoiCalculatorModal isOpen={isRoiOpen} onClose={handleCloseRoi} />
+        )}
+        <DiscountRoastFlyer />
+      </Suspense>
     </div>
   )
 }

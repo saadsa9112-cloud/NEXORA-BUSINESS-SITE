@@ -204,6 +204,14 @@ function HeroVisual() {
 
 /* ── Hero Section ───────────────────────────────────────────────────────── */
 export default function Hero() {
+  const [isDesktop, setIsDesktop] = useState(() => typeof window !== 'undefined' ? window.innerWidth >= 1024 : false)
+
+  useEffect(() => {
+    const handleResize = () => setIsDesktop(window.innerWidth >= 1024)
+    window.addEventListener('resize', handleResize, { passive: true })
+    return () => window.removeEventListener('resize', handleResize)
+  }, [])
+
   const scrollToWork = () => {
     const el = document.getElementById('work')
     if (el) {
@@ -375,15 +383,17 @@ export default function Hero() {
             </motion.div>
           </motion.div>
 
-          {/* Right — Interactive 3D Visual for Large Screens */}
-          <motion.div
-            initial={{ opacity: 0, scale: 0.95, y: 20 }}
-            animate={{ opacity: 1, scale: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.3, ease: [0.16, 1, 0.3, 1] }}
-            className="hidden lg:block relative h-[480px]"
-          >
-            <HeroVisual />
-          </motion.div>
+          {/* Right — Interactive 3D Visual for Large Screens (Zero CPU overhead on mobile) */}
+          {isDesktop && (
+            <motion.div
+              initial={{ opacity: 0, scale: 0.95, y: 20 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              transition={{ duration: 0.8, delay: 0.3, ease: [0.16, 1, 0.3, 1] }}
+              className="hidden lg:block relative h-[480px]"
+            >
+              <HeroVisual />
+            </motion.div>
+          )}
         </div>
       </div>
 

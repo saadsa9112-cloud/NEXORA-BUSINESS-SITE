@@ -12,7 +12,7 @@ export default function TiltCard({
 }) {
   const cardRef = useRef(null)
   const shouldReduceMotion = useReducedMotion()
-  const [isMobile, setIsMobile] = useState(false)
+  const [isMobile, setIsMobile] = useState(() => typeof window !== 'undefined' ? (window.innerWidth < 768 || 'ontouchstart' in window) : false)
   const [isHovered, setIsHovered] = useState(false)
 
   // Detect touch devices

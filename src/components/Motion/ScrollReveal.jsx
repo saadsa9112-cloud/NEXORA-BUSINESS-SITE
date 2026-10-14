@@ -5,8 +5,8 @@ export default function ScrollReveal({
   className = '',
   variant = 'fadeUp', // fadeUp | fadeIn | scaleUp | slideLeft | slideRight
   delay = 0,
-  duration = 0.6,
-  viewportMargin = '-60px',
+  duration = 0.45,
+  viewportMargin = '0px',
   once = true,
   ...props
 }) {

@@ -38,19 +38,12 @@ const fetchWithTimeout = async (url, ms = 5000, options = {}) => {
 }
 
 export const getRealVisitorGeo = async () => {
-  // Start GPS in background — race with 3s timeout so it never blocks
-  const gpsPromise = getMobileGPSLocation()
-  const gpsRace = () => Promise.race([gpsPromise, new Promise(r => setTimeout(() => r(null), 3000))])
-
-  // ── Tier 1: freeipapi.com (HTTPS, CORS-safe) ────────────────────────
-  // Fields: ipAddress, cityName, regionName, countryName, countryCode,
-  //         latitude, longitude, asnOrganization, timeZones[]
+  // ── Tier 1: freeipapi.com (HTTPS, CORS-safe, Zero Permission Prompt) ──
   try {
-    const res = await fetchWithTimeout('https://freeipapi.com/api/json', 5000, { mode: 'cors' })
+    const res = await fetchWithTimeout('https://freeipapi.com/api/json', 4000, { mode: 'cors' })
     if (res.ok) {
       const d = await res.json()
       if (d?.ipAddress) {
-        const gps = await gpsRace()
         return {
           ip: d.ipAddress,
           city: d.cityName || '—',
@@ -58,8 +51,8 @@ export const getRealVisitorGeo = async () => {
           country: d.countryName || '—',
           countryCode: d.countryCode || '',
           flag: getFlagEmoji(d.countryCode),
-          latitude: gps?.latitude ?? (d.latitude != null ? Number(d.latitude).toFixed(4) : null),
-          longitude: gps?.longitude ?? (d.longitude != null ? Number(d.longitude).toFixed(4) : null),
+          latitude: d.latitude != null ? Number(d.latitude).toFixed(4) : null,
+          longitude: d.longitude != null ? Number(d.longitude).toFixed(4) : null,
           isp: d.asnOrganization || '—',
           timezone: d.timeZones?.[0] || '—',
         }
