@@ -27,17 +27,32 @@ const ROASTS = [
 ]
 
 export default function DiscountRoastFlyer() {
+  const [isMobile, setIsMobile] = useState(() => typeof window !== 'undefined' ? (window.innerWidth < 768 || 'ontouchstart' in window) : false)
   const [isOpen, setIsOpen] = useState(false)
   const [isDismissed, setIsDismissed] = useState(false)
   const [roastIndex, setRoastIndex] = useState(0)
-  const [timeLeft, setTimeLeft] = useState(4)
+  const [timeLeft, setTimeLeft] = useState(6)
   const [isHovered, setIsHovered] = useState(false)
   const timerRef = useRef(null)
 
   useEffect(() => {
-    const showTimer = setTimeout(() => setIsOpen(true), 1500)
-    return () => clearTimeout(showTimer)
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 768 || 'ontouchstart' in window)
+    }
+    window.addEventListener('resize', checkMobile, { passive: true })
+    return () => window.removeEventListener('resize', checkMobile)
   }, [])
+
+  useEffect(() => {
+    // Do not trigger intrusive popups on mobile devices (prevents SEO interstitial penalty & mobile GPU stutter)
+    if (isMobile) return
+
+    const showTimer = setTimeout(() => setIsOpen(true), 5000)
+    return () => clearTimeout(showTimer)
+  }, [isMobile])
+
+  // On mobile screens, keep UI 100% clean, fast, and clutter-free
+  if (isMobile) return null
 
   useEffect(() => {
     if (!isOpen || isHovered) {
