@@ -19,6 +19,24 @@ const LEGAL_LINKS = ['Privacy Policy', 'Terms & Conditions', 'Refund Policy']
 export default function Footer({ onOpenSpeedAudit, onOpenRoi }) {
   const handleNavClick = (href) => {
     const id = href.replace('#', '')
+    if (href === '#ai-tools') {
+      window.location.hash = '#ai-tools'
+      window.scrollTo({ top: 0, behavior: 'smooth' })
+      return
+    }
+    if (window.location.hash === '#ai-tools' || window.location.pathname === '/ai-tools') {
+      window.location.hash = href
+      setTimeout(() => {
+        const el = document.getElementById(id)
+        if (el) {
+          const top = el.getBoundingClientRect().top + window.scrollY - 80
+          window.scrollTo({ top, behavior: 'smooth' })
+        } else {
+          window.scrollTo({ top: 0, behavior: 'smooth' })
+        }
+      }, 150)
+      return
+    }
     const el = document.getElementById(id)
     if (el) {
       const top = el.getBoundingClientRect().top + window.scrollY - 80

@@ -22,6 +22,7 @@ import { getRealVisitorGeo, logRealTimeVisitor, updateVisitorSection } from './u
 
 // Code-split heavy modals and administrative suite for sub-second mobile loads
 const AdminPortalPage = lazy(() => import('./components/Admin/AdminPortalPage'))
+const AiToolsPage = lazy(() => import('./pages/AiToolsPage'))
 const WebsiteAuditModal = lazy(() => import('./components/WebsiteAudit/WebsiteAuditModal'))
 const RoiCalculatorModal = lazy(() => import('./components/RoiCalculator/RoiCalculatorModal'))
 const AiAssistantModal = lazy(() => import('./components/AiAssistant/AiAssistantModal'))
@@ -34,6 +35,7 @@ const TRACKED_SECTIONS = ['home', 'services', 'work', 'pricing', 'about', 'faq',
 export default function App() {
   const [currency, setCurrency] = useState('PKR')
   const [isAdminPage, setIsAdminPage] = useState(false)
+  const [isAiToolsPage, setIsAiToolsPage] = useState(false)
   const [isSpeedAuditOpen, setIsSpeedAuditOpen] = useState(false)
   const [isRoiOpen, setIsRoiOpen] = useState(false)
   const [isAiModalOpen, setIsAiModalOpen] = useState(false)
@@ -56,6 +58,13 @@ export default function App() {
         setIsAdminPage(true)
       } else {
         setIsAdminPage(false)
+      }
+
+      if (path === '/ai-tools' || hash === '#ai-tools' || search.includes('ai-tools')) {
+        setIsAiToolsPage(true)
+        window.scrollTo({ top: 0, behavior: 'smooth' })
+      } else {
+        setIsAiToolsPage(false)
       }
 
       if (hash === '#speed-audit' || hash === '#audit') {
@@ -245,47 +254,60 @@ export default function App() {
       {/* Main Single Page Header Navbar */}
       <Navbar />
 
-      {/* Clean Single Page Body */}
-      <main id="main-content">
-        <section id="home">
-          <Hero />
-        </section>
+      {/* Clean Single Page Body or Dedicated AI Tools Page */}
+      {isAiToolsPage ? (
+        <main id="main-content">
+          <Suspense fallback={<div className="min-h-screen flex items-center justify-center text-sm text-gray-500 font-mono">Loading AI Tools Suite...</div>}>
+            <AiToolsPage
+              onOpenContact={() => {
+                setIsAiToolsPage(false)
+                window.location.hash = '#contact'
+              }}
+            />
+          </Suspense>
+        </main>
+      ) : (
+        <main id="main-content">
+          <section id="home">
+            <Hero />
+          </section>
 
-        <TrustStrip />
+          <TrustStrip />
 
-        <section id="services">
-          <Services />
-        </section>
+          <section id="services">
+            <Services />
+          </section>
 
-        <section id="work">
-          <Portfolio />
-        </section>
+          <section id="work">
+            <Portfolio />
+          </section>
 
-        <TechStack />
-        <ServiceGuarantees />
-        <WhyChooseUs />
-        <Process />
+          <TechStack />
+          <ServiceGuarantees />
+          <WhyChooseUs />
+          <Process />
 
-        <section id="pricing">
-          <Pricing currency={currency} setCurrency={setCurrency} />
-        </section>
+          <section id="pricing">
+            <Pricing currency={currency} setCurrency={setCurrency} />
+          </section>
 
-        <section id="about">
-          <About />
-        </section>
+          <section id="about">
+            <About />
+          </section>
 
-        <QualitySecurity />
+          <QualitySecurity />
 
-        <section id="faq">
-          <FAQ />
-        </section>
+          <section id="faq">
+            <FAQ />
+          </section>
 
-        <section id="contact">
-          <QuoteForm currency={currency} setCurrency={setCurrency} />
-        </section>
+          <section id="contact">
+            <QuoteForm currency={currency} setCurrency={setCurrency} />
+          </section>
 
-        <FinalCTA />
-      </main>
+          <FinalCTA />
+        </main>
+      )}
 
       {/* Global Footer */}
       <Footer

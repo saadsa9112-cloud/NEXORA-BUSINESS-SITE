@@ -11,6 +11,12 @@ export default function Navbar() {
 
   useEffect(() => {
     const handleScroll = () => {
+      if (window.location.hash === '#ai-tools' || window.location.pathname === '/ai-tools') {
+        setActiveSection('ai-tools')
+        setScrolled(window.scrollY > 20)
+        return
+      }
+
       setScrolled(window.scrollY > 20)
 
       const sectionIds = ['home', 'services', 'work', 'pricing', 'about', 'faq', 'contact']
@@ -36,7 +42,11 @@ export default function Navbar() {
 
     handleScroll()
     window.addEventListener('scroll', handleScroll, { passive: true })
-    return () => window.removeEventListener('scroll', handleScroll)
+    window.addEventListener('hashchange', handleScroll)
+    return () => {
+      window.removeEventListener('scroll', handleScroll)
+      window.removeEventListener('hashchange', handleScroll)
+    }
   }, [])
 
   // Close mobile menu on ESC key
@@ -56,6 +66,28 @@ export default function Navbar() {
     setMobileOpen(false)
     const id = href.replace('#', '')
     setActiveSection(id)
+
+    if (href === '#ai-tools') {
+      window.location.hash = '#ai-tools'
+      window.scrollTo({ top: 0, behavior: 'smooth' })
+      return
+    }
+
+    if (window.location.hash === '#ai-tools' || window.location.pathname === '/ai-tools') {
+      window.location.hash = href
+      setTimeout(() => {
+        const el = document.getElementById(id)
+        if (el) {
+          const offset = 80
+          const top = el.getBoundingClientRect().top + window.scrollY - offset
+          window.scrollTo({ top, behavior: 'smooth' })
+        } else {
+          window.scrollTo({ top: 0, behavior: 'smooth' })
+        }
+      }, 150)
+      return
+    }
+
     const el = document.getElementById(id)
     if (el) {
       const offset = 80
