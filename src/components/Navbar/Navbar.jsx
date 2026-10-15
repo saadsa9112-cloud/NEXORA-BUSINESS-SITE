@@ -119,7 +119,7 @@ export default function Navbar() {
         <div className={`transition-colors duration-300 ${
           scrolled
             ? 'bg-[#05070D]/95 backdrop-blur-md border-b border-white/10 shadow-lg shadow-black/20 text-white'
-            : 'bg-white/95 backdrop-blur-md border-b border-[#E5EAF1] shadow-xs text-[#0B1020]'
+            : 'bg-white/95 backdrop-blur-md border-b border-[#E5EAF1] shadow-xs text-[#0B1020] dark:bg-[#05070D]/95 dark:border-white/10 dark:text-white'
         }`}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16 lg:h-20">
@@ -147,10 +147,10 @@ export default function Navbar() {
                       isActive
                         ? scrolled
                           ? 'text-[#3B82F6] font-bold bg-white/10 ring-1 ring-[#3B82F6]/30'
-                          : 'text-[#0066FF] font-bold bg-blue-50 ring-1 ring-[#0066FF]/20'
+                          : 'text-[#0066FF] font-bold bg-blue-50 ring-1 ring-[#0066FF]/20 dark:bg-white/10 dark:text-[#38BDF8]'
                         : scrolled
                         ? 'text-[#A7ADBB] hover:text-white hover:bg-white/5'
-                        : 'text-[#4B5563] hover:text-[#0B1020] hover:bg-gray-100'
+                        : 'text-[#4B5563] hover:text-[#0B1020] hover:bg-gray-100 dark:text-slate-300 dark:hover:text-white dark:hover:bg-white/5'
                     }`}
                   >
                     {link.label}
@@ -218,11 +218,11 @@ export default function Navbar() {
         role="dialog"
         aria-modal="true"
         aria-label="Navigation menu"
-        className={`fixed top-0 right-0 bottom-0 z-50 w-72 bg-white border-l border-[#E5EAF1] lg:hidden transform transition-transform duration-300 shadow-2xl ${
+        className={`fixed top-0 right-0 bottom-0 z-50 w-72 bg-white dark:bg-[#0B1020] border-l border-[#E5EAF1] dark:border-white/10 lg:hidden transform transition-transform duration-300 shadow-2xl ${
           mobileOpen ? 'translate-x-0' : 'translate-x-full'
         }`}
       >
-        <div className="flex items-center justify-between px-5 h-16 border-b border-[#E5EAF1]">
+        <div className="flex items-center justify-between px-5 h-16 border-b border-[#E5EAF1] dark:border-white/10">
           <NexoraBrand variant="navbar" isScrolled={false} />
           <div className="flex items-center gap-1.5">
             <button
@@ -238,7 +238,7 @@ export default function Navbar() {
               type="button"
               aria-label="Close menu"
               onClick={() => setMobileOpen(false)}
-              className="flex items-center justify-center w-8 h-8 rounded-lg text-[#0B1020] hover:bg-gray-100 transition-all"
+              className="flex items-center justify-center w-8 h-8 rounded-lg text-[#0B1020] dark:text-white hover:bg-gray-100 dark:hover:bg-white/10 transition-all"
             >
               <X size={18} />
             </button>
@@ -255,8 +255,8 @@ export default function Navbar() {
                 onClick={(e) => { e.preventDefault(); handleNavClick(link.href) }}
                 className={`flex items-center px-4 py-3 text-sm font-medium rounded-lg transition-all duration-200 ${
                   isActive
-                    ? 'text-[#0066FF] font-semibold bg-blue-50'
-                    : 'text-[#4B5563] hover:text-[#0B1020] hover:bg-gray-100'
+                    ? 'text-[#0066FF] font-semibold bg-blue-50 dark:bg-white/10 dark:text-[#38BDF8]'
+                    : 'text-[#4B5563] hover:text-[#0B1020] hover:bg-gray-100 dark:text-slate-300 dark:hover:text-white dark:hover:bg-white/5'
                 }`}
               >
                 {link.label}

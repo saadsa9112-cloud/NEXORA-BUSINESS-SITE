@@ -19,6 +19,12 @@ import UnifiedFloatingHub from './components/FloatingHub/UnifiedFloatingHub'
 import FloatingActionBar from './components/FloatingBar/FloatingActionBar'
 import Footer from './components/Footer/Footer'
 import { getRealVisitorGeo, logRealTimeVisitor, updateVisitorSection } from './utils/geoTracker'
+import { getInitialTheme, applyTheme } from './utils/theme'
+
+// Immediately ensure initial theme (defaults strictly to light) is applied
+if (typeof window !== 'undefined') {
+  applyTheme(getInitialTheme())
+}
 
 // Code-split heavy modals and administrative suite for sub-second mobile loads
 const AdminPortalPage = lazy(() => import('./components/Admin/AdminPortalPage'))
@@ -241,7 +247,7 @@ export default function App() {
   }
 
   return (
-    <div className="min-h-screen bg-[#F7F9FC] text-[#0B1020] overflow-x-hidden">
+    <div className="min-h-screen bg-[#F7F9FC] dark:bg-[#05070D] text-[#0B1020] dark:text-[#F8FAFC] overflow-x-hidden transition-colors duration-300">
 
       {/* Skip to main content — accessibility */}
       <a

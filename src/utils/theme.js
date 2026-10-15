@@ -5,7 +5,8 @@ export const getInitialTheme = () => {
   if (typeof window === 'undefined') return 'light'
   const saved = localStorage.getItem(THEME_KEY)
   if (saved === 'dark' || saved === 'light') return saved
-  return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'
+  // Always default strictly to 'light' mode
+  return 'light'
 }
 
 export const applyTheme = (theme) => {
