@@ -1,13 +1,23 @@
 import { useState, useEffect } from 'react'
-import { Menu, X, ArrowRight } from 'lucide-react'
+import { Menu, X, ArrowRight, Sun, Moon } from 'lucide-react'
 import { NAV_LINKS, CONTACT } from '../../data/siteData'
 import NexoraBrand from '../NexoraBrand/NexoraBrand'
 import LaunchBanner from '../LaunchBanner/LaunchBanner'
+import { getInitialTheme, applyTheme, toggleTheme } from '../../utils/theme'
 
 export default function Navbar() {
   const [scrolled, setScrolled] = useState(false)
   const [mobileOpen, setMobileOpen] = useState(false)
   const [activeSection, setActiveSection] = useState('home')
+  const [theme, setTheme] = useState(getInitialTheme)
+
+  useEffect(() => {
+    applyTheme(theme)
+  }, [theme])
+
+  const handleToggleTheme = () => {
+    setTheme((prev) => toggleTheme(prev))
+  }
 
   useEffect(() => {
     const handleScroll = () => {
@@ -149,8 +159,23 @@ export default function Navbar() {
               })}
             </nav>
 
-            {/* CTA + Mobile Toggle */}
-            <div className="flex items-center gap-2.5">
+            {/* CTA + Theme Toggle + Mobile Hamburger */}
+            <div className="flex items-center gap-2 sm:gap-2.5">
+              {/* Theme Toggle Button (Light / Dark) */}
+              <button
+                type="button"
+                onClick={handleToggleTheme}
+                aria-label={`Switch to ${theme === 'dark' ? 'light' : 'dark'} mode`}
+                className={`flex items-center justify-center w-9 h-9 sm:w-10 sm:h-10 rounded-xl transition-all duration-200 border cursor-pointer ${
+                  scrolled
+                    ? 'border-white/10 bg-white/5 text-amber-400 hover:bg-white/10'
+                    : 'border-[#E5EAF1] bg-white text-slate-700 hover:bg-gray-100 hover:text-black dark:border-white/10 dark:bg-white/5 dark:text-amber-400'
+                }`}
+                title={`Switch to ${theme === 'dark' ? 'Light' : 'Dark'} Mode`}
+              >
+                {theme === 'dark' ? <Sun size={17} className="text-amber-400" /> : <Moon size={17} className="text-slate-700" />}
+              </button>
+
               <a
                 href="#contact"
                 onClick={(e) => { e.preventDefault(); handleNavClick('#contact') }}
@@ -166,7 +191,7 @@ export default function Navbar() {
                 aria-label={mobileOpen ? 'Close menu' : 'Open menu'}
                 aria-expanded={mobileOpen}
                 onClick={() => setMobileOpen((v) => !v)}
-                className={`lg:hidden flex items-center justify-center w-10 h-10 rounded-lg transition-all duration-200 ${
+                className={`lg:hidden flex items-center justify-center w-9 h-9 sm:w-10 sm:h-10 rounded-lg transition-all duration-200 ${
                   scrolled ? 'text-white hover:bg-white/10' : 'text-[#0B1020] hover:bg-gray-100'
                 }`}
               >
@@ -199,14 +224,25 @@ export default function Navbar() {
       >
         <div className="flex items-center justify-between px-5 h-16 border-b border-[#E5EAF1]">
           <NexoraBrand variant="navbar" isScrolled={false} />
-          <button
-            type="button"
-            aria-label="Close menu"
-            onClick={() => setMobileOpen(false)}
-            className="flex items-center justify-center w-9 h-9 rounded-lg text-[#0B1020] hover:bg-gray-100 transition-all"
-          >
-            <X size={18} />
-          </button>
+          <div className="flex items-center gap-1.5">
+            <button
+              type="button"
+              onClick={handleToggleTheme}
+              aria-label={`Switch to ${theme === 'dark' ? 'light' : 'dark'} mode`}
+              className="flex items-center justify-center w-8 h-8 rounded-lg border border-[#E5EAF1] bg-gray-50 text-slate-700 dark:border-white/10 dark:bg-white/5 dark:text-amber-400"
+              title={`Switch to ${theme === 'dark' ? 'Light' : 'Dark'} Mode`}
+            >
+              {theme === 'dark' ? <Sun size={15} className="text-amber-400" /> : <Moon size={15} />}
+            </button>
+            <button
+              type="button"
+              aria-label="Close menu"
+              onClick={() => setMobileOpen(false)}
+              className="flex items-center justify-center w-8 h-8 rounded-lg text-[#0B1020] hover:bg-gray-100 transition-all"
+            >
+              <X size={18} />
+            </button>
+          </div>
         </div>
 
         <nav aria-label="Mobile navigation" className="px-4 py-6 flex flex-col gap-1">

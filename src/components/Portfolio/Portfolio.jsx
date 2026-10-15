@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { ExternalLink, X, Check, ShieldCheck, Sparkles } from 'lucide-react'
+import { ExternalLink, X, Check, ShieldCheck, Sparkles, Monitor, Tablet, Smartphone } from 'lucide-react'
 import { PORTFOLIO_ITEMS } from '../../data/siteData'
 import TiltCard from '../Motion/TiltCard'
 import ScrollReveal from '../Motion/ScrollReveal'
@@ -10,6 +10,7 @@ const CATEGORIES = ['All', 'Web Application', 'Education & Portal', 'Automobile 
 export default function Portfolio() {
   const [activeCategory, setActiveCategory] = useState('All')
   const [previewProject, setPreviewProject] = useState(null)
+  const [deviceView, setDeviceView] = useState('desktop')
 
   const filteredItems = activeCategory === 'All'
     ? PORTFOLIO_ITEMS
@@ -185,13 +186,113 @@ export default function Portfolio() {
 
                 {/* Modal Body */}
                 <div className="p-4 sm:p-6 overflow-y-auto flex flex-col gap-4 sm:gap-6">
-                  {/* Large High-Res Image Preview */}
-                  <div className="rounded-xl overflow-hidden border border-[#E5EAF1] shadow-soft max-h-[260px] sm:max-h-[360px]">
-                    <img
-                      src={previewProject.image}
-                      alt={`${previewProject.title} — ${previewProject.category} case study showcase by NEXORA DIGITAL`}
-                      className="w-full h-full object-cover object-top"
-                    />
+                  {/* Device Mockup Switcher Toolbar */}
+                  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2.5 bg-[#F8FAFC] p-2.5 rounded-xl border border-[#E5EAF1]">
+                    <div className="flex items-center gap-2 text-xs">
+                      <span className="text-[11px] uppercase tracking-wider text-[#6B7280] font-bold">Preview Viewport:</span>
+                      <span className="capitalize text-[#0066FF] font-bold bg-blue-50 px-2 py-0.5 rounded border border-blue-100">
+                        {deviceView} Mockup
+                      </span>
+                    </div>
+                    <div className="inline-flex items-center p-1 bg-white rounded-lg border border-[#E5EAF1] shadow-xs gap-1 self-start sm:self-auto">
+                      <button
+                        type="button"
+                        onClick={() => setDeviceView('desktop')}
+                        className={`flex items-center gap-1.5 px-3 py-1 rounded-md text-xs font-semibold transition-all cursor-pointer ${
+                          deviceView === 'desktop'
+                            ? 'bg-[#0066FF] text-white shadow-xs'
+                            : 'text-[#4B5563] hover:text-[#0B1020] hover:bg-gray-100'
+                        }`}
+                      >
+                        <Monitor size={13} />
+                        <span>Desktop</span>
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => setDeviceView('tablet')}
+                        className={`flex items-center gap-1.5 px-3 py-1 rounded-md text-xs font-semibold transition-all cursor-pointer ${
+                          deviceView === 'tablet'
+                            ? 'bg-[#0066FF] text-white shadow-xs'
+                            : 'text-[#4B5563] hover:text-[#0B1020] hover:bg-gray-100'
+                        }`}
+                      >
+                        <Tablet size={13} />
+                        <span>Tablet</span>
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => setDeviceView('mobile')}
+                        className={`flex items-center gap-1.5 px-3 py-1 rounded-md text-xs font-semibold transition-all cursor-pointer ${
+                          deviceView === 'mobile'
+                            ? 'bg-[#0066FF] text-white shadow-xs'
+                            : 'text-[#4B5563] hover:text-[#0B1020] hover:bg-gray-100'
+                        }`}
+                      >
+                        <Smartphone size={13} />
+                        <span>Mobile</span>
+                      </button>
+                    </div>
+                  </div>
+
+                  {/* High-Res Device Mockup Frame */}
+                  <div className="w-full flex justify-center items-center py-1">
+                    {deviceView === 'desktop' && (
+                      <div className="w-full rounded-xl overflow-hidden border border-[#E5EAF1] shadow-soft bg-[#0B1020] transition-all duration-300">
+                        {/* Browser Chrome Header */}
+                        <div className="bg-[#1E293B] px-3 py-2 flex items-center justify-between border-b border-gray-700/50">
+                          <div className="flex items-center gap-1.5">
+                            <span className="w-2.5 h-2.5 rounded-full bg-rose-500/80 inline-block" />
+                            <span className="w-2.5 h-2.5 rounded-full bg-amber-500/80 inline-block" />
+                            <span className="w-2.5 h-2.5 rounded-full bg-emerald-500/80 inline-block" />
+                          </div>
+                          <div className="px-3 py-0.5 rounded-md bg-[#0B1020]/60 text-[10px] text-gray-300 font-mono truncate max-w-[200px] sm:max-w-[320px] border border-gray-700/40">
+                            https://nexoradigital.com/showcase/{previewProject.title.toLowerCase().replace(/[^a-z0-9]+/g, '-')}
+                          </div>
+                          <div className="w-12 text-right">
+                            <span className="text-[9px] font-mono text-emerald-400 bg-emerald-500/10 px-1.5 py-0.5 rounded border border-emerald-500/20">SSL 256</span>
+                          </div>
+                        </div>
+                        <div className="max-h-[260px] sm:max-h-[360px] overflow-hidden bg-white">
+                          <img
+                            src={previewProject.image}
+                            alt={`${previewProject.title} — ${previewProject.category} desktop showcase`}
+                            className="w-full h-full object-cover object-top"
+                          />
+                        </div>
+                      </div>
+                    )}
+
+                    {deviceView === 'tablet' && (
+                      <div className="w-full max-w-[480px] rounded-2xl p-2.5 bg-[#0F172A] border-2 border-gray-700/70 shadow-xl transition-all duration-300">
+                        <div className="w-8 h-1 bg-gray-600 rounded-full mx-auto mb-2 opacity-60" />
+                        <div className="rounded-xl overflow-hidden max-h-[280px] sm:max-h-[340px] bg-white border border-gray-200">
+                          <img
+                            src={previewProject.image}
+                            alt={`${previewProject.title} — Tablet mockup showcase`}
+                            className="w-full h-full object-cover object-top"
+                          />
+                        </div>
+                        <div className="w-3 h-3 rounded-full border border-gray-600 mx-auto mt-2 opacity-60" />
+                      </div>
+                    )}
+
+                    {deviceView === 'mobile' && (
+                      <div className="w-[260px] sm:w-[280px] rounded-[32px] p-2.5 bg-[#0F172A] border-4 border-gray-800 shadow-2xl relative transition-all duration-300">
+                        {/* Dynamic Island Notch */}
+                        <div className="w-20 h-3.5 bg-black rounded-full mx-auto mb-2 flex items-center justify-center gap-1.5">
+                          <span className="w-1.5 h-1.5 rounded-full bg-blue-500/60" />
+                          <span className="w-1.5 h-1.5 rounded-full bg-gray-700" />
+                        </div>
+                        <div className="rounded-[20px] overflow-hidden max-h-[300px] sm:max-h-[320px] bg-white border border-gray-200">
+                          <img
+                            src={previewProject.image}
+                            alt={`${previewProject.title} — Mobile device showcase`}
+                            className="w-full h-full object-cover object-top"
+                          />
+                        </div>
+                        <div className="w-24 h-1 bg-gray-500 rounded-full mx-auto mt-2 opacity-80" />
+                      </div>
+                    )}
                   </div>
 
                   {/* Highlights Grid */}
