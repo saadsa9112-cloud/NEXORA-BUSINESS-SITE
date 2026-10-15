@@ -5,11 +5,12 @@ import ScrollReveal from '../Motion/ScrollReveal'
 
 const CORPORATE_BLUE_THEME = {
   gradient: 'from-[#0066FF] via-[#1F90FF] to-blue-400',
-  badgeBg: 'bg-blue-50 text-[#0066FF] border-blue-200',
-  activeBtn: 'bg-blue-50/90 border-[#0066FF] text-[#0066FF] ring-1 ring-[#0066FF]',
+  badgeBg: 'bg-blue-50 dark:bg-blue-500/15 text-[#0066FF] dark:text-[#38BDF8] border-blue-200 dark:border-blue-500/30',
+  activeBtn: 'bg-[#0066FF] text-white border-[#0066FF] shadow-md shadow-blue-500/20 ring-1 ring-[#0066FF]',
+  activeRow: 'bg-blue-50/90 dark:bg-blue-500/15 border-[#0066FF] dark:border-blue-400 text-[#0066FF] dark:text-[#38BDF8] ring-1 ring-[#0066FF]',
   activeCheckbox: 'bg-[#0066FF] border-[#0066FF]',
-  actionBtn: 'bg-[#0066FF] hover:bg-[#0052CC] shadow-blue-500/20',
-  totalText: 'text-[#0066FF]',
+  actionBtn: 'bg-[#0066FF] hover:bg-[#0052CC] shadow-blue-500/20 text-white',
+  totalText: 'text-[#0066FF] dark:text-[#38BDF8]',
 }
 
 const DOMAIN_CONFIGS = {
@@ -355,7 +356,7 @@ export default function CostEstimator({ currency = 'PKR', setCurrency }) {
 
   return (
     <ScrollReveal variant="fadeUp" className="mt-16 mb-8 max-w-4xl mx-auto">
-      <div className="p-6 sm:p-8 rounded-2xl bg-white border border-[#E5EAF1] shadow-soft relative overflow-hidden transition-all duration-300">
+      <div className="p-6 sm:p-8 rounded-2xl bg-white dark:bg-[#0B1020] border border-[#E5EAF1] dark:border-white/10 shadow-soft relative overflow-hidden transition-all duration-300">
         {/* Unified Corporate Blue Theme Accent Line */}
         <div className={`absolute top-0 left-0 right-0 h-1.5 bg-gradient-to-r ${CORPORATE_BLUE_THEME.gradient}`} />
 
@@ -366,12 +367,12 @@ export default function CostEstimator({ currency = 'PKR', setCurrency }) {
               <IconComponent size={13} />
               <span>{domain.estimatorTitle}</span>
             </div>
-            <h3 className="text-2xl font-bold text-[#0B1020]">Project Scope &amp; Budget Calculator</h3>
-            <p className="text-sm text-[#4B5563]">{domain.subtitle}</p>
+            <h3 className="text-2xl font-bold text-[#0B1020] dark:text-white">Project Scope &amp; Budget Calculator</h3>
+            <p className="text-sm text-[#4B5563] dark:text-slate-300">{domain.subtitle}</p>
           </div>
 
-          <div className="bg-[#F8FAFC] p-4 rounded-xl border border-[#E5EAF1] text-right flex sm:flex-col justify-between items-baseline sm:items-end">
-            <span className="text-[10px] text-[#6B7280] font-bold uppercase tracking-wider">Estimated Investment</span>
+          <div className="bg-[#F8FAFC] dark:bg-[#131B2E] p-4 rounded-xl border border-[#E5EAF1] dark:border-white/10 text-right flex sm:flex-col justify-between items-baseline sm:items-end">
+            <span className="text-[10px] text-[#6B7280] dark:text-slate-400 font-bold uppercase tracking-wider">Estimated Investment</span>
             <div className={`text-2xl font-black transition-colors duration-300 ${CORPORATE_BLUE_THEME.totalText}`}>
               {currencySymbol}{estimatedTotal.toLocaleString()}
             </div>
@@ -382,7 +383,7 @@ export default function CostEstimator({ currency = 'PKR', setCurrency }) {
         <div className="flex flex-col gap-6 mb-8">
           {/* 1. Solution Type Selector Buttons */}
           <div>
-            <label className="block text-xs font-bold uppercase tracking-wider text-[#0B1020] mb-3">
+            <label className="block text-xs font-bold uppercase tracking-wider text-[#0B1020] dark:text-white mb-3">
               1. SELECT WEBSITE TYPE
             </label>
             <div className="grid grid-cols-2 sm:grid-cols-5 gap-2.5">
@@ -397,17 +398,17 @@ export default function CostEstimator({ currency = 'PKR', setCurrency }) {
                     onClick={() => handleSelectService(item.id)}
                     className={`p-3 rounded-xl text-left border text-xs font-semibold transition-all duration-200 cursor-pointer flex flex-col justify-between ${
                       isSelected
-                        ? CORPORATE_BLUE_THEME.activeBtn
-                        : 'bg-white border-[#E5EAF1] text-[#4B5563] hover:border-gray-300 hover:bg-slate-50'
+                        ? 'bg-[#0066FF] text-white border-[#0066FF] shadow-md shadow-blue-500/20'
+                        : 'bg-white dark:bg-[#131B2E] border-[#E5EAF1] dark:border-white/10 text-[#4B5563] dark:text-slate-300 hover:border-gray-300 dark:hover:border-white/20 hover:bg-slate-50 dark:hover:bg-white/5'
                     }`}
                   >
                     <div>
                       <div className="flex items-center gap-1.5 mb-1.5">
-                        <ItemIcon size={14} className={isSelected ? 'text-current' : 'text-slate-400'} />
-                        <span className="font-bold text-[#0B1020] leading-snug truncate">{item.name}</span>
+                        <ItemIcon size={14} className={isSelected ? 'text-white' : 'text-[#0066FF] dark:text-[#38BDF8]'} />
+                        <span className={`font-bold leading-snug truncate ${isSelected ? 'text-white' : 'text-[#0B1020] dark:text-white'}`}>{item.name}</span>
                       </div>
                     </div>
-                    <div className="text-[10px] text-[#6B7280]">
+                    <div className={`text-[10px] ${isSelected ? 'text-blue-100' : 'text-[#6B7280] dark:text-slate-400'}`}>
                       From {currencySymbol}{baseVal.toLocaleString()}
                     </div>
                   </button>
@@ -420,7 +421,7 @@ export default function CostEstimator({ currency = 'PKR', setCurrency }) {
           <div className="grid sm:grid-cols-2 gap-6 pt-2">
             {/* 2. Scope Options (Tailored per domain) */}
             <div>
-              <label className="block text-xs font-bold uppercase tracking-wider text-[#0B1020] mb-3">
+              <label className="block text-xs font-bold uppercase tracking-wider text-[#0B1020] dark:text-white mb-3">
                 {domain.scopeLabel}
               </label>
               <div className="flex flex-col gap-2">
@@ -433,12 +434,12 @@ export default function CostEstimator({ currency = 'PKR', setCurrency }) {
                       onClick={() => setSelectedScopeId(opt.id)}
                       className={`p-3.5 rounded-xl flex items-center justify-between border text-xs font-semibold transition-all duration-200 cursor-pointer ${
                         isSelected
-                          ? CORPORATE_BLUE_THEME.activeBtn
-                          : 'bg-white border-[#E5EAF1] text-[#4B5563] hover:border-gray-300 hover:bg-slate-50'
+                          ? 'bg-blue-50/90 dark:bg-blue-500/15 border-[#0066FF] dark:border-blue-400 text-[#0066FF] dark:text-[#38BDF8] ring-1 ring-[#0066FF]'
+                          : 'bg-white dark:bg-[#131B2E] border-[#E5EAF1] dark:border-white/10 text-[#4B5563] dark:text-slate-300 hover:border-gray-300 dark:hover:border-white/20 hover:bg-slate-50 dark:hover:bg-white/5'
                       }`}
                     >
-                      <span className="font-bold text-[#0B1020] pr-2 text-left">{opt.name}</span>
-                      <span className="text-[10px] text-[#6B7280] whitespace-nowrap">
+                      <span className={`font-bold pr-2 text-left ${isSelected ? 'text-[#0066FF] dark:text-[#38BDF8]' : 'text-[#0B1020] dark:text-white'}`}>{opt.name}</span>
+                      <span className={`text-[10px] whitespace-nowrap ${isSelected ? 'text-[#0066FF] dark:text-[#38BDF8] font-bold' : 'text-[#6B7280] dark:text-slate-400'}`}>
                         {opt.addOn === 0 ? 'Included in Base Price' : `+ ${currencySymbol}${opt.addOn.toLocaleString()}`}
                       </span>
                     </button>
@@ -449,7 +450,7 @@ export default function CostEstimator({ currency = 'PKR', setCurrency }) {
 
             {/* 3. Add-on Services (Tailored per domain) */}
             <div>
-              <label className="block text-xs font-bold uppercase tracking-wider text-[#0B1020] mb-3">
+              <label className="block text-xs font-bold uppercase tracking-wider text-[#0B1020] dark:text-white mb-3">
                 {domain.addonLabel}
               </label>
               <div className="flex flex-col gap-2">
@@ -462,19 +463,19 @@ export default function CostEstimator({ currency = 'PKR', setCurrency }) {
                       onClick={() => toggleAddon(addon.id)}
                       className={`p-3 rounded-xl flex items-center justify-between border text-xs font-semibold transition-all duration-200 cursor-pointer ${
                         isSelected
-                          ? CORPORATE_BLUE_THEME.activeBtn
-                          : 'bg-white border-[#E5EAF1] text-[#4B5563] hover:border-gray-300 hover:bg-slate-50'
+                          ? 'bg-blue-50/90 dark:bg-blue-500/15 border-[#0066FF] dark:border-blue-400 text-[#0066FF] dark:text-[#38BDF8] ring-1 ring-[#0066FF]'
+                          : 'bg-white dark:bg-[#131B2E] border-[#E5EAF1] dark:border-white/10 text-[#4B5563] dark:text-slate-300 hover:border-gray-300 dark:hover:border-white/20 hover:bg-slate-50 dark:hover:bg-white/5'
                       }`}
                     >
                       <div className="flex items-center gap-2 pr-2 text-left">
                         <div className={`w-4 h-4 rounded border flex items-center justify-center flex-shrink-0 transition-colors ${
-                          isSelected ? `${CORPORATE_BLUE_THEME.activeCheckbox} text-white` : 'border-slate-300 bg-white'
+                          isSelected ? `${CORPORATE_BLUE_THEME.activeCheckbox} text-white` : 'border-slate-300 dark:border-slate-600 bg-white dark:bg-[#0B1020]'
                         }`}>
                           {isSelected && <Check size={10} />}
                         </div>
-                        <span className="font-semibold text-[#0B1020]">{addon.name}</span>
+                        <span className={`font-semibold ${isSelected ? 'text-[#0066FF] dark:text-[#38BDF8]' : 'text-[#0B1020] dark:text-white'}`}>{addon.name}</span>
                       </div>
-                      <span className="text-[10px] text-[#6B7280] whitespace-nowrap">+{currencySymbol}{addon.price.toLocaleString()}</span>
+                      <span className={`text-[10px] whitespace-nowrap ${isSelected ? 'text-[#0066FF] dark:text-[#38BDF8] font-bold' : 'text-[#6B7280] dark:text-slate-400'}`}>+{currencySymbol}{addon.price.toLocaleString()}</span>
                     </button>
                   )
                 })}
@@ -484,17 +485,17 @@ export default function CostEstimator({ currency = 'PKR', setCurrency }) {
         </div>
 
         {/* Action Button */}
-        <div className="pt-5 border-t border-[#F1F5F9] flex flex-col sm:flex-row items-center justify-between gap-4">
-          <p className="text-xs text-[#6B7280]">
-            Selected service: <strong className="text-[#0B1020]">{domain.name}</strong> • Final quotation will be confirmed after reviewing your requirements.
+        <div className="pt-5 border-t border-[#F1F5F9] dark:border-white/10 flex flex-col sm:flex-row items-center justify-between gap-4">
+          <p className="text-xs text-[#6B7280] dark:text-slate-400">
+            Selected service: <strong className="text-[#0B1020] dark:text-white">{domain.name}</strong> • Final quotation will be confirmed after reviewing your requirements.
           </p>
           <div className="flex items-center gap-2.5 w-full sm:w-auto">
             <button
               type="button"
               onClick={handleExportPdf}
-              className="w-1/2 sm:w-auto py-3.5 px-4 bg-slate-100 hover:bg-slate-200 text-[#0B1020] border border-[#E5EAF1] text-xs font-bold rounded-xl flex items-center justify-center gap-1.5 transition-all cursor-pointer"
+              className="w-1/2 sm:w-auto py-3.5 px-4 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-[#0B1020] dark:text-white border border-[#E5EAF1] dark:border-white/15 text-xs font-bold rounded-xl flex items-center justify-center gap-1.5 transition-all cursor-pointer shadow-2xs"
             >
-              <FileText size={14} className="text-[#0066FF]" />
+              <FileText size={14} className="text-[#0066FF] dark:text-[#38BDF8]" />
               <span>Export PDF Proposal</span>
             </button>
             <button

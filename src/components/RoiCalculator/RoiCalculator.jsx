@@ -35,27 +35,27 @@ export default function RoiCalculator() {
   }
 
   return (
-    <section id="roi" aria-labelledby="roi-heading" className="py-20 lg:py-28 bg-white border-y border-[#E5EAF1] relative">
+    <section id="roi" aria-labelledby="roi-heading" className="py-20 lg:py-28 bg-white dark:bg-[#05070D] border-y border-[#E5EAF1] dark:border-white/10 relative transition-colors duration-300">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         
-        <ScrollReveal variant="fadeUp" className="max-w-4xl mx-auto bg-[#F8FAFC] border border-[#E5EAF1] rounded-3xl p-6 sm:p-10 shadow-xl">
+        <ScrollReveal variant="fadeUp" className="max-w-4xl mx-auto bg-[#F8FAFC] dark:bg-[#0B1020]/80 border border-[#E5EAF1] dark:border-white/10 rounded-3xl p-6 sm:p-10 shadow-xl transition-colors">
           
           <div className="text-center max-w-2xl mx-auto mb-8">
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-50 border border-blue-200 text-[#0066FF] text-xs font-bold uppercase tracking-wider mb-3">
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-50 dark:bg-blue-500/10 border border-blue-200 dark:border-blue-500/30 text-[#0066FF] dark:text-blue-400 text-xs font-bold uppercase tracking-wider mb-3">
               <Calculator size={14} />
               <span>Simple ROI &amp; Revenue Growth Estimator</span>
             </div>
-            <h3 className="text-2xl sm:text-3xl font-black text-[#0B1020]">
+            <h3 className="text-2xl sm:text-3xl font-black text-[#0B1020] dark:text-white">
               Calculate Your Website's Revenue Growth Potential
             </h3>
-            <p className="text-xs sm:text-sm text-[#4B5563] mt-2">
+            <p className="text-xs sm:text-sm text-[#4B5563] dark:text-gray-300 mt-2">
               Adjust the manual inputs below to calculate your exact projected monthly &amp; annual revenue gains with NEXORA high-speed architecture.
             </p>
           </div>
 
           {/* Currency Switcher */}
           <div className="flex justify-center items-center gap-2 mb-8">
-            <span className="text-xs font-bold text-gray-500 uppercase tracking-wider">Currency:</span>
+            <span className="text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider">Currency:</span>
             {Object.keys(CURRENCY_SYMBOLS).map((curr) => (
               <button
                 key={curr}
@@ -64,7 +64,7 @@ export default function RoiCalculator() {
                 className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer ${
                   currency === curr
                     ? 'bg-[#0066FF] text-white shadow-md'
-                    : 'bg-white border border-[#E5EAF1] text-gray-600 hover:bg-gray-50'
+                    : 'bg-white dark:bg-white/5 border border-[#E5EAF1] dark:border-white/10 text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-white/10'
                 }`}
               >
                 {curr}
@@ -73,12 +73,12 @@ export default function RoiCalculator() {
           </div>
 
           {/* Manual Input Controls */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8 bg-white p-6 rounded-2xl border border-[#E5EAF1]">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8 bg-white dark:bg-[#0B1020] p-6 rounded-2xl border border-[#E5EAF1] dark:border-white/10">
             
             {/* 1. Monthly Website Visitors */}
             <div>
               <div className="flex justify-between items-center mb-1">
-                <label className="text-xs font-bold text-[#0B1020]">Monthly Website Visitors</label>
+                <label className="text-xs font-bold text-[#0B1020] dark:text-white">Monthly Website Visitors</label>
                 <span className="text-xs font-bold text-[#0066FF] font-mono">{formatNumber(monthlyVisitors)} visitors</span>
               </div>
               <input
@@ -100,7 +100,7 @@ export default function RoiCalculator() {
             {/* 2. Current Conversion Rate % */}
             <div>
               <div className="flex justify-between items-center mb-1">
-                <label className="text-xs font-bold text-[#0B1020]">Current Conversion Rate (%)</label>
+                <label className="text-xs font-bold text-[#0B1020] dark:text-white">Current Conversion Rate (%)</label>
                 <span className="text-xs font-bold text-[#0066FF] font-mono">{currentConversionRate}%</span>
               </div>
               <input
@@ -122,7 +122,7 @@ export default function RoiCalculator() {
             {/* 3. Average Order / Deal Value */}
             <div>
               <div className="flex justify-between items-center mb-1">
-                <label className="text-xs font-bold text-[#0B1020]">Average Deal / Order Value ({symbol})</label>
+                <label className="text-xs font-bold text-[#0B1020] dark:text-white">Average Deal / Order Value ({symbol})</label>
               </div>
               <div className="relative">
                 <span className="absolute left-3 top-1/2 -translate-y-1/2 text-xs font-bold text-gray-400">{symbol}</span>
@@ -130,7 +130,7 @@ export default function RoiCalculator() {
                   type="number"
                   value={averageDealValue}
                   onChange={(e) => setAverageDealValue(Number(e.target.value) || 0)}
-                  className="w-full pl-10 pr-3 py-2 bg-gray-50 border border-[#E5EAF1] rounded-xl text-xs font-bold text-[#0B1020] focus:outline-none focus:border-[#0066FF]"
+                  className="w-full pl-10 pr-3 py-2 bg-gray-50 dark:bg-black/50 border border-[#E5EAF1] dark:border-white/15 rounded-xl text-xs font-bold text-[#0B1020] dark:text-white focus:outline-none focus:border-[#0066FF]"
                 />
               </div>
             </div>
@@ -138,8 +138,8 @@ export default function RoiCalculator() {
             {/* 4. NEXORA Speed Uplift Target % */}
             <div>
               <div className="flex justify-between items-center mb-1">
-                <label className="text-xs font-bold text-[#0B1020]">NEXORA Speed &amp; UI Uplift (+%)</label>
-                <span className="text-xs font-bold text-green-600 font-mono">+{targetUpliftRate}%</span>
+                <label className="text-xs font-bold text-[#0B1020] dark:text-white">NEXORA Speed &amp; UI Uplift (+%)</label>
+                <span className="text-xs font-bold text-green-600 dark:text-green-400 font-mono">+{targetUpliftRate}%</span>
               </div>
               <input
                 type="range"

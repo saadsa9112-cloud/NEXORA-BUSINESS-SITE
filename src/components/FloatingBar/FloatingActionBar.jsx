@@ -30,14 +30,14 @@ export default function FloatingActionBar() {
           transition={{ type: 'spring', stiffness: 350, damping: 25 }}
           className="hidden sm:block fixed bottom-6 left-1/2 z-40 w-auto max-w-sm"
         >
-          <div className="bg-white/95 backdrop-blur-md border border-[#E5EAF1] shadow-2xl rounded-2xl px-2.5 py-2 sm:px-4 sm:py-2.5 flex items-center gap-2 text-xs font-semibold">
+          <div className="bg-white/95 dark:bg-[#0B1020]/95 backdrop-blur-md border border-[#E5EAF1] dark:border-white/10 shadow-2xl rounded-2xl px-2.5 py-2 sm:px-4 sm:py-2.5 flex items-center gap-2 text-xs font-semibold">
             {/* Status indicator — desktop only */}
-            <div className="hidden sm:flex items-center gap-2 pr-2 border-r border-[#E5EAF1]">
+            <div className="hidden sm:flex items-center gap-2 pr-2 border-r border-[#E5EAF1] dark:border-white/10">
               <span className="relative flex h-2.5 w-2.5">
                 <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" />
                 <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald-500" />
               </span>
-              <span className="text-[11px] text-[#0B1020] font-bold">Online</span>
+              <span className="text-[11px] text-[#0B1020] dark:text-white font-bold">Online</span>
             </div>
 
             {/* Quick Actions */}

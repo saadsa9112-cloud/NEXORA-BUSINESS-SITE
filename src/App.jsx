@@ -262,7 +262,7 @@ export default function App() {
 
       {/* Clean Single Page Body or Dedicated AI Tools Page */}
       {isAiToolsPage ? (
-        <main id="main-content">
+        <main id="main-content" className="bg-[#F7F9FC] dark:bg-[#05070D] min-h-screen transition-colors duration-300">
           <Suspense fallback={<div className="min-h-screen flex items-center justify-center text-sm text-gray-500 font-mono">Loading AI Tools Suite...</div>}>
             <AiToolsPage
               onOpenContact={() => {
