@@ -116,10 +116,10 @@ export default function Navbar() {
         <LaunchBanner />
 
         {/* Main Navbar Bar */}
-        <div className={`transition-colors duration-300 ${
+        <div className={`transition-all duration-300 bg-white/95 backdrop-blur-md border-b text-[#0B1020] dark:bg-[#05070D]/95 dark:border-white/10 dark:text-white ${
           scrolled
-            ? 'bg-[#05070D]/95 backdrop-blur-md border-b border-white/10 shadow-lg shadow-black/20 text-white'
-            : 'bg-white/95 backdrop-blur-md border-b border-[#E5EAF1] shadow-xs text-[#0B1020] dark:bg-[#05070D]/95 dark:border-white/10 dark:text-white'
+            ? 'border-[#E5EAF1] shadow-md shadow-slate-200/50 dark:shadow-black/40'
+            : 'border-[#E5EAF1]/60 shadow-xs'
         }`}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16 lg:h-20">
@@ -145,11 +145,7 @@ export default function Navbar() {
                     onClick={(e) => { e.preventDefault(); handleNavClick(link.href) }}
                     className={`px-3.5 py-2 text-sm font-medium rounded-lg transition-all duration-200 ${
                       isActive
-                        ? scrolled
-                          ? 'text-[#3B82F6] font-bold bg-white/10 ring-1 ring-[#3B82F6]/30'
-                          : 'text-[#0066FF] font-bold bg-blue-50 ring-1 ring-[#0066FF]/20 dark:bg-white/10 dark:text-[#38BDF8]'
-                        : scrolled
-                        ? 'text-[#A7ADBB] hover:text-white hover:bg-white/5'
+                        ? 'text-[#0066FF] font-bold bg-blue-50 ring-1 ring-[#0066FF]/20 dark:bg-white/10 dark:text-[#38BDF8]'
                         : 'text-[#4B5563] hover:text-[#0B1020] hover:bg-gray-100 dark:text-slate-300 dark:hover:text-white dark:hover:bg-white/5'
                     }`}
                   >
@@ -166,11 +162,7 @@ export default function Navbar() {
                 type="button"
                 onClick={handleToggleTheme}
                 aria-label={`Switch to ${theme === 'dark' ? 'light' : 'dark'} mode`}
-                className={`flex items-center justify-center w-9 h-9 sm:w-10 sm:h-10 rounded-xl transition-all duration-200 border cursor-pointer ${
-                  scrolled
-                    ? 'border-white/10 bg-white/5 text-amber-400 hover:bg-white/10'
-                    : 'border-[#E5EAF1] bg-white text-slate-700 hover:bg-gray-100 hover:text-black dark:border-white/10 dark:bg-white/5 dark:text-amber-400'
-                }`}
+                className="flex items-center justify-center w-9 h-9 sm:w-10 sm:h-10 rounded-xl transition-all duration-200 border border-[#E5EAF1] bg-white text-slate-700 hover:bg-gray-100 hover:text-black dark:border-white/10 dark:bg-white/5 dark:text-amber-400 cursor-pointer"
                 title={`Switch to ${theme === 'dark' ? 'Light' : 'Dark'} Mode`}
               >
                 {theme === 'dark' ? <Sun size={17} className="text-amber-400" /> : <Moon size={17} className="text-slate-700" />}
@@ -191,9 +183,7 @@ export default function Navbar() {
                 aria-label={mobileOpen ? 'Close menu' : 'Open menu'}
                 aria-expanded={mobileOpen}
                 onClick={() => setMobileOpen((v) => !v)}
-                className={`lg:hidden flex items-center justify-center w-9 h-9 sm:w-10 sm:h-10 rounded-lg transition-all duration-200 ${
-                  scrolled ? 'text-white hover:bg-white/10' : 'text-[#0B1020] hover:bg-gray-100'
-                }`}
+                className="lg:hidden flex items-center justify-center w-9 h-9 sm:w-10 sm:h-10 rounded-lg transition-all duration-200 text-[#0B1020] hover:bg-gray-100 dark:text-white dark:hover:bg-white/10"
               >
                 {mobileOpen ? <X size={20} /> : <Menu size={20} />}
               </button>

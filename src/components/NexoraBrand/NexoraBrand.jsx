@@ -2,7 +2,6 @@ import nexoraIconMark from '../../assets/nexora-icon-mark.png'
 
 export default function NexoraBrand({ variant = 'navbar', isScrolled = false, className = '' }) {
   const isFooter = variant === 'footer'
-  const isDarkNavbar = isFooter || isScrolled
 
   return (
     <div className={`inline-flex items-center gap-3 select-none ${className}`}>
@@ -23,9 +22,7 @@ export default function NexoraBrand({ variant = 'navbar', isScrolled = false, cl
           {/* NEXORA - Uppercase Text */}
           <span
             className={`font-black tracking-wider uppercase font-sans transition-colors duration-300 ${
-              isDarkNavbar ? 'text-white' : 'text-[#0B1020] dark:text-white'
-            } ${
-              isFooter ? 'text-2xl sm:text-3xl' : 'text-[19px] sm:text-[20px]'
+              isFooter ? 'text-white text-2xl sm:text-3xl' : 'text-[#0B1020] dark:text-white text-[19px] sm:text-[20px]'
             }`}
             style={{ letterSpacing: '0.05em' }}
           >
@@ -35,7 +32,7 @@ export default function NexoraBrand({ variant = 'navbar', isScrolled = false, cl
           {/* BY HMS Tag */}
           <span
             className={`font-extrabold uppercase px-1.5 py-0.5 rounded text-[8px] sm:text-[9px] tracking-wider transition-colors duration-300 ${
-              isDarkNavbar
+              isFooter
                 ? 'bg-[#1F90FF]/15 text-[#1F90FF] border border-[#1F90FF]/30'
                 : 'bg-blue-50 text-[#0066FF] border border-blue-500/20 dark:bg-[#1F90FF]/15 dark:text-[#38BDF8] dark:border-[#1F90FF]/30'
             }`}
