@@ -38,10 +38,14 @@
     <meta property="twitter:image" content="https://nexorabyhms.netlify.app/nexora-logo.png" />
     <meta property="twitter:image:alt" content="NEXORA DIGITAL — Web Development, Shopify &amp; SEO Agency" />
 
-    <!-- Fonts -->
+    <!-- Optimized Non-Blocking Fonts for Core Web Vitals (FCP / LCP) -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
+    <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" media="print" onload="this.media='all'" />
+    <noscript>
+      <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" />
+    </noscript>
 
     <!-- Schema.org Structured Data -->
     <script type="application/ld+json">

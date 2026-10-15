@@ -20,29 +20,29 @@ export default function Pricing({ currency: propCurrency, setCurrency: propSetCu
   }
 
   return (
-    <section id="pricing" aria-labelledby="pricing-heading" className="py-20 lg:py-28 bg-[#F7F9FC]">
+    <section id="pricing" aria-labelledby="pricing-heading" className="py-20 lg:py-28 bg-[#F7F9FC] dark:bg-[#05070D] transition-colors duration-300">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
         <ScrollReveal variant="fadeUp" className="max-w-2xl mx-auto text-center mb-12">
-          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full border border-blue-500/20 bg-blue-50 text-[#0066FF] mb-4">
+          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full border border-blue-500/20 dark:border-blue-500/30 bg-blue-50 dark:bg-blue-500/10 text-[#0066FF] dark:text-[#38BDF8] mb-4">
             <span className="text-xs font-semibold tracking-wider uppercase">Investment &amp; Pricing Architecture</span>
           </div>
-          <h2 id="pricing-heading" className="text-3xl sm:text-4xl lg:text-5xl font-black text-[#0B1020] leading-tight tracking-tight mb-4">
+          <h2 id="pricing-heading" className="text-3xl sm:text-4xl lg:text-5xl font-black text-[#0B1020] dark:text-white leading-tight tracking-tight mb-4">
             Transparent. Scalable. <span className="text-gradient-blue">Value-Driven.</span>
           </h2>
-          <p className="text-[#4B5563] text-base sm:text-lg leading-relaxed mb-6">
+          <p className="text-[#4B5563] dark:text-slate-300 text-base sm:text-lg leading-relaxed mb-6">
             Clear investment structures tailored for domestic enterprises and global international organizations.
           </p>
 
           {/* Dual Currency Switcher Toggle */}
-          <div className="inline-flex items-center p-1.5 rounded-2xl bg-white border border-[#E5EAF1] shadow-xs">
+          <div className="inline-flex items-center p-1.5 rounded-2xl bg-white dark:bg-[#0B1020] border border-[#E5EAF1] dark:border-white/10 shadow-xs">
             <button
               type="button"
               onClick={() => setCurrency('PKR')}
               className={`px-4 py-2 rounded-xl text-xs font-bold transition-all duration-200 cursor-pointer ${
                 currency === 'PKR'
                   ? 'bg-[#0066FF] text-white shadow-md shadow-blue-500/20'
-                  : 'text-[#4B5563] hover:text-[#0B1020]'
+                  : 'text-[#4B5563] dark:text-slate-400 hover:text-[#0B1020] dark:hover:text-white'
               }`}
             >
               🇵🇰 PKR (Domestic)
@@ -53,7 +53,7 @@ export default function Pricing({ currency: propCurrency, setCurrency: propSetCu
               className={`px-4 py-2 rounded-xl text-xs font-bold transition-all duration-200 cursor-pointer ${
                 currency === 'USD'
                   ? 'bg-[#0066FF] text-white shadow-md shadow-blue-500/20'
-                  : 'text-[#4B5563] hover:text-[#0B1020]'
+                  : 'text-[#4B5563] dark:text-slate-400 hover:text-[#0B1020] dark:hover:text-white'
               }`}
             >
               🇺🇸 USD (Global Clients)
@@ -74,8 +74,8 @@ export default function Pricing({ currency: propCurrency, setCurrency: propSetCu
                 glowColor={plan.highlight ? 'rgba(0, 102, 255, 0.22)' : 'rgba(0, 102, 255, 0.1)'}
                 className={`group relative flex flex-col p-6 rounded-2xl border transition-all duration-300 h-full ${
                   plan.highlight
-                    ? 'bg-white border-[#0066FF] shadow-lg shadow-blue-500/15 ring-2 ring-[#0066FF]/20'
-                    : 'bg-white border-[#E5EAF1] shadow-soft hover:shadow-xl hover:border-blue-300'
+                    ? 'bg-white dark:bg-[#0B1020] border-[#0066FF] dark:border-blue-500 shadow-lg shadow-blue-500/15 ring-2 ring-[#0066FF]/20'
+                    : 'bg-white dark:bg-[#0B1020] border-[#E5EAF1] dark:border-white/10 shadow-soft hover:shadow-xl hover:border-blue-300 dark:hover:border-blue-500/40'
                 }`}
               >
                 {/* Recommended Badge */}
@@ -88,31 +88,31 @@ export default function Pricing({ currency: propCurrency, setCurrency: propSetCu
                 )}
 
                 {/* Plan title */}
-                <h3 className="text-[#0B1020] font-bold text-lg mb-1">{plan.title}</h3>
+                <h3 className="text-[#0B1020] dark:text-white font-bold text-lg mb-1">{plan.title}</h3>
 
                 {/* Price */}
                 <div className="mb-4 mt-2">
-                  <div className="text-[10px] text-[#6B7280] font-semibold uppercase tracking-wider mb-1">{plan.note}</div>
+                  <div className="text-[10px] text-[#6B7280] dark:text-slate-400 font-semibold uppercase tracking-wider mb-1">{plan.note}</div>
                   <div className="flex items-baseline gap-1">
-                    <span className={`text-2xl font-black ${plan.highlight ? 'text-[#0066FF]' : 'text-[#0B1020]'}`}>
+                    <span className={`text-2xl font-black ${plan.highlight ? 'text-[#0066FF] dark:text-[#38BDF8]' : 'text-[#0B1020] dark:text-white'}`}>
                       {currency === 'USD' ? plan.priceUsd : plan.price}
                     </span>
                     {plan.period && (
-                      <span className="text-xs text-[#6B7280] font-medium">{plan.period}</span>
+                      <span className="text-xs text-[#6B7280] dark:text-slate-400 font-medium">{plan.period}</span>
                     )}
                   </div>
                 </div>
 
                 {/* Divider */}
-                <div className="w-full h-px bg-[#F1F5F9] mb-4" aria-hidden="true" />
+                <div className="w-full h-px bg-[#F1F5F9] dark:bg-white/10 mb-4" aria-hidden="true" />
 
                 {/* Features (Max 4 short features) */}
                 <ul className="flex flex-col gap-2.5 flex-1" role="list">
                   {plan.features.map((feature) => (
-                    <li key={feature} className="flex items-center gap-2.5 text-xs sm:text-sm text-[#4B5563]">
+                    <li key={feature} className="flex items-center gap-2.5 text-xs sm:text-sm text-[#4B5563] dark:text-slate-300">
                       <Check
                         size={14}
-                        className={`flex-shrink-0 ${plan.highlight ? 'text-[#0066FF]' : 'text-slate-400'}`}
+                        className={`flex-shrink-0 ${plan.highlight ? 'text-[#0066FF] dark:text-[#38BDF8]' : 'text-slate-400 dark:text-slate-500'}`}
                         aria-hidden="true"
                       />
                       <span>{feature}</span>
@@ -125,10 +125,10 @@ export default function Pricing({ currency: propCurrency, setCurrency: propSetCu
                   <MagneticButton onClick={scrollToContact} className="w-full">
                     <button
                       type="button"
-                      className={`w-full py-2.5 px-4 rounded-xl text-xs font-semibold transition-all duration-200 ${
+                      className={`w-full py-2.5 px-4 rounded-xl text-xs font-semibold transition-all duration-200 cursor-pointer ${
                         plan.highlight
                           ? 'bg-[#0066FF] hover:bg-[#0052CC] text-white shadow-md shadow-blue-500/20'
-                          : 'bg-slate-50 hover:bg-slate-100 text-[#0B1020] border border-[#E5EAF1]'
+                          : 'bg-slate-50 dark:bg-white/5 hover:bg-slate-100 dark:hover:bg-white/10 text-[#0B1020] dark:text-white border border-[#E5EAF1] dark:border-white/10'
                       }`}
                     >
                       Get a Custom Quote →

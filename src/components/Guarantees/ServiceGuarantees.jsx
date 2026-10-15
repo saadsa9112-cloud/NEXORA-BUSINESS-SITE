@@ -26,20 +26,20 @@ const GUARANTEES = [
 
 export default function ServiceGuarantees() {
   return (
-    <section className="py-16 bg-[#05070D] border-y border-white/10 text-white relative overflow-hidden">
+    <section className="py-16 bg-[#F8FAFC] dark:bg-[#05070D] border-y border-[#E5EAF1] dark:border-white/10 text-slate-900 dark:text-white relative overflow-hidden transition-colors duration-300">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         
         {/* Section Header */}
         <div className="text-center max-w-2xl mx-auto mb-10">
           <ScrollReveal variant="fadeUp">
-            <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-blue-500/10 border border-blue-500/30 text-blue-400 text-[11px] font-bold uppercase tracking-wider mb-2">
+            <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-blue-500/10 border border-blue-500/30 text-blue-600 dark:text-blue-400 text-[11px] font-bold uppercase tracking-wider mb-2">
               <Award size={13} />
               <span>International Agency SLA &amp; IP Protection</span>
             </div>
-            <h3 className="text-2xl sm:text-4xl font-black text-white tracking-tight">
+            <h3 className="text-2xl sm:text-4xl font-black text-[#0B1020] dark:text-white tracking-tight">
               Risk-Free Guarantees Included with Every Project
             </h3>
-            <p className="text-xs sm:text-sm text-gray-400 mt-2">
+            <p className="text-xs sm:text-sm text-[#4B5563] dark:text-slate-400 mt-2">
               Industry-standard legal code transfer, NDA privacy compliance, and performance benchmarks.
             </p>
           </ScrollReveal>
@@ -51,17 +51,17 @@ export default function ServiceGuarantees() {
             const Icon = g.icon
             return (
               <ScrollReveal key={g.title} variant="fadeUp" delay={idx * 0.1}>
-                <div className="p-6 rounded-2xl bg-[#0B1020] border border-white/10 hover:border-blue-500/50 transition-all duration-300 group hover:-translate-y-1 h-full flex flex-col justify-between">
+                <div className="p-6 rounded-2xl bg-white dark:bg-[#0B1020] border border-[#E5EAF1] dark:border-white/10 shadow-xs hover:shadow-lg hover:border-blue-500/50 transition-all duration-300 group hover:-translate-y-1 h-full flex flex-col justify-between">
                   <div>
-                    <div className="w-10 h-10 rounded-xl bg-blue-500/20 text-blue-400 border border-blue-500/30 flex items-center justify-center mb-4 group-hover:bg-[#0066FF] group-hover:text-white transition-colors">
+                    <div className="w-10 h-10 rounded-xl bg-blue-50 dark:bg-blue-500/20 text-[#0066FF] dark:text-blue-400 border border-blue-200 dark:border-blue-500/30 flex items-center justify-center mb-4 group-hover:bg-[#0066FF] group-hover:text-white transition-colors">
                       <Icon size={20} />
                     </div>
-                    <h4 className="text-sm font-bold text-white mb-1.5 flex items-center gap-1.5">
+                    <h4 className="text-sm font-bold text-[#0B1020] dark:text-white mb-1.5 flex items-center gap-1.5">
                       <span>{g.title}</span>
                     </h4>
-                    <p className="text-xs text-gray-400 leading-relaxed">{g.desc}</p>
+                    <p className="text-xs text-[#4B5563] dark:text-slate-400 leading-relaxed">{g.desc}</p>
                   </div>
-                  <div className="mt-4 pt-3 border-t border-white/10 flex items-center gap-1 text-[11px] text-green-400 font-semibold">
+                  <div className="mt-4 pt-3 border-t border-slate-100 dark:border-white/10 flex items-center gap-1 text-[11px] text-green-600 dark:text-green-400 font-semibold">
                     <CheckCircle2 size={13} />
                     <span>Included in Scope Contract</span>
                   </div>

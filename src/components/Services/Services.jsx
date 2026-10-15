@@ -71,26 +71,26 @@ export default function Services() {
   }
 
   return (
-    <section id="services" aria-labelledby="services-heading" className="py-20 lg:py-28 bg-[#F7F9FC] transition-colors duration-300">
+    <section id="services" aria-labelledby="services-heading" className="py-20 lg:py-28 bg-[#F7F9FC] dark:bg-[#05070D] transition-colors duration-300">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         
         {/* Header */}
         <ScrollReveal variant="fadeUp" className="max-w-3xl mb-8">
-          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full border border-blue-500/20 bg-blue-50 text-[#0066FF] mb-4">
+          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full border border-blue-500/20 dark:border-blue-500/30 bg-blue-50 dark:bg-blue-500/10 text-[#0066FF] dark:text-[#38BDF8] mb-4">
             <span className="text-xs font-semibold tracking-wider uppercase">Our Services</span>
           </div>
-          <h2 id="services-heading" className="text-3xl sm:text-4xl lg:text-5xl font-black text-[#0B1020] leading-tight tracking-tight mb-4">
+          <h2 id="services-heading" className="text-3xl sm:text-4xl lg:text-5xl font-black text-[#0B1020] dark:text-white leading-tight tracking-tight mb-4">
             Digital Services Built to<br className="hidden sm:block" />{' '}
             <span className="text-gradient-blue">Grow Your Business.</span>
           </h2>
-          <p className="text-[#4B5563] text-base sm:text-lg leading-relaxed max-w-2xl mb-6">
+          <p className="text-[#4B5563] dark:text-slate-300 text-base sm:text-lg leading-relaxed max-w-2xl mb-6">
             From custom website development to ongoing search optimization and maintenance, we provide end-to-end digital services tailored to your goals. Click any card to inspect full deliverables and SLAs.
           </p>
 
           {/* Targeted SEO Service Deep-Links */}
           <div className="flex items-center gap-2 flex-wrap pt-1">
-            <span className="text-[11px] font-bold text-[#6B7280] uppercase tracking-wider flex items-center gap-1">
-              <Compass size={13} className="text-[#0066FF]" /> Fast Track:
+            <span className="text-[11px] font-bold text-[#6B7280] dark:text-slate-400 uppercase tracking-wider flex items-center gap-1">
+              <Compass size={13} className="text-[#0066FF] dark:text-[#38BDF8]" /> Fast Track:
             </span>
             {SEO_QUICK_LINKS.map((link) => (
               <a
@@ -100,7 +100,7 @@ export default function Services() {
                   e.preventDefault()
                   window.location.hash = link.hash
                 }}
-                className="px-3 py-1 rounded-full text-xs font-semibold bg-white border border-[#E5EAF1] text-[#4B5563] hover:text-[#0066FF] hover:border-blue-400 hover:bg-blue-50/50 shadow-2xs transition-all duration-200 cursor-pointer"
+                className="px-3 py-1 rounded-full text-xs font-semibold bg-white dark:bg-[#0B1020] border border-[#E5EAF1] dark:border-white/10 text-[#4B5563] dark:text-slate-300 hover:text-[#0066FF] dark:hover:text-[#38BDF8] hover:border-blue-400 dark:hover:border-blue-500/40 hover:bg-blue-50/50 dark:hover:bg-white/5 shadow-2xs transition-all duration-200 cursor-pointer"
               >
                 {link.label}
               </a>
@@ -121,28 +121,28 @@ export default function Services() {
                 <TiltCard
                   maxTilt={5}
                   onClick={() => handleOpenService(service)}
-                  className="group relative flex flex-col p-6 rounded-2xl bg-white border border-[#E5EAF1] shadow-soft hover:shadow-xl hover:border-blue-400 transition-all duration-300 cursor-pointer h-full"
+                  className="group relative flex flex-col p-6 rounded-2xl bg-white dark:bg-[#0B1020] border border-[#E5EAF1] dark:border-white/10 shadow-soft hover:shadow-xl dark:shadow-black/40 hover:border-blue-400 dark:hover:border-blue-500/50 transition-all duration-300 cursor-pointer h-full"
                 >
                   {/* Info Badge */}
-                  <div className="absolute top-4 right-4 text-slate-300 group-hover:text-[#0066FF] transition-colors">
+                  <div className="absolute top-4 right-4 text-slate-300 dark:text-slate-600 group-hover:text-[#0066FF] dark:group-hover:text-[#38BDF8] transition-colors">
                     <Info size={16} />
                   </div>
 
                   {/* Icon */}
-                  <div className="w-12 h-12 rounded-xl bg-blue-50 text-[#0066FF] flex items-center justify-center mb-5 group-hover:bg-[#0066FF] group-hover:text-white group-hover:scale-110 group-hover:rotate-3 transition-all duration-300 shadow-xs">
+                  <div className="w-12 h-12 rounded-xl bg-blue-50 dark:bg-[#131B2E] text-[#0066FF] dark:text-[#38BDF8] flex items-center justify-center mb-5 group-hover:bg-[#0066FF] group-hover:text-white group-hover:scale-110 group-hover:rotate-3 transition-all duration-300 shadow-xs">
                     <Icon size={22} aria-hidden="true" />
                   </div>
 
                   {/* Content */}
-                  <h3 className="text-[#0B1020] font-bold text-base sm:text-lg mb-2 leading-snug group-hover:text-[#0066FF] transition-colors">{service.title}</h3>
-                  <p className="text-[#4B5563] text-sm leading-relaxed flex-1">{service.description}</p>
+                  <h3 className="text-[#0B1020] dark:text-white font-bold text-base sm:text-lg mb-2 leading-snug group-hover:text-[#0066FF] dark:group-hover:text-[#38BDF8] transition-colors">{service.title}</h3>
+                  <p className="text-[#4B5563] dark:text-slate-300 text-sm leading-relaxed flex-1">{service.description}</p>
 
                   {/* Link */}
-                  <div className="mt-5 pt-4 border-t border-[#F1F5F9] flex items-center justify-between">
-                    <span className="text-xs font-semibold text-[#0066FF] group-hover:text-[#0052CC] transition-colors duration-200 flex items-center gap-1.5">
+                  <div className="mt-5 pt-4 border-t border-[#F1F5F9] dark:border-white/10 flex items-center justify-between">
+                    <span className="text-xs font-semibold text-[#0066FF] dark:text-[#38BDF8] group-hover:text-[#0052CC] transition-colors duration-200 flex items-center gap-1.5">
                       View Scope &amp; Quote <ArrowRight size={13} className="group-hover:translate-x-1.5 transition-transform duration-200" aria-hidden="true" />
                     </span>
-                    <div className="w-1.5 h-1.5 rounded-full bg-[#0066FF] opacity-50 group-hover:scale-150 transition-transform duration-200" aria-hidden="true" />
+                    <div className="w-1.5 h-1.5 rounded-full bg-[#0066FF] dark:bg-[#38BDF8] opacity-50 group-hover:scale-150 transition-transform duration-200" aria-hidden="true" />
                   </div>
                 </TiltCard>
               </ScrollReveal>

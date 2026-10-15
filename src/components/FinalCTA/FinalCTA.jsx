@@ -13,20 +13,20 @@ export default function FinalCTA() {
   }
 
   return (
-    <section aria-labelledby="finalcta-heading" className="py-20 lg:py-28 bg-white border-t border-[#E5EAF1] relative overflow-hidden">
+    <section aria-labelledby="finalcta-heading" className="py-20 lg:py-28 bg-white dark:bg-[#070913] border-t border-[#E5EAF1] dark:border-white/10 relative overflow-hidden transition-colors duration-300">
       <div className="relative max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
         <ScrollReveal variant="fadeUp">
           {/* Label */}
-          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full border border-blue-500/20 bg-blue-50 text-[#0066FF] mb-6">
-            <span className="w-2 h-2 rounded-full bg-[#0066FF] animate-pulse" aria-hidden="true" />
+          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full border border-blue-500/20 bg-blue-50 dark:bg-blue-500/10 text-[#0066FF] dark:text-[#38BDF8] mb-6">
+            <span className="w-2 h-2 rounded-full bg-[#0066FF] dark:bg-[#38BDF8] animate-pulse" aria-hidden="true" />
             <span className="text-xs font-semibold tracking-wider uppercase">Strategic Digital Growth</span>
           </div>
 
-          <h2 id="finalcta-heading" className="text-3xl sm:text-4xl lg:text-5xl font-black text-[#0B1020] leading-tight tracking-tight mb-5">
+          <h2 id="finalcta-heading" className="text-3xl sm:text-4xl lg:text-5xl font-black text-[#0B1020] dark:text-white leading-tight tracking-tight mb-5">
             Ready to Accelerate <span className="text-gradient-blue">Your Digital Presence?</span>
           </h2>
 
-          <p className="text-[#4B5563] text-base sm:text-lg leading-relaxed max-w-xl mx-auto mb-8">
+          <p className="text-[#4B5563] dark:text-slate-300 text-base sm:text-lg leading-relaxed max-w-xl mx-auto mb-8">
             Partner with NEXORA DIGITAL (by HMS) to engineer a high-performance web platform that commands authority and drives measurable enterprise growth.
           </p>
 

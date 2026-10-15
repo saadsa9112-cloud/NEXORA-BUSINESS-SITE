@@ -272,7 +272,7 @@ export default function Hero() {
             animate="visible"
           >
             {/* Eyebrow */}
-            <motion.div variants={itemVariants} className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full border border-blue-500/20 bg-blue-50 text-[#0066FF] mb-6">
+            <motion.div variants={itemVariants} className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full border border-blue-500/20 dark:border-blue-500/30 bg-blue-50 dark:bg-blue-500/10 text-[#0066FF] dark:text-[#38BDF8] mb-6">
               <span className="w-2 h-2 rounded-full bg-[#0066FF] animate-pulse" />
               <span className="text-xs font-semibold tracking-wider uppercase">
                 NEXORA DIGITAL • BUILDING DIGITAL SUCCESS
@@ -280,13 +280,13 @@ export default function Hero() {
             </motion.div>
 
             {/* H1 Headline */}
-            <motion.h1 variants={itemVariants} className="text-3xl sm:text-5xl lg:text-6xl font-black text-[#0B1020] leading-[1.15] tracking-tight mb-5 sm:mb-6">
+            <motion.h1 variants={itemVariants} className="text-3xl sm:text-5xl lg:text-6xl font-black text-[#0B1020] dark:text-white leading-[1.15] tracking-tight mb-5 sm:mb-6">
               Digital Solutions That <br className="hidden sm:inline" />
               <span className="text-gradient-blue">Move Your Business Forward.</span>
             </motion.h1>
 
             {/* Supporting copy */}
-            <motion.p variants={itemVariants} className="text-[#4B5563] text-sm sm:text-base lg:text-lg leading-relaxed mb-6 sm:mb-8 max-w-xl">
+            <motion.p variants={itemVariants} className="text-[#4B5563] dark:text-slate-300 text-sm sm:text-base lg:text-lg leading-relaxed mb-6 sm:mb-8 max-w-xl">
               Professional website development, WordPress, Shopify, SEO, graphic design,
               hosting and maintenance services designed to help your business build trust and grow online.
             </motion.p>
@@ -306,7 +306,7 @@ export default function Hero() {
               <MagneticButton onClick={scrollToWork} className="w-full sm:w-auto">
                 <button
                   type="button"
-                  className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 sm:px-7 py-3.5 sm:py-4 bg-white border border-[#E5EAF1] hover:border-gray-300 text-[#0B1020] font-semibold rounded-xl transition-all duration-200 hover:bg-gray-50 shadow-xs text-sm sm:text-base cursor-pointer"
+                  className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 sm:px-7 py-3.5 sm:py-4 bg-white dark:bg-[#0B1020] border border-[#E5EAF1] dark:border-white/10 hover:border-gray-300 dark:hover:border-white/20 text-[#0B1020] dark:text-white font-semibold rounded-xl transition-all duration-200 hover:bg-gray-50 dark:hover:bg-white/5 shadow-xs text-sm sm:text-base cursor-pointer"
                 >
                   <span>View Our Work</span>
                   <ChevronDown size={17} aria-hidden="true" />
@@ -315,10 +315,10 @@ export default function Hero() {
             </motion.div>
 
             {/* Tags strip */}
-            <motion.div variants={itemVariants} className="flex flex-wrap items-center gap-x-3 gap-y-1.5 text-[#6B7280] text-xs sm:text-sm font-medium">
+            <motion.div variants={itemVariants} className="flex flex-wrap items-center gap-x-3 gap-y-1.5 text-[#6B7280] dark:text-slate-400 text-xs sm:text-sm font-medium">
               {['Web Development', 'SEO', 'E-commerce', 'Graphic Design'].map((tag, i) => (
                 <span key={tag} className="flex items-center gap-2.5 sm:gap-3">
-                  {i > 0 && <span className="text-gray-300" aria-hidden="true">•</span>}
+                  {i > 0 && <span className="text-gray-300 dark:text-gray-600" aria-hidden="true">•</span>}
                   <span>{tag}</span>
                 </span>
               ))}
@@ -326,42 +326,42 @@ export default function Hero() {
 
             {/* MOBILE INTERACTIVE TECH SHOWCASE CARD — Instant High Attraction */}
             <motion.div variants={itemVariants} className="lg:hidden mt-8 w-full">
-              <div className="relative rounded-2xl p-4 bg-gradient-to-br from-white via-blue-50/40 to-white border border-[#E5EAF1] shadow-xl overflow-hidden">
+              <div className="relative rounded-2xl p-4 bg-gradient-to-br from-white via-blue-50/40 to-white dark:from-[#0B1020] dark:via-[#0F172A] dark:to-[#0B1020] border border-[#E5EAF1] dark:border-white/10 shadow-xl overflow-hidden">
                 {/* Subtle top ambient glow */}
                 <div className="absolute top-0 right-0 w-36 h-36 bg-blue-500/10 rounded-full blur-2xl pointer-events-none" />
 
                 {/* Header of mobile card */}
-                <div className="flex items-center justify-between pb-3 border-b border-[#F1F5F9] mb-3">
+                <div className="flex items-center justify-between pb-3 border-b border-[#F1F5F9] dark:border-white/10 mb-3">
                   <div className="flex items-center gap-2">
                     <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse" />
-                    <span className="text-xs font-black text-[#0B1020] tracking-wide">NEXORA ARCHITECTURE</span>
+                    <span className="text-xs font-black text-[#0B1020] dark:text-white tracking-wide">NEXORA ARCHITECTURE</span>
                   </div>
-                  <span className="px-2 py-0.5 rounded-full bg-blue-50 text-[#0066FF] border border-blue-200 text-[10px] font-bold font-mono">
+                  <span className="px-2 py-0.5 rounded-full bg-blue-50 dark:bg-blue-500/10 text-[#0066FF] dark:text-[#38BDF8] border border-blue-200 dark:border-blue-500/30 text-[10px] font-bold font-mono">
                     REACT 19 • ULTRA FAST
                   </span>
                 </div>
 
                 {/* 3 Live Telemetry Stat Pills */}
                 <div className="grid grid-cols-3 gap-2 mb-3">
-                  <div className="p-2.5 bg-white rounded-xl border border-slate-100 shadow-xs text-center">
-                    <div className="text-[10px] text-gray-500 font-semibold">PageSpeed</div>
-                    <div className="text-base font-black text-emerald-600 flex items-center justify-center gap-0.5">
+                  <div className="p-2.5 bg-white dark:bg-[#131B2E] rounded-xl border border-slate-100 dark:border-white/10 shadow-xs text-center">
+                    <div className="text-[10px] text-gray-500 dark:text-slate-400 font-semibold">PageSpeed</div>
+                    <div className="text-base font-black text-emerald-600 dark:text-emerald-400 flex items-center justify-center gap-0.5">
                       <span>99+</span>
                       <span className="text-[9px] text-emerald-500">⚡</span>
                     </div>
                   </div>
-                  <div className="p-2.5 bg-white rounded-xl border border-slate-100 shadow-xs text-center">
-                    <div className="text-[10px] text-gray-500 font-semibold">Load Time</div>
-                    <div className="text-base font-black text-[#0066FF]">0.8s</div>
+                  <div className="p-2.5 bg-white dark:bg-[#131B2E] rounded-xl border border-slate-100 dark:border-white/10 shadow-xs text-center">
+                    <div className="text-[10px] text-gray-500 dark:text-slate-400 font-semibold">Load Time</div>
+                    <div className="text-base font-black text-[#0066FF] dark:text-[#38BDF8]">0.8s</div>
                   </div>
-                  <div className="p-2.5 bg-white rounded-xl border border-slate-100 shadow-xs text-center">
-                    <div className="text-[10px] text-gray-500 font-semibold">OWASP SSL</div>
-                    <div className="text-base font-black text-indigo-600">100%</div>
+                  <div className="p-2.5 bg-white dark:bg-[#131B2E] rounded-xl border border-slate-100 dark:border-white/10 shadow-xs text-center">
+                    <div className="text-[10px] text-gray-500 dark:text-slate-400 font-semibold">OWASP SSL</div>
+                    <div className="text-base font-black text-indigo-600 dark:text-indigo-400">100%</div>
                   </div>
                 </div>
 
                 {/* Interactive Mini Deliverables Preview Bar */}
-                <div className="p-3 bg-[#0B1020] rounded-xl text-white flex items-center justify-between shadow-md">
+                <div className="p-3 bg-[#0B1020] dark:bg-black/60 rounded-xl text-white flex items-center justify-between shadow-md border border-white/10">
                   <div className="flex items-center gap-2.5">
                     <div className="w-8 h-8 rounded-lg bg-[#0066FF] flex items-center justify-center text-sm font-bold flex-shrink-0">
                       💎

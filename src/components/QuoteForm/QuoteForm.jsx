@@ -158,8 +158,8 @@ export default function QuoteForm({ currency = 'PKR', setCurrency }) {
   }
 
   const inputClass = (name) =>
-    `form-input w-full px-4 py-3 rounded-xl text-sm placeholder:text-gray-400 bg-white border border-[#E5EAF1] text-[#0B1020] transition-all duration-200 focus:border-[#0066FF] focus:ring-2 focus:ring-[#0066FF]/15 focus:outline-none ${
-      errors[name] ? 'border-red-400 bg-red-50/50' : ''
+    `form-input w-full px-4 py-3 rounded-xl text-sm placeholder:text-gray-400 dark:placeholder:text-slate-500 bg-white dark:bg-[#05070D] border border-[#E5EAF1] dark:border-white/10 text-[#0B1020] dark:text-white transition-all duration-200 focus:border-[#0066FF] focus:ring-2 focus:ring-[#0066FF]/15 focus:outline-none ${
+      errors[name] ? 'border-red-400 bg-red-50/50 dark:bg-red-950/20' : ''
     }`
 
   const waFormattedText = lastSubmitted
@@ -170,19 +170,19 @@ export default function QuoteForm({ currency = 'PKR', setCurrency }) {
     <section
       id="contact"
       aria-labelledby="contact-heading"
-      className="py-20 lg:py-28 bg-[#F7F9FC]"
+      className="py-20 lg:py-28 bg-[#F7F9FC] dark:bg-[#05070D] transition-colors duration-300"
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid lg:grid-cols-2 gap-12 lg:gap-16 items-start">
           {/* Left Column — Contact Info */}
           <ScrollReveal variant="slideLeft">
-            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full border border-blue-500/20 bg-blue-50 text-[#0066FF] mb-4">
+            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full border border-blue-500/20 dark:border-blue-500/30 bg-blue-50 dark:bg-blue-500/10 text-[#0066FF] dark:text-[#38BDF8] mb-4">
               <span className="text-xs font-semibold tracking-wider uppercase">Initiate Your Project</span>
             </div>
-            <h2 id="contact-heading" className="text-3xl sm:text-4xl lg:text-5xl font-black text-[#0B1020] leading-tight tracking-tight mb-5">
+            <h2 id="contact-heading" className="text-3xl sm:text-4xl lg:text-5xl font-black text-[#0B1020] dark:text-white leading-tight tracking-tight mb-5">
               Request An Executive <span className="text-gradient-blue">Proposal &amp; Quote.</span>
             </h2>
-            <p className="text-[#4B5563] text-base sm:text-lg leading-relaxed mb-8">
+            <p className="text-[#4B5563] dark:text-slate-300 text-base sm:text-lg leading-relaxed mb-8">
               Ready to initiate your digital transformation? Outline your project requirements below to receive a comprehensive technical proposal and scope breakdown within 24 hours.
             </p>
 
@@ -190,29 +190,29 @@ export default function QuoteForm({ currency = 'PKR', setCurrency }) {
             <div className="flex flex-col gap-4">
               <a
                 href={`tel:${CONTACT.phone}`}
-                className="flex items-center gap-3 text-[#4B5563] hover:text-[#0066FF] transition-colors duration-200 text-sm group"
+                className="flex items-center gap-3 text-[#4B5563] dark:text-slate-300 hover:text-[#0066FF] dark:hover:text-[#38BDF8] transition-colors duration-200 text-sm group"
               >
-                <div className="w-10 h-10 rounded-xl bg-blue-50 text-[#0066FF] border border-blue-100 shadow-xs group-hover:bg-[#0066FF] group-hover:text-white flex items-center justify-center flex-shrink-0 transition-all">
+                <div className="w-10 h-10 rounded-xl bg-blue-50 dark:bg-[#131B2E] text-[#0066FF] dark:text-[#38BDF8] border border-blue-100 dark:border-blue-500/20 shadow-xs group-hover:bg-[#0066FF] group-hover:text-white flex items-center justify-center flex-shrink-0 transition-all">
                   <Phone size={18} />
                 </div>
-                <span className="font-bold text-[#0B1020] group-hover:text-[#0066FF] transition-colors">{CONTACT.phone}</span>
+                <span className="font-bold text-[#0B1020] dark:text-white group-hover:text-[#0066FF] dark:group-hover:text-[#38BDF8] transition-colors">{CONTACT.phone}</span>
               </a>
 
               <a
                 href={`mailto:${CONTACT.email}`}
-                className="flex items-center gap-3 text-[#4B5563] hover:text-[#0066FF] transition-colors duration-200 text-sm group"
+                className="flex items-center gap-3 text-[#4B5563] dark:text-slate-300 hover:text-[#0066FF] dark:hover:text-[#38BDF8] transition-colors duration-200 text-sm group"
               >
-                <div className="w-10 h-10 rounded-xl bg-blue-50 text-[#0066FF] border border-blue-100 shadow-xs group-hover:bg-[#0066FF] group-hover:text-white flex items-center justify-center flex-shrink-0 transition-all">
+                <div className="w-10 h-10 rounded-xl bg-blue-50 dark:bg-[#131B2E] text-[#0066FF] dark:text-[#38BDF8] border border-blue-100 dark:border-blue-500/20 shadow-xs group-hover:bg-[#0066FF] group-hover:text-white flex items-center justify-center flex-shrink-0 transition-all">
                   <Mail size={18} />
                 </div>
-                <span className="font-bold text-[#0B1020] group-hover:text-[#0066FF] transition-colors break-all">{CONTACT.email}</span>
+                <span className="font-bold text-[#0B1020] dark:text-white group-hover:text-[#0066FF] dark:group-hover:text-[#38BDF8] transition-colors break-all">{CONTACT.email}</span>
               </a>
             </div>
           </ScrollReveal>
 
           {/* Right Column — Clean Compact Form */}
           <ScrollReveal variant="slideRight">
-            <div className="p-6 sm:p-8 rounded-2xl bg-white border border-[#E5EAF1] shadow-soft">
+            <div className="p-6 sm:p-8 rounded-2xl bg-white dark:bg-[#0B1020] border border-[#E5EAF1] dark:border-white/10 shadow-soft dark:shadow-2xl">
               <AnimatePresence mode="wait">
                 {/* SUCCESS STATE */}
                 {status === 'success' ? (
@@ -284,7 +284,7 @@ export default function QuoteForm({ currency = 'PKR', setCurrency }) {
                     <div className="grid sm:grid-cols-2 gap-5 mb-6">
                       {/* 1. Full Name * */}
                       <div className="sm:col-span-2">
-                        <label htmlFor="fullName" className="block text-xs font-semibold uppercase tracking-wider text-[#0B1020] mb-1.5">
+                        <label htmlFor="fullName" className="block text-xs font-semibold uppercase tracking-wider text-[#0B1020] dark:text-white mb-1.5">
                           Full Name <span className="text-red-500" aria-label="required">*</span>
                         </label>
                         <input
@@ -309,7 +309,7 @@ export default function QuoteForm({ currency = 'PKR', setCurrency }) {
 
                       {/* 2. Business Name */}
                       <div>
-                        <label htmlFor="businessName" className="block text-xs font-semibold uppercase tracking-wider text-[#0B1020] mb-1.5">
+                        <label htmlFor="businessName" className="block text-xs font-semibold uppercase tracking-wider text-[#0B1020] dark:text-white mb-1.5">
                           Business Name
                         </label>
                         <input
@@ -326,7 +326,7 @@ export default function QuoteForm({ currency = 'PKR', setCurrency }) {
 
                       {/* 3. WhatsApp Number * */}
                       <div>
-                        <label htmlFor="whatsapp" className="block text-xs font-semibold uppercase tracking-wider text-[#0B1020] mb-1.5">
+                        <label htmlFor="whatsapp" className="block text-xs font-semibold uppercase tracking-wider text-[#0B1020] dark:text-white mb-1.5">
                           WhatsApp Number <span className="text-red-500" aria-label="required">*</span>
                         </label>
                         <input
@@ -351,7 +351,7 @@ export default function QuoteForm({ currency = 'PKR', setCurrency }) {
 
                       {/* 4. Email */}
                       <div className="sm:col-span-2">
-                        <label htmlFor="email" className="block text-xs font-semibold uppercase tracking-wider text-[#0B1020] mb-1.5">
+                        <label htmlFor="email" className="block text-xs font-semibold uppercase tracking-wider text-[#0B1020] dark:text-white mb-1.5">
                           Email Address
                         </label>
                         <input
@@ -375,7 +375,7 @@ export default function QuoteForm({ currency = 'PKR', setCurrency }) {
 
                       {/* 5. Service Required * */}
                       <div>
-                        <label htmlFor="service" className="block text-xs font-semibold uppercase tracking-wider text-[#0B1020] mb-1.5">
+                        <label htmlFor="service" className="block text-xs font-semibold uppercase tracking-wider text-[#0B1020] dark:text-white mb-1.5">
                           Service Required <span className="text-red-500" aria-label="required">*</span>
                         </label>
                         <select
@@ -386,7 +386,7 @@ export default function QuoteForm({ currency = 'PKR', setCurrency }) {
                           aria-required="true"
                           aria-invalid={!!errors.service}
                           aria-describedby={errors.service ? 'service-error' : undefined}
-                          className={`${inputClass('service')} appearance-none cursor-pointer bg-white`}
+                          className={`${inputClass('service')} appearance-none cursor-pointer bg-white dark:bg-[#05070D]`}
                         >
                           <option value="" disabled>Select a service</option>
                           {SERVICES_LIST.map((s) => (
@@ -403,22 +403,22 @@ export default function QuoteForm({ currency = 'PKR', setCurrency }) {
                       {/* 6. Budget Range */}
                       <div>
                         <div className="flex items-center justify-between mb-1.5">
-                          <label htmlFor="budget" className="block text-xs font-semibold uppercase tracking-wider text-[#0B1020]">
+                          <label htmlFor="budget" className="block text-xs font-semibold uppercase tracking-wider text-[#0B1020] dark:text-white">
                             Budget Range ({currency})
                           </label>
                           {setCurrency && (
-                            <div className="inline-flex items-center gap-1 bg-[#F1F5F9] p-0.5 rounded-md text-[10px] font-bold">
+                            <div className="inline-flex items-center gap-1 bg-[#F1F5F9] dark:bg-white/5 border border-slate-200 dark:border-white/10 p-0.5 rounded-md text-[10px] font-bold">
                               <button
                                 type="button"
                                 onClick={() => setCurrency('PKR')}
-                                className={`px-1.5 py-0.5 rounded transition-colors ${currency === 'PKR' ? 'bg-[#0066FF] text-white shadow-xs' : 'text-slate-600 hover:text-slate-900'}`}
+                                className={`px-1.5 py-0.5 rounded transition-colors ${currency === 'PKR' ? 'bg-[#0066FF] text-white shadow-xs' : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'}`}
                               >
                                 PKR
                               </button>
                               <button
                                 type="button"
                                 onClick={() => setCurrency('USD')}
-                                className={`px-1.5 py-0.5 rounded transition-colors ${currency === 'USD' ? 'bg-[#0066FF] text-white shadow-xs' : 'text-slate-600 hover:text-slate-900'}`}
+                                className={`px-1.5 py-0.5 rounded transition-colors ${currency === 'USD' ? 'bg-[#0066FF] text-white shadow-xs' : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'}`}
                               >
                                 USD
                               </button>
@@ -430,7 +430,7 @@ export default function QuoteForm({ currency = 'PKR', setCurrency }) {
                           name="budget"
                           value={fields.budget}
                           onChange={handleChange}
-                          className={`${inputClass('budget')} appearance-none cursor-pointer bg-white`}
+                          className={`${inputClass('budget')} appearance-none cursor-pointer bg-white dark:bg-[#05070D]`}
                         >
                           <option value="" disabled>
                             Select budget range ({currency === 'USD' ? '$ USD' : 'Rs. PKR'})
@@ -443,7 +443,7 @@ export default function QuoteForm({ currency = 'PKR', setCurrency }) {
 
                       {/* 7. Project Details * */}
                       <div className="sm:col-span-2">
-                        <label htmlFor="details" className="block text-xs font-semibold uppercase tracking-wider text-[#0B1020] mb-1.5">
+                        <label htmlFor="details" className="block text-xs font-semibold uppercase tracking-wider text-[#0B1020] dark:text-white mb-1.5">
                           Project Details <span className="text-red-500" aria-label="required">*</span>
                         </label>
                         <textarea
