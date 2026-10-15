@@ -5,6 +5,7 @@ import Hero from './components/Hero/Hero'
 import TrustStrip from './components/TrustStrip/TrustStrip'
 import Services from './components/Services/Services'
 import Portfolio from './components/Portfolio/Portfolio'
+import Testimonials from './components/Testimonials/Testimonials'
 import TechStack from './components/TechStack/TechStack'
 import ServiceGuarantees from './components/Guarantees/ServiceGuarantees'
 import WhyChooseUs from './components/WhyChooseUs/WhyChooseUs'
@@ -36,7 +37,7 @@ const ClientPortalModal = lazy(() => import('./components/ClientPortal/ClientPor
 const DiscountRoastFlyer = lazy(() => import('./components/DiscountFlyer/DiscountRoastFlyer'))
 
 // Tracked sections on the page
-const TRACKED_SECTIONS = ['home', 'services', 'work', 'pricing', 'about', 'faq', 'contact']
+const TRACKED_SECTIONS = ['home', 'services', 'work', 'reviews', 'pricing', 'about', 'faq', 'contact']
 
 export default function App() {
   const [currency, setCurrency] = useState('PKR')
@@ -287,6 +288,8 @@ export default function App() {
           <section id="work">
             <Portfolio />
           </section>
+
+          <Testimonials />
 
           <TechStack />
           <ServiceGuarantees />

@@ -3,17 +3,17 @@ import { motion, useMotionValue, useSpring, useTransform, useReducedMotion } fro
 import { ArrowRight, ChevronDown } from 'lucide-react'
 import MagneticButton from '../Motion/MagneticButton'
 
-/* ── Light Browser Mockup ───────────────────────────────────────── */
+/* ── Light / Dark Browser Mockup ───────────────────────────────────────── */
 function BrowserMockup({ children, className = '' }) {
   return (
-    <div className={`rounded-2xl overflow-hidden border border-[#E5EAF1] bg-white shadow-soft ${className}`}>
+    <div className={`rounded-2xl overflow-hidden border border-[#E5EAF1] dark:border-white/10 bg-white dark:bg-[#0B1020] shadow-soft dark:shadow-none transition-colors duration-300 ${className}`}>
       {/* Browser chrome */}
-      <div className="flex items-center gap-1.5 px-4 py-3 bg-[#F1F5F9] border-b border-[#E5EAF1]">
+      <div className="flex items-center gap-1.5 px-4 py-3 bg-[#F1F5F9] dark:bg-[#131B2E] border-b border-[#E5EAF1] dark:border-white/10">
         <span className="w-2.5 h-2.5 rounded-full bg-red-400/80" />
         <span className="w-2.5 h-2.5 rounded-full bg-amber-400/80" />
         <span className="w-2.5 h-2.5 rounded-full bg-emerald-400/80" />
-        <div className="ml-3 flex-1 h-5 rounded-md bg-white border border-[#E5EAF1] flex items-center px-3 shadow-xs">
-          <span className="text-[9px] text-[#6B7280] font-mono truncate">NEXORA DIGITAL</span>
+        <div className="ml-3 flex-1 h-5 rounded-md bg-white dark:bg-[#070913] border border-[#E5EAF1] dark:border-white/10 flex items-center px-3 shadow-xs">
+          <span className="text-[9px] text-[#6B7280] dark:text-slate-400 font-mono truncate">NEXORA DIGITAL</span>
         </div>
       </div>
       {children}
@@ -115,12 +115,12 @@ function HeroVisual() {
       >
         <BrowserMockup className="w-full">
           {/* Website UI simulation */}
-          <div className="p-5 bg-white">
+          <div className="p-5 bg-white dark:bg-[#0B1020] transition-colors duration-300">
             {/* Nav bar simulation */}
-            <div className="flex items-center justify-between mb-5 pb-3 border-b border-[#F1F5F9]">
+            <div className="flex items-center justify-between mb-5 pb-3 border-b border-[#F1F5F9] dark:border-white/10">
               <div className="w-20 h-3.5 rounded-md bg-[#0066FF]/80" />
               <div className="flex gap-2.5">
-                {[1, 2, 3].map(i => <div key={i} className="w-8 h-2 rounded bg-slate-200" />)}
+                {[1, 2, 3].map(i => <div key={i} className="w-8 h-2 rounded bg-slate-200 dark:bg-white/10" />)}
                 <div className="w-16 h-5 rounded-md bg-[#0066FF] flex items-center justify-center">
                   <span className="text-[7px] text-white font-semibold">Contact</span>
                 </div>
@@ -129,31 +129,31 @@ function HeroVisual() {
 
             {/* Hero section simulation */}
             <div className="mb-5 py-2">
-              <div className="w-24 h-2 rounded-full bg-blue-100 text-[#0066FF] mb-3 flex items-center px-2">
+              <div className="w-24 h-2 rounded-full bg-blue-100 dark:bg-blue-500/20 text-[#0066FF] dark:text-[#38BDF8] mb-3 flex items-center px-2">
                 <span className="text-[6px] font-bold">DIGITAL AGENCY</span>
               </div>
-              <div className="w-5/6 h-4 rounded bg-[#0B1020] mb-2" />
+              <div className="w-5/6 h-4 rounded bg-[#0B1020] dark:bg-white/90 mb-2" />
               <div className="w-2/3 h-4 rounded bg-[#0066FF] mb-4" />
-              <div className="w-full h-2 rounded bg-slate-200 mb-1.5" />
-              <div className="w-4/5 h-2 rounded bg-slate-200 mb-4" />
+              <div className="w-full h-2 rounded bg-slate-200 dark:bg-white/10 mb-1.5" />
+              <div className="w-4/5 h-2 rounded bg-slate-200 dark:bg-white/10 mb-4" />
               <div className="flex gap-2">
                 <div className="w-20 h-6 rounded-md bg-[#0066FF] flex items-center justify-center">
                   <span className="text-[7px] text-white font-semibold">Get Started</span>
                 </div>
-                <div className="w-16 h-6 rounded-md border border-slate-200 flex items-center justify-center">
-                  <span className="text-[7px] text-slate-600 font-medium">Learn More</span>
+                <div className="w-16 h-6 rounded-md border border-slate-200 dark:border-white/10 flex items-center justify-center">
+                  <span className="text-[7px] text-slate-600 dark:text-slate-300 font-medium">Learn More</span>
                 </div>
               </div>
             </div>
 
             {/* Services cards simulation grid */}
-            <div className="grid grid-cols-3 gap-2.5 pt-2 border-t border-[#F1F5F9]">
+            <div className="grid grid-cols-3 gap-2.5 pt-2 border-t border-[#F1F5F9] dark:border-white/10">
               {[
-                { title: 'Websites', color: 'bg-blue-50 text-[#0066FF]' },
-                { title: 'SEO', color: 'bg-indigo-50 text-indigo-600' },
-                { title: 'E-commerce', color: 'bg-emerald-50 text-emerald-600' }
+                { title: 'Websites', color: 'bg-blue-50 dark:bg-blue-500/10 text-[#0066FF] dark:text-[#38BDF8]' },
+                { title: 'SEO', color: 'bg-indigo-50 dark:bg-indigo-500/10 text-indigo-600 dark:text-indigo-400' },
+                { title: 'E-commerce', color: 'bg-emerald-50 dark:bg-emerald-500/10 text-emerald-600 dark:text-emerald-400' }
               ].map((card, i) => (
-                <div key={i} className={`p-2 rounded-lg border border-slate-100 ${card.color}`}>
+                <div key={i} className={`p-2 rounded-lg border border-slate-100 dark:border-white/5 ${card.color}`}>
                   <div className="w-4 h-4 rounded bg-current opacity-20 mb-1" />
                   <div className="text-[7px] font-bold truncate">{card.title}</div>
                 </div>
@@ -169,14 +169,14 @@ function HeroVisual() {
             y: isMobile || shouldReduceMotion ? 0 : badge1Y,
             translateZ: 30,
           }}
-          className="absolute -top-4 -right-4 px-3.5 py-2.5 rounded-xl bg-white border border-[#E5EAF1] shadow-lg flex items-center gap-2.5 z-20"
+          className="absolute -top-4 -right-4 px-3.5 py-2.5 rounded-xl bg-white dark:bg-[#0B1020] border border-[#E5EAF1] dark:border-white/10 shadow-lg flex items-center gap-2.5 z-20"
         >
           <div className="w-3 h-3 rounded-full bg-emerald-500 flex items-center justify-center">
             <span className="w-1.5 h-1.5 rounded-full bg-white animate-ping" />
           </div>
           <div>
-            <div className="text-[10px] font-bold text-[#0B1020]">SEO Ready</div>
-            <div className="text-[8px] text-[#6B7280]">Optimized Structure</div>
+            <div className="text-[10px] font-bold text-[#0B1020] dark:text-white">SEO Ready</div>
+            <div className="text-[8px] text-[#6B7280] dark:text-slate-400">Optimized Structure</div>
           </div>
         </motion.div>
 
@@ -187,14 +187,14 @@ function HeroVisual() {
             y: isMobile || shouldReduceMotion ? 0 : badge2Y,
             translateZ: 40,
           }}
-          className="absolute -bottom-4 -left-4 px-3.5 py-2.5 rounded-xl bg-white border border-[#E5EAF1] shadow-lg flex items-center gap-2.5 z-20"
+          className="absolute -bottom-4 -left-4 px-3.5 py-2.5 rounded-xl bg-white dark:bg-[#0B1020] border border-[#E5EAF1] dark:border-white/10 shadow-lg flex items-center gap-2.5 z-20"
         >
-          <div className="w-7 h-7 rounded-lg bg-blue-50 text-[#0066FF] flex items-center justify-center font-bold text-xs">
+          <div className="w-7 h-7 rounded-lg bg-blue-50 dark:bg-blue-500/20 text-[#0066FF] dark:text-[#38BDF8] flex items-center justify-center font-bold text-xs">
             ⚡
           </div>
           <div>
-            <div className="text-[10px] font-bold text-[#0B1020]">Fast Performance</div>
-            <div className="text-[8px] text-[#6B7280]">100% Responsive</div>
+            <div className="text-[10px] font-bold text-[#0B1020] dark:text-white">Fast Performance</div>
+            <div className="text-[8px] text-[#6B7280] dark:text-slate-400">100% Responsive</div>
           </div>
         </motion.div>
       </motion.div>
