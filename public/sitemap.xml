@@ -3,7 +3,7 @@
         xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
   <url>
     <loc>https://nexorabyhms.netlify.app/</loc>
-    <lastmod>2026-10-15</lastmod>
+    <lastmod>2026-10-20</lastmod>
     <changefreq>daily</changefreq>
     <priority>1.0</priority>
     <image:image>
@@ -14,7 +14,7 @@
   </url>
   <url>
     <loc>https://nexorabyhms.netlify.app/ai-tools</loc>
-    <lastmod>2026-10-15</lastmod>
+    <lastmod>2026-10-20</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
     <image:image>
