@@ -111,51 +111,51 @@ function HeroVisual() {
             ease: 'easeInOut',
           },
         }}
-        className="relative w-full max-w-md shadow-2xl rounded-2xl"
+        className="relative w-full max-w-[320px] sm:max-w-md shadow-2xl rounded-2xl"
       >
         <BrowserMockup className="w-full">
           {/* Website UI simulation */}
-          <div className="p-5 bg-white dark:bg-[#0B1020] transition-colors duration-300">
+          <div className="p-4 sm:p-5 bg-white dark:bg-[#0B1020] transition-colors duration-300">
             {/* Nav bar simulation */}
-            <div className="flex items-center justify-between mb-5 pb-3 border-b border-[#F1F5F9] dark:border-white/10">
-              <div className="w-20 h-3.5 rounded-md bg-[#0066FF]/80" />
-              <div className="flex gap-2.5">
-                {[1, 2, 3].map(i => <div key={i} className="w-8 h-2 rounded bg-slate-200 dark:bg-white/10" />)}
-                <div className="w-16 h-5 rounded-md bg-[#0066FF] flex items-center justify-center">
+            <div className="flex items-center justify-between mb-4 sm:mb-5 pb-3 border-b border-[#F1F5F9] dark:border-white/10">
+              <div className="w-16 sm:w-20 h-3.5 rounded-md bg-[#0066FF]/80" />
+              <div className="flex gap-2 sm:gap-2.5">
+                {[1, 2, 3].map(i => <div key={i} className="w-6 sm:w-8 h-2 rounded bg-slate-200 dark:bg-white/10" />)}
+                <div className="w-14 sm:w-16 h-5 rounded-md bg-[#0066FF] flex items-center justify-center">
                   <span className="text-[7px] text-white font-semibold">Contact</span>
                 </div>
               </div>
             </div>
 
             {/* Hero section simulation */}
-            <div className="mb-5 py-2">
+            <div className="mb-4 sm:mb-5 py-1 sm:py-2">
               <div className="w-24 h-2 rounded-full bg-blue-100 dark:bg-blue-500/20 text-[#0066FF] dark:text-[#38BDF8] mb-3 flex items-center px-2">
                 <span className="text-[6px] font-bold">DIGITAL AGENCY</span>
               </div>
-              <div className="w-5/6 h-4 rounded bg-[#0B1020] dark:bg-white/90 mb-2" />
-              <div className="w-2/3 h-4 rounded bg-[#0066FF] mb-4" />
+              <div className="w-5/6 h-3.5 sm:h-4 rounded bg-[#0B1020] dark:bg-white/90 mb-2" />
+              <div className="w-2/3 h-3.5 sm:h-4 rounded bg-[#0066FF] mb-3 sm:mb-4" />
               <div className="w-full h-2 rounded bg-slate-200 dark:bg-white/10 mb-1.5" />
-              <div className="w-4/5 h-2 rounded bg-slate-200 dark:bg-white/10 mb-4" />
+              <div className="w-4/5 h-2 rounded bg-slate-200 dark:bg-white/10 mb-3 sm:mb-4" />
               <div className="flex gap-2">
-                <div className="w-20 h-6 rounded-md bg-[#0066FF] flex items-center justify-center">
-                  <span className="text-[7px] text-white font-semibold">Get Started</span>
+                <div className="w-18 sm:w-20 h-5 sm:h-6 rounded-md bg-[#0066FF] flex items-center justify-center">
+                  <span className="text-[6px] sm:text-[7px] text-white font-semibold">Get Started</span>
                 </div>
-                <div className="w-16 h-6 rounded-md border border-slate-200 dark:border-white/10 flex items-center justify-center">
-                  <span className="text-[7px] text-slate-600 dark:text-slate-300 font-medium">Learn More</span>
+                <div className="w-14 sm:w-16 h-5 sm:h-6 rounded-md border border-slate-200 dark:border-white/10 flex items-center justify-center">
+                  <span className="text-[6px] sm:text-[7px] text-slate-600 dark:text-slate-300 font-medium">Learn More</span>
                 </div>
               </div>
             </div>
 
             {/* Services cards simulation grid */}
-            <div className="grid grid-cols-3 gap-2.5 pt-2 border-t border-[#F1F5F9] dark:border-white/10">
+            <div className="grid grid-cols-3 gap-2 sm:gap-2.5 pt-2 border-t border-[#F1F5F9] dark:border-white/10">
               {[
                 { title: 'Websites', color: 'bg-blue-50 dark:bg-blue-500/10 text-[#0066FF] dark:text-[#38BDF8]' },
-                { title: 'SEO', color: 'bg-indigo-50 dark:bg-indigo-500/10 text-indigo-600 dark:text-indigo-400' },
+                { title: 'SEO', color: 'bg-indigo-50 dark:indigo-500/10 text-indigo-600 dark:text-indigo-400' },
                 { title: 'E-commerce', color: 'bg-emerald-50 dark:bg-emerald-500/10 text-emerald-600 dark:text-emerald-400' }
               ].map((card, i) => (
-                <div key={i} className={`p-2 rounded-lg border border-slate-100 dark:border-white/5 ${card.color}`}>
-                  <div className="w-4 h-4 rounded bg-current opacity-20 mb-1" />
-                  <div className="text-[7px] font-bold truncate">{card.title}</div>
+                <div key={i} className={`p-1.5 sm:p-2 rounded-lg border border-slate-100 dark:border-white/5 ${card.color}`}>
+                  <div className="w-3.5 sm:w-4 h-3.5 sm:h-4 rounded bg-current opacity-20 mb-1" />
+                  <div className="text-[6.5px] sm:text-[7px] font-bold truncate">{card.title}</div>
                 </div>
               ))}
             </div>
@@ -169,14 +169,14 @@ function HeroVisual() {
             y: isMobile || shouldReduceMotion ? 0 : badge1Y,
             translateZ: 30,
           }}
-          className="absolute -top-4 -right-4 px-3.5 py-2.5 rounded-xl bg-white dark:bg-[#0B1020] border border-[#E5EAF1] dark:border-white/10 shadow-lg flex items-center gap-2.5 z-20"
+          className="absolute -top-3 -right-2 sm:-top-4 sm:-right-4 px-2.5 sm:px-3.5 py-1.5 sm:py-2.5 rounded-xl bg-white/95 dark:bg-[#0B1020]/95 backdrop-blur-md border border-[#E5EAF1] dark:border-white/10 shadow-lg flex items-center gap-2 sm:gap-2.5 z-20"
         >
-          <div className="w-3 h-3 rounded-full bg-emerald-500 flex items-center justify-center">
+          <div className="w-2.5 h-2.5 sm:w-3 sm:h-3 rounded-full bg-emerald-500 flex items-center justify-center">
             <span className="w-1.5 h-1.5 rounded-full bg-white animate-ping" />
           </div>
           <div>
-            <div className="text-[10px] font-bold text-[#0B1020] dark:text-white">SEO Ready</div>
-            <div className="text-[8px] text-[#6B7280] dark:text-slate-400">Optimized Structure</div>
+            <div className="text-[9px] sm:text-[10px] font-bold text-[#0B1020] dark:text-white leading-tight">SEO Ready</div>
+            <div className="text-[7px] sm:text-[8px] text-[#6B7280] dark:text-slate-400 leading-tight">Optimized Structure</div>
           </div>
         </motion.div>
 
@@ -187,14 +187,14 @@ function HeroVisual() {
             y: isMobile || shouldReduceMotion ? 0 : badge2Y,
             translateZ: 40,
           }}
-          className="absolute -bottom-4 -left-4 px-3.5 py-2.5 rounded-xl bg-white dark:bg-[#0B1020] border border-[#E5EAF1] dark:border-white/10 shadow-lg flex items-center gap-2.5 z-20"
+          className="absolute -bottom-3 -left-2 sm:-bottom-4 sm:-left-4 px-2.5 sm:px-3.5 py-1.5 sm:py-2.5 rounded-xl bg-white/95 dark:bg-[#0B1020]/95 backdrop-blur-md border border-[#E5EAF1] dark:border-white/10 shadow-lg flex items-center gap-2 sm:gap-2.5 z-20"
         >
-          <div className="w-7 h-7 rounded-lg bg-blue-50 dark:bg-blue-500/20 text-[#0066FF] dark:text-[#38BDF8] flex items-center justify-center font-bold text-xs">
+          <div className="w-6 h-6 sm:w-7 sm:h-7 rounded-lg bg-blue-50 dark:bg-blue-500/20 text-[#0066FF] dark:text-[#38BDF8] flex items-center justify-center font-bold text-[10px] sm:text-xs">
             ⚡
           </div>
           <div>
-            <div className="text-[10px] font-bold text-[#0B1020] dark:text-white">Fast Performance</div>
-            <div className="text-[8px] text-[#6B7280] dark:text-slate-400">100% Responsive</div>
+            <div className="text-[9px] sm:text-[10px] font-bold text-[#0B1020] dark:text-white leading-tight">Fast Performance</div>
+            <div className="text-[7px] sm:text-[8px] text-[#6B7280] dark:text-slate-400 leading-tight">100% Responsive</div>
           </div>
         </motion.div>
       </motion.div>
@@ -204,14 +204,6 @@ function HeroVisual() {
 
 /* ── Hero Section ───────────────────────────────────────────────────────── */
 export default function Hero() {
-  const [isDesktop, setIsDesktop] = useState(() => typeof window !== 'undefined' ? window.innerWidth >= 1024 : false)
-
-  useEffect(() => {
-    const handleResize = () => setIsDesktop(window.innerWidth >= 1024)
-    window.addEventListener('resize', handleResize, { passive: true })
-    return () => window.removeEventListener('resize', handleResize)
-  }, [])
-
   const scrollToWork = () => {
     const el = document.getElementById('work')
     if (el) {
@@ -325,17 +317,15 @@ export default function Hero() {
             </motion.div>
           </motion.div>
 
-          {/* Right — Interactive 3D Visual for Large Screens */}
-          {isDesktop && (
-            <motion.div
-              initial={{ opacity: 0, scale: 0.95, y: 20 }}
-              animate={{ opacity: 1, scale: 1, y: 0 }}
-              transition={{ duration: 0.8, delay: 0.3, ease: [0.16, 1, 0.3, 1] }}
-              className="hidden lg:block relative h-[480px]"
-            >
-              <HeroVisual />
-            </motion.div>
-          )}
+          {/* Visual Showcase (Both Mobile & Desktop) */}
+          <motion.div
+            initial={{ opacity: 0, scale: 0.95, y: 20 }}
+            animate={{ opacity: 1, scale: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.25, ease: [0.16, 1, 0.3, 1] }}
+            className="relative w-full max-w-[340px] sm:max-w-md mx-auto mt-6 sm:mt-10 lg:mt-0 py-4 flex items-center justify-center"
+          >
+            <HeroVisual />
+          </motion.div>
         </div>
       </div>
 
