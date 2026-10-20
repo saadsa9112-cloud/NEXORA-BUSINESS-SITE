@@ -2,7 +2,6 @@ import { useState, useEffect } from 'react'
 import { Menu, X, ArrowRight, Sun, Moon } from 'lucide-react'
 import { NAV_LINKS, CONTACT } from '../../data/siteData'
 import NexoraBrand from '../NexoraBrand/NexoraBrand'
-import LaunchBanner from '../LaunchBanner/LaunchBanner'
 import { getInitialTheme, applyTheme, toggleTheme } from '../../utils/theme'
 
 export default function Navbar() {
@@ -110,17 +109,12 @@ export default function Navbar() {
     <>
       <header
         role="banner"
-        className="fixed top-0 left-0 right-0 z-50 transition-all duration-300 ease-in-out"
-      >
-        {/* Launch Announcement Banner */}
-        <LaunchBanner />
-
-        {/* Main Navbar Bar */}
-        <div className={`transition-all duration-300 bg-white/95 backdrop-blur-md border-b text-[#0B1020] dark:bg-[#05070D]/95 dark:border-white/10 dark:text-white ${
+        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ease-in-out ${
           scrolled
-            ? 'border-[#E5EAF1] shadow-md shadow-slate-200/50 dark:shadow-black/40'
-            : 'border-[#E5EAF1]/60 shadow-xs'
-        }`}>
+            ? 'bg-white/95 dark:bg-[#05070D]/95 backdrop-blur-md border-b border-[#E5EAF1] dark:border-white/10 shadow-md shadow-slate-200/50 dark:shadow-black/40 text-[#0B1020] dark:text-white'
+            : 'bg-white/90 dark:bg-[#05070D]/90 backdrop-blur-md border-b border-[#E5EAF1]/70 dark:border-white/10 shadow-xs text-[#0B1020] dark:text-white'
+        }`}
+      >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16 lg:h-20">
 
@@ -190,8 +184,7 @@ export default function Navbar() {
             </div>
           </div>
         </div>
-      </div>
-    </header>
+      </header>
 
       {/* Mobile Menu Overlay */}
       {mobileOpen && (

@@ -323,67 +323,9 @@ export default function Hero() {
                 </span>
               ))}
             </motion.div>
-
-            {/* MOBILE INTERACTIVE TECH SHOWCASE CARD — Instant High Attraction */}
-            <motion.div variants={itemVariants} className="lg:hidden mt-8 w-full">
-              <div className="relative rounded-2xl p-4 bg-gradient-to-br from-white via-blue-50/40 to-white dark:from-[#0B1020] dark:via-[#0F172A] dark:to-[#0B1020] border border-[#E5EAF1] dark:border-white/10 shadow-xl overflow-hidden">
-                {/* Subtle top ambient glow */}
-                <div className="absolute top-0 right-0 w-36 h-36 bg-blue-500/10 rounded-full blur-2xl pointer-events-none" />
-
-                {/* Header of mobile card */}
-                <div className="flex items-center justify-between pb-3 border-b border-[#F1F5F9] dark:border-white/10 mb-3">
-                  <div className="flex items-center gap-2">
-                    <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse" />
-                    <span className="text-xs font-black text-[#0B1020] dark:text-white tracking-wide">NEXORA ARCHITECTURE</span>
-                  </div>
-                  <span className="px-2 py-0.5 rounded-full bg-blue-50 dark:bg-blue-500/10 text-[#0066FF] dark:text-[#38BDF8] border border-blue-200 dark:border-blue-500/30 text-[10px] font-bold font-mono">
-                    REACT 19 • ULTRA FAST
-                  </span>
-                </div>
-
-                {/* 3 Live Telemetry Stat Pills */}
-                <div className="grid grid-cols-3 gap-2 mb-3">
-                  <div className="p-2.5 bg-white dark:bg-[#131B2E] rounded-xl border border-slate-100 dark:border-white/10 shadow-xs text-center">
-                    <div className="text-[10px] text-gray-500 dark:text-slate-400 font-semibold">PageSpeed</div>
-                    <div className="text-base font-black text-emerald-600 dark:text-emerald-400 flex items-center justify-center gap-0.5">
-                      <span>99+</span>
-                      <span className="text-[9px] text-emerald-500">⚡</span>
-                    </div>
-                  </div>
-                  <div className="p-2.5 bg-white dark:bg-[#131B2E] rounded-xl border border-slate-100 dark:border-white/10 shadow-xs text-center">
-                    <div className="text-[10px] text-gray-500 dark:text-slate-400 font-semibold">Load Time</div>
-                    <div className="text-base font-black text-[#0066FF] dark:text-[#38BDF8]">0.8s</div>
-                  </div>
-                  <div className="p-2.5 bg-white dark:bg-[#131B2E] rounded-xl border border-slate-100 dark:border-white/10 shadow-xs text-center">
-                    <div className="text-[10px] text-gray-500 dark:text-slate-400 font-semibold">OWASP SSL</div>
-                    <div className="text-base font-black text-indigo-600 dark:text-indigo-400">100%</div>
-                  </div>
-                </div>
-
-                {/* Interactive Mini Deliverables Preview Bar */}
-                <div className="p-3 bg-[#0B1020] dark:bg-black/60 rounded-xl text-white flex items-center justify-between shadow-md border border-white/10">
-                  <div className="flex items-center gap-2.5">
-                    <div className="w-8 h-8 rounded-lg bg-[#0066FF] flex items-center justify-center text-sm font-bold flex-shrink-0">
-                      💎
-                    </div>
-                    <div className="text-left">
-                      <div className="text-xs font-bold">Enterprise Ready Delivery</div>
-                      <div className="text-[10px] text-gray-400">Full Code Ownership • 3-Day Sprint</div>
-                    </div>
-                  </div>
-                  <button
-                    onClick={scrollToWork}
-                    className="px-2.5 py-1 bg-white/10 hover:bg-white/20 text-white rounded-lg text-[10px] font-bold flex items-center gap-1 transition-colors flex-shrink-0 cursor-pointer"
-                  >
-                    <span>View Work</span>
-                    <ArrowRight size={11} />
-                  </button>
-                </div>
-              </div>
-            </motion.div>
           </motion.div>
 
-          {/* Right — Interactive 3D Visual for Large Screens (Zero CPU overhead on mobile) */}
+          {/* Right — Interactive 3D Visual for Large Screens */}
           {isDesktop && (
             <motion.div
               initial={{ opacity: 0, scale: 0.95, y: 20 }}

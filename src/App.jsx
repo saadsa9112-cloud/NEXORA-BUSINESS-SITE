@@ -1,5 +1,4 @@
 import { useState, useEffect, useRef, lazy, Suspense } from 'react'
-import LaunchBanner from './components/LaunchBanner/LaunchBanner'
 import Navbar from './components/Navbar/Navbar'
 import Hero from './components/Hero/Hero'
 import TrustStrip from './components/TrustStrip/TrustStrip'
